@@ -28,15 +28,6 @@ export default function HomePage() {
           solutions.
         </p>
 
-        <Link
-          href="/products"
-          className="inline-block px-6 py-3 rounded-lg font-semibold text-white 
-          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-          hover:from-blue-700 hover:via-purple-600 hover:to-pink-600 
-          transition-all duration-300 animate-fadeInBounce"
-        >
-          Explore Our Products →
-        </Link>
       </div>
 
       {/* Highlights Section */}
@@ -98,6 +89,21 @@ export default function HomePage() {
           <p className="text-gray-600 text-sm">
             Read our latest insights, tips, and guides for the property industry.
           </p>
+        </Link>
+      </div>
+ <div
+        className="w-full max-w-4xl rounded-2xl shadow-lg 
+        bg-white/80 backdrop-blur-sm p-8 sm:p-12 
+        animate-fadeInBounce text-center"
+      >
+        <Link
+          href="/products"
+          className="inline-block px-6 py-3 rounded-lg font-semibold text-white 
+          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+          hover:from-blue-700 hover:via-purple-600 hover:to-pink-600 
+          transition-all duration-300 animate-fadeInBounce"
+        >
+          Explore Our Products →
         </Link>
       </div>
     </main>
