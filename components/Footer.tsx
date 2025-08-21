@@ -80,8 +80,10 @@ export default function Footer() {
             className="rounded"
           />
                   </a> 
+        <p>Site Designed by <a href="www.TechTalents.in" target="_blank">Tech Talents</a></p>
 
       </div>
+      
     </footer>
   );
 }
