@@ -2,6 +2,7 @@
   "name": "propmatics-next",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@10.x",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
