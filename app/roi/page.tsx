@@ -28,7 +28,7 @@ export default function Page() {
   // User-editable inputs per option
   const [options, setOptions] = useState<OptionInput[]>([
     {
-      name: "Plot inside a rural town e.g Zaheerabad",
+      name: "Plot inside a nearby rural town",
       price: 30,
       cash: 10,
       appreciation: 11,
