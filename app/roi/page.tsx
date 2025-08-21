@@ -114,7 +114,7 @@ export default function Page() {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">Real Estate ROI Calculator</h1>
-      <h2 className="text-3xl font-bold mb-6 text-center">Enter No.of Years, Data for Option A, B & C and then Hit "Calulate" Button</h2>
+      <h2 className="text-3xl font-bold mb-4 text-center">Enter No.of Years, Data for Option A, B & C and then Hit "Calulate" Button</h2>
       
 
       {/* Controls */}
