@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { FaYoutube, FaInstagram, FaFacebook, FaLinkedin } from "react-icons/fa";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,20 +35,46 @@ export default function Navbar() {
           : "bg-white/80 backdrop-blur-sm"
       }`}
     >
-      <div className="container mx-auto flex justify-between items-center p-4">
-        {/* Logo Only */}
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/logo.png" // Place your generated logo file in /public/logo.png
-            alt="PropMatics Logo"
-            width={250}
-            height={80}
-            priority
-          />
-        </Link>
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center p-4">
+        <div className="flex w-full justify-between items-center">
+          {/* Logo Only */}
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt="PropMatics Logo"
+              width={250}
+              height={80}
+              priority
+            />
+          </Link>
+
+          {/* Social Icons */}
+          <div className="hidden md:flex space-x-4">
+            <a href="https://www.youtube.com/@propmatics" target="_blank" rel="noopener noreferrer">
+              <FaYoutube className="text-red-600 hover:scale-110 transition-transform" size={22} />
+            </a>
+            <a href="https://www.instagram.com/propmatics/" target="_blank" rel="noopener noreferrer">
+              <FaInstagram className="text-pink-500 hover:scale-110 transition-transform" size={22} />
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=100063560241775" target="_blank" rel="noopener noreferrer">
+              <FaFacebook className="text-blue-600 hover:scale-110 transition-transform" size={22} />
+            </a>
+            <a href="https://www.linkedin.com/in/proptyme-property-management-services-50a612184/" target="_blank" rel="noopener noreferrer">
+              <FaLinkedin className="text-blue-700 hover:scale-110 transition-transform" size={22} />
+            </a>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-gray-700"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-6">
+        <div className="hidden md:flex space-x-6 mt-4 md:mt-0">
           {navLinks.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -71,14 +98,6 @@ export default function Navbar() {
             );
           })}
         </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-gray-700"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
       </div>
 
       {/* Mobile Menu */}
