@@ -47,23 +47,7 @@ export default function Navbar() {
               priority
             />
           </Link>
-
-          {/* Social Icons */}
-          <div className="hidden md:flex space-x-4">
-            <a href="https://www.youtube.com/@propmatics" target="_blank" rel="noopener noreferrer">
-              <FaYoutube className="text-red-600 hover:scale-110 transition-transform" size={22} />
-            </a>
-            <a href="https://www.instagram.com/propmatics/" target="_blank" rel="noopener noreferrer">
-              <FaInstagram className="text-pink-500 hover:scale-110 transition-transform" size={22} />
-            </a>
-            <a href="https://www.facebook.com/profile.php?id=100063560241775" target="_blank" rel="noopener noreferrer">
-              <FaFacebook className="text-blue-600 hover:scale-110 transition-transform" size={22} />
-            </a>
-            <a href="https://www.linkedin.com/in/proptyme-property-management-services-50a612184/" target="_blank" rel="noopener noreferrer">
-              <FaLinkedin className="text-blue-700 hover:scale-110 transition-transform" size={22} />
-            </a>
-          </div>
-
+         
           {/* Mobile Menu Button */}
           <button
             className="md:hidden text-gray-700"
@@ -98,6 +82,22 @@ export default function Navbar() {
             );
           })}
         </div>
+
+         {/* Social Icons */}
+          <div className="hidden md:flex space-x-4">
+            <a href="https://www.youtube.com/@propmatics" target="_blank" rel="noopener noreferrer">
+              <FaYoutube className="text-red-600 hover:scale-110 transition-transform" size={22} />
+            </a>
+            <a href="https://www.instagram.com/propmatics/" target="_blank" rel="noopener noreferrer">
+              <FaInstagram className="text-pink-500 hover:scale-110 transition-transform" size={22} />
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=100063560241775" target="_blank" rel="noopener noreferrer">
+              <FaFacebook className="text-blue-600 hover:scale-110 transition-transform" size={22} />
+            </a>
+            <a href="https://www.linkedin.com/in/proptyme-property-management-services-50a612184/" target="_blank" rel="noopener noreferrer">
+              <FaLinkedin className="text-blue-700 hover:scale-110 transition-transform" size={22} />
+            </a>
+          </div>
       </div>
 
       {/* Mobile Menu */}
