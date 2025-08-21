@@ -15,7 +15,7 @@ export default function Navbar() {
     { href: "/properties", label: "Properties" },
     { href: "/services", label: "Services" },
     { href: "/products", label: "Products" },
-    { href: "/roi", label: "Tools" },
+    { href: "/roi", label: "ROI Calc" },
     { href: "/blog", label: "Blogs" },
     { href: "/contact", label: "Contact" },
   ];
