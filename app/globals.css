@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: system-ui, sans-serif;
+}
+
+ifrm {
+    border: none; width: 100vw; height: 100vh;
+}
+form>div {
+    @apply flex flex-col gap-2;
+}
+
+input,
+textarea {
+    @apply shadow-md px-6 py-2 border border-slate-300;
+}
+
