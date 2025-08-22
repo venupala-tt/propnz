@@ -41,6 +41,38 @@ export default function Footer() {
                 Pricing
               </Link>
             </li>
+               <li>
+              <Link
+                href="/pages/pricing"
+                className="text-gray-600 hover:text-blue-600 transition"
+              >
+                Pricing
+              </Link>
+            </li>
+               <li>
+              <Link
+                href="/pages/privacy-policy"
+                className="text-gray-600 hover:text-blue-600 transition"
+              >
+                Privacy Policy
+              </Link>
+            </li>
+               <li>
+              <Link
+                href="/pages/shipping-policy"
+                className="text-gray-600 hover:text-blue-600 transition"
+              >
+                Shipping Policy
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/pages/terms-conditions"
+                className="text-gray-600 hover:text-blue-600 transition"
+              >
+            Terms Conditions
+              </Link>
+            </li>
           </ul>
         </div>
 
