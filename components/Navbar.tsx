@@ -97,7 +97,17 @@ export default function Navbar() {
             <a href="https://www.linkedin.com/in/proptyme-property-management-services-50a612184/" target="_blank" rel="noopener noreferrer">
               <FaLinkedin className="text-blue-700 hover:scale-110 transition-transform" size={22} />
             </a>
-          </div>
+                {/* Wishlink */}
+            <a href="https://www.wishlink.com/propmatics" target="_blank" rel="noopener noreferrer">
+               <img
+              src="/wishlink-favicon.ico"  // make sure it's inside /public
+              alt="Wishlink"
+              width={24}
+              height={24}
+              className="rounded"
+            />
+           </a>
+           </div>
       </div>
 
       {/* Mobile Menu */}
