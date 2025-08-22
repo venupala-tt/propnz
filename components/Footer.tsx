@@ -10,7 +10,6 @@ export default function Footer() {
         <div className="flex flex-col justify-center items-center md:items-start">
           <p className="text-sm text-gray-600">
             © {new Date().getFullYear()} PropMatics 
-            <br>Designed by <a href="http://www.TechTalents.in"></a>Tech Talents</br>
           </p>
         </div>
 
