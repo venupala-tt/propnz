@@ -33,7 +33,7 @@ export default function ContactForm() {
         setStatus("✅ Message sent successfully!");
         setFormData({ name: "", email: "", category: "", message: "" });
       } else {
-        setStatus("❌ Failed to send message. Please try again.");
+        setStatus("❌ Sorry, Failed to send message. Please try again.");
       }
     } catch (error) {
       setStatus("❌ Error sending message.");
