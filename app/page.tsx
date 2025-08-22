@@ -2,10 +2,6 @@ import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
 import dynamic from "next/dynamic";
 
-// Dynamically import RightSidebar at runtime
-const RightSidebar = dynamic(() => import("../components/RightSidebar"), {
-  ssr: false,
-});
 
 export default function HomePage() {
   return (
@@ -117,9 +113,7 @@ export default function HomePage() {
       </main>
 
       {/* Right Sidebar aligned with Hero section and sticky */}
-      <div className="self-start mt-6 sticky top-6">
-        <RightSidebar />
-      </div>
+     
     </div>
   );
 }
