@@ -3,7 +3,7 @@ import { Package, Wrench, FileText } from "lucide-react";
 import dynamic from "next/dynamic";
 
 // Dynamically import RightSidebar at runtime
-const RightSidebar = dynamic(() => import("@/components/RightSidebar"), {
+const RightSidebar = dynamic(() => import("../components/RightSidebar"), {
   ssr: false,
 });
 
