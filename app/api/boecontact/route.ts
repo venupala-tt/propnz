@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     });
 
     await transporter.sendMail({
-      console.log("Trying to send email");
+    //  console.log("Trying to send email");
       from: email,
       to: process.env.CONTACT_RECEIVER, // your email
       subject: `New Book an Expert request: ${category}`,
