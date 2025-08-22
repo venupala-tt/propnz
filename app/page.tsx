@@ -3,13 +3,13 @@ import { Package, Wrench, FileText } from "lucide-react";
 import dynamic from "next/dynamic";
 
 // Dynamically import RightSidebar at runtime
-const RightSidebar = dynamic(() => import("../components/RightSidebar"), {
+const RightSidebar = dynamic(() => import("@/components/RightSidebar"), {
   ssr: false,
 });
 
 export default function HomePage() {
   return (
-    <div className="flex">
+    <div className="flex items-start">
       <main
         className="flex-1 flex min-h-screen flex-col items-center justify-start 
         p-4 sm:p-8 lg:p-16 
@@ -116,8 +116,10 @@ export default function HomePage() {
         </div>
       </main>
 
-      {/* Right Sidebar loaded at runtime */}
-      <RightSidebar />
+      {/* Right Sidebar aligned with Hero section and sticky */}
+      <div className="self-start mt-6 sticky top-6">
+        <RightSidebar />
+      </div>
     </div>
   );
 }
