@@ -19,10 +19,10 @@ export default function Footer() {
           <ul className="space-y-2">
             <li>
               <Link
-                href="/pages/book-an-expert"
+                href="/pages/roi"
                 className="text-gray-600 hover:text-blue-600 transition"
               >
-                Book An Expert
+                ROI Calulator
               </Link>
             </li>
             <li>
