@@ -1,112 +1,123 @@
 import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
+import dynamic from "next/dynamic";
+
+// Dynamically import RightSidebar at runtime
+const RightSidebar = dynamic(() => import("@/components/RightSidebar"), {
+  ssr: false,
+});
 
 export default function HomePage() {
   return (
-    <main
-      className="flex min-h-screen flex-col items-center justify-start 
-      p-4 sm:p-8 lg:p-16 
-      bg-gradient-to-br from-blue-100 via-white to-purple-100 
-      animate-gradientWave"
-    >
-      {/* Hero Section */}
-      <div
-        className="w-full max-w-4xl rounded-xl shadow-md 
-        bg-white/80 backdrop-blur-sm p-6 sm:p-8 
-        animate-fadeInBounce text-center mt-6"
+    <div className="flex">
+      <main
+        className="flex-1 flex min-h-screen flex-col items-center justify-start 
+        p-4 sm:p-8 lg:p-16 
+        bg-gradient-to-br from-blue-100 via-white to-purple-100 
+        animate-gradientWave"
       >
-        <h1
-          className="text-3xl sm:text-4xl font-bold mb-4 
-          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-          bg-clip-text text-transparent animate-gradientWave"
+        {/* Hero Section */}
+        <div
+          className="w-full max-w-4xl rounded-xl shadow-md 
+          bg-white/80 backdrop-blur-sm p-6 sm:p-8 
+          animate-fadeInBounce text-center mt-6"
         >
-          PropMatics
-        </h1>
+          <h1
+            className="text-3xl sm:text-4xl font-bold mb-4 
+            bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+            bg-clip-text text-transparent animate-gradientWave"
+          >
+            PropMatics
+          </h1>
 
-        <p className="text-base text-gray-700 max-w-xl mx-auto mb-4">
-          Learn & Build scalable, performant, and visually appealing property
-          solutions.
-        </p>
-      </div>
-
-      {/* Highlights Section */}
-      <div
-        className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 w-full max-w-5xl"
-      >
-        {/* Products Card */}
-        <Link
-          href="/products"
-          className="group p-4 rounded-lg bg-white shadow-md hover:shadow-xl 
-          transition-all duration-300 transform hover:-translate-y-2 
-          bg-white/80 backdrop-blur-sm animate-fadeInBounce"
-        >
-          <div className="flex items-center justify-center w-14 h-14 rounded-full 
-            bg-gradient-to-r from-blue-500 to-purple-500 text-white mb-3">
-            <Package size={24} />
-          </div>
-          <h3 className="text-lg font-semibold mb-1 text-gray-800">
-            Products
-          </h3>
-          <p className="text-gray-600 text-sm">
-            Browse our innovative property-related products designed for performance and scalability.
+          <p className="text-base text-gray-700 max-w-xl mx-auto mb-4">
+            Learn & Build scalable, performant, and visually appealing property
+            solutions.
           </p>
-        </Link>
+        </div>
 
-        {/* Services Card */}
-        <Link
-          href="/services"
-          className="group p-4 rounded-lg bg-white shadow-md hover:shadow-xl 
-          transition-all duration-300 transform hover:-translate-y-2 
-          bg-white/80 backdrop-blur-sm animate-fadeInBounce"
+        {/* Highlights Section */}
+        <div
+          className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 w-full max-w-5xl"
         >
-          <div className="flex items-center justify-center w-14 h-14 rounded-full 
-            bg-gradient-to-r from-pink-500 to-purple-500 text-white mb-3">
-            <Wrench size={24} />
-          </div>
-          <h3 className="text-lg font-semibold mb-1 text-gray-800">
-            Services
-          </h3>
-          <p className="text-gray-600 text-sm">
-            Explore our expert services ranging from planning to documentation and beyond.
-          </p>
-        </Link>
+          {/* Products Card */}
+          <Link
+            href="/products"
+            className="group p-4 rounded-lg bg-white shadow-md hover:shadow-xl 
+            transition-all duration-300 transform hover:-translate-y-2 
+            bg-white/80 backdrop-blur-sm animate-fadeInBounce"
+          >
+            <div className="flex items-center justify-center w-14 h-14 rounded-full 
+              bg-gradient-to-r from-blue-500 to-purple-500 text-white mb-3">
+              <Package size={24} />
+            </div>
+            <h3 className="text-lg font-semibold mb-1 text-gray-800">
+              Products
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Browse our innovative property-related products designed for performance and scalability.
+            </p>
+          </Link>
 
-        {/* Blog Card */}
-        <Link
-          href="/blog"
-          className="group p-4 rounded-lg bg-white shadow-md hover:shadow-xl 
-          transition-all duration-300 transform hover:-translate-y-2 
-          bg-white/80 backdrop-blur-sm animate-fadeInBounce"
-        >
-          <div className="flex items-center justify-center w-14 h-14 rounded-full 
-            bg-gradient-to-r from-green-500 to-blue-500 text-white mb-3">
-            <FileText size={24} />
-          </div>
-          <h3 className="text-lg font-semibold mb-1 text-gray-800">
-            Blog
-          </h3>
-          <p className="text-gray-600 text-sm">
-            Read our latest insights, tips, and guides for the property industry.
-          </p>
-        </Link>
-      </div>
+          {/* Services Card */}
+          <Link
+            href="/services"
+            className="group p-4 rounded-lg bg-white shadow-md hover:shadow-xl 
+            transition-all duration-300 transform hover:-translate-y-2 
+            bg-white/80 backdrop-blur-sm animate-fadeInBounce"
+          >
+            <div className="flex items-center justify-center w-14 h-14 rounded-full 
+              bg-gradient-to-r from-pink-500 to-purple-500 text-white mb-3">
+              <Wrench size={24} />
+            </div>
+            <h3 className="text-lg font-semibold mb-1 text-gray-800">
+              Services
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Explore our expert services ranging from planning to documentation and beyond.
+            </p>
+          </Link>
 
-      {/* CTA Section */}
-      <div
-        className="w-full max-w-4xl rounded-xl shadow-md 
-        bg-white/80 backdrop-blur-sm p-6 sm:p-8 
-        animate-fadeInBounce text-center mt-8"
-      >
-        <Link
-          href="/products"
-          className="inline-block px-5 py-2.5 rounded-md font-semibold text-white 
-          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-          hover:from-blue-700 hover:via-purple-600 hover:to-pink-600 
-          transition-all duration-300 animate-fadeInBounce"
+          {/* Blog Card */}
+          <Link
+            href="/blog"
+            className="group p-4 rounded-lg bg-white shadow-md hover:shadow-xl 
+            transition-all duration-300 transform hover:-translate-y-2 
+            bg-white/80 backdrop-blur-sm animate-fadeInBounce"
+          >
+            <div className="flex items-center justify-center w-14 h-14 rounded-full 
+              bg-gradient-to-r from-green-500 to-blue-500 text-white mb-3">
+              <FileText size={24} />
+            </div>
+            <h3 className="text-lg font-semibold mb-1 text-gray-800">
+              Blog
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Read our latest insights, tips, and guides for the property industry.
+            </p>
+          </Link>
+        </div>
+
+        {/* CTA Section */}
+        <div
+          className="w-full max-w-4xl rounded-xl shadow-md 
+          bg-white/80 backdrop-blur-sm p-6 sm:p-8 
+          animate-fadeInBounce text-center mt-8"
         >
-          Explore Our Products →
-        </Link>
-      </div>
-    </main>
+          <Link
+            href="/products"
+            className="inline-block px-5 py-2.5 rounded-md font-semibold text-white 
+            bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+            hover:from-blue-700 hover:via-purple-600 hover:to-pink-600 
+            transition-all duration-300 animate-fadeInBounce"
+          >
+            Explore Our Products →
+          </Link>
+        </div>
+      </main>
+
+      {/* Right Sidebar loaded at runtime */}
+      <RightSidebar />
+    </div>
   );
 }
