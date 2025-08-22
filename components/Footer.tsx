@@ -9,7 +9,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="flex flex-col justify-center items-center md:items-start">
           <p className="text-sm text-gray-600">
-            © {new Date().getFullYear()} PropMatics by <a href="https://www.TechTalents.in" target="_blank"/>Tech Talents</a>
+            © {new Date().getFullYear()} PropMatics by Tech Talents
           </p>
         </div>
 
