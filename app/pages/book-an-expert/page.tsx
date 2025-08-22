@@ -1,11 +1,11 @@
-export default function ProductsPage() {
+export default function BookAnExpertPage() {
   return (
-    <section className="px-4 py-10 max-w-4xl mx-auto">
-      <h2 className="text-3xl font-semibold mb-4">Our Products</h2>
-      <ul className="space-y-2 list-disc list-inside">
-        <li>Junction Box</li>
-        <li>More Coming Soon...</li>
-      </ul>
+    <section className="px-6 py-12 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4">Book an Expert</h1>
+      <p className="text-gray-600">
+        Schedule a consultation with our experts. Provide details about your
+        requirements and we will connect you with the right professional.
+      </p>
     </section>
   )
 }
