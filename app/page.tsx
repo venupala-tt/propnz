@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
 import dynamic from "next/dynamic";
 
-
 export default function HomePage() {
   return (
     <div className="flex items-start">
@@ -94,20 +93,30 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* CTA Section */}
+        {/* CTA Section as Cards */}
         <div
-          className="w-full max-w-4xl rounded-xl shadow-md 
-          bg-white/80 backdrop-blur-sm p-6 sm:p-8 
-          animate-fadeInBounce text-center mt-8"
+          className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10"
         >
+          {/* Explore Our Products Card */}
           <Link
             href="/products"
-            className="inline-block px-5 py-2.5 rounded-md font-semibold text-white 
-            bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-            hover:from-blue-700 hover:via-purple-600 hover:to-pink-600 
-            transition-all duration-300 animate-fadeInBounce"
+            className="block rounded-xl shadow-lg p-6 text-center bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce"
           >
-            Explore Our Products →
+            <h3 className="text-xl font-semibold mb-2">Explore Our Products</h3>
+            <p className="text-sm opacity-90">
+              Discover our full range of property solutions tailored to your needs.
+            </p>
+          </Link>
+
+          {/* Property Tools Card */}
+          <Link
+            href="/pages/tools"
+            className="block rounded-xl shadow-lg p-6 text-center bg-gradient-to-r from-green-600 via-teal-500 to-blue-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce"
+          >
+            <h3 className="text-xl font-semibold mb-2">Property Tools for You</h3>
+            <p className="text-sm opacity-90">
+              Access powerful tools to calculate ROI, capital gains, and more.
+            </p>
           </Link>
         </div>
       </main>
