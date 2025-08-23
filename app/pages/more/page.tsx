@@ -5,7 +5,7 @@ export default function MoreComingSoon() {
         <h1 className="text-3xl font-bold mb-4 text-gray-800">
 More Tools        </h1>
         <p className="text-gray-600 mb-6">
-          🚀 We’re working hard to bring you this tool very soon.  
+          🚀 We’re working hard to bring you More Tools very soon.  
           Stay tuned for updates!
         </p>
         <div className="animate-bounce text-4xl">⏳</div>
