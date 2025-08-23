@@ -46,7 +46,7 @@ export default function Page() {
       mitigation: "Insist on HMDA/RERA, check builder track record & road access, avoid over-leverage.",
     },
     {
-      name: "Buy a Resale Flat for Living",
+      name: "Buy a New or Resale Flat for Living",
       price: 80,
       cash: 25,
       appreciation: 6,
