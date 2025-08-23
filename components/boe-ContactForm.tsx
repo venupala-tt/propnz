@@ -71,6 +71,7 @@ export default function ContactForm() {
         required
       >
         <option value="">Select Category</option>
+        <option>Property Advisory</option>
         <option>Construction Planning Services</option>
         <option>Interior Designing</option>
         <option>Vaastu Services</option>
