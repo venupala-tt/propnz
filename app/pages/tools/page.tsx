@@ -28,7 +28,7 @@ export default function ToolsPage() {
 
         {/* More Tools */}
         <Link
-          href="../pages/tools"
+          href="../pages/more"
           className="block rounded-lg shadow-lg p-6 bg-gradient-to-r from-pink-500 to-red-500 text-white hover:shadow-xl transition-all"
         >
           <h2 className="text-lg font-semibold">More...</h2>
