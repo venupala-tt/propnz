@@ -28,7 +28,7 @@ importers:
          version: '0.18.5'
      file-saver: 
         specifier: ^2.0.5
-        version:'2.0.5'
+        version: '2.0.5'
       contentful:
         specifier: ^11.7.15
         version: 11.7.15
