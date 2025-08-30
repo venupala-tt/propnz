@@ -26,6 +26,14 @@ export default function ToolsPage() {
           <h2 className="text-lg font-semibold">Capital Gains Calculator</h2>
         </Link>
 
+           {/* Real Estate Unit Converter */}
+        <Link
+          href="../pages/rcalc"
+          className="block rounded-lg shadow-lg p-6 bg-gradient-to-r from-green-600 to-teal-500 text-white hover:shadow-xl transition-all"
+        >
+          <h2 className="text-lg font-semibold">Capital Gains Calculator</h2>
+        </Link>
+
         {/* More Tools */}
         <Link
           href="../pages/more"
