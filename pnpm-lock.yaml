@@ -23,10 +23,10 @@ importers:
       '@typescript/lib-dom':
         specifier: npm:@types/web
         version: '@types/web@0.0.262'
-       '@xlsx':
+       xlsx:
          specifier: ^0.18.5
          version: '0.18.5'
-     'file-saver': 
+     file-saver: 
         specifier: ^2.0.5
         version:'2.0.5'
       contentful:
