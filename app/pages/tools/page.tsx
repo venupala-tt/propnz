@@ -15,7 +15,7 @@ export default function ToolsPage() {
           href="../pages/roi"
           className="block rounded-lg shadow-lg p-6 bg-gradient-to-r from-blue-600 to-purple-500 text-white hover:shadow-xl transition-all"
         >
-          <h2 className="text-lg font-semibold">ROI Calculator</h2>
+          <h2 className="text-lg font-semibold">Investing in Property?? visit our ROI Calculator</h2>
         </Link>
 
         {/* Capital Gains Calculator */}
