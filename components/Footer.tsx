@@ -22,7 +22,7 @@ export default function Footer() {
                 href="/pages/book-an-expert"
                 className="text-gray-600 hover:text-blue-600 transition"
               >
-               Book Our Expert"
+               Book Our Expert
               </Link>
             </li>
             <li>
