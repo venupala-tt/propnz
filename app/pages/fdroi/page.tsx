@@ -22,34 +22,72 @@ export default function ROICalculatorPage() {
     const cpPerYd = Number(costPerSqYd);
     const sellPrice = Number(sellingPriceSqFt);
 
+    // 1) Land Investment (Owner)
     const totalInvestment = plotSize * cpPerYd;
 
+    // 2) Constructable area (80% of plot) -> sq.ft
     const constructableSqYds = plotSize * 0.8;
-    const constructableSqFtPerFloor = constructableSqYds * 9;
+    const constructableSqFtPerFloor = constructableSqYds * 9; // 1 sq.yd = 9 sq.ft
+
+    // 3) Floors by plot size
     let floors = 0;
     if (plotSize === 300) floors = 3;
     else if (plotSize === 600) floors = 4;
     else if (plotSize === 900) floors = 4;
     else if (plotSize === 1200) floors = 5;
 
+    // 4) Total constructed/sellable area
     const totalSellableSqFt = constructableSqFtPerFloor * floors;
-    const landOwnerSqFt = totalSellableSqFt * 0.4;
-    const saleValue = landOwnerSqFt * sellPrice;
-    const roiPercent = ((saleValue - totalInvestment) / totalInvestment) * 100;
 
-    const investmentCrores = totalInvestment / 10000000;
-    const saleValueCrores = saleValue / 10000000;
+    // Shares
+    const landOwnerSqFt = totalSellableSqFt * 0.4; // 40% Owner
+    const developerShareSqFt = totalSellableSqFt * 0.6; // 60% Developer
+
+    // 5) Owner sale value & ROI
+    const ownerSaleValue = landOwnerSqFt * sellPrice;
+    const ownerRoiPercent = ((ownerSaleValue - totalInvestment) / totalInvestment) * 100;
+
+    // 6) Developer costs & ROI (assumptions provided)
+    const constructionCost = totalSellableSqFt * 2000; // ₹2,000 / sq.ft on entire constructed area
+    const adminCost = constructionCost * 0.20;         // +20% administrative expenses
+    const totalDevInvestment = constructionCost + adminCost;
+
+    const developerSaleValue = developerShareSqFt * sellPrice; // revenue on 60% share
+    const developerRoiPercent =
+      ((developerSaleValue - totalDevInvestment) / totalDevInvestment) * 100;
+
+    // Crores conversions
+    const toCrores = (v: number) => v / 10000000;
+    const investmentCrores = toCrores(totalInvestment);
+    const ownerSaleValueCrores = toCrores(ownerSaleValue);
+
+    const constructionCostCr = toCrores(constructionCost);
+    const adminCostCr = toCrores(adminCost);
+    const totalDevInvestmentCr = toCrores(totalDevInvestment);
+    const developerSaleValueCr = toCrores(developerSaleValue);
 
     setResult({
+      // owner
       totalInvestment,
       constructableSqFtPerFloor,
       floors,
       totalSellableSqFt,
       landOwnerSqFt,
-      saleValue,
-      roiPercent,
+      ownerSaleValue,
+      ownerRoiPercent,
       investmentCrores,
-      saleValueCrores,
+      ownerSaleValueCrores,
+      // developer
+      developerShareSqFt,
+      constructionCost,
+      adminCost,
+      totalDevInvestment,
+      developerSaleValue,
+      developerRoiPercent,
+      constructionCostCr,
+      adminCostCr,
+      totalDevInvestmentCr,
+      developerSaleValueCr,
     });
   };
 
@@ -63,7 +101,7 @@ export default function ROICalculatorPage() {
           Approximate project duration: <b>2 years</b>
         </p>
 
-        {/* Input Form */}
+        {/* Inputs */}
         <div className="space-y-4">
           <div>
             <label className="block font-medium text-gray-700 mb-1">Plot Size</label>
@@ -113,38 +151,83 @@ export default function ROICalculatorPage() {
 
         {/* Results */}
         {result && (
-          <div className="mt-8 bg-gray-50 p-6 rounded-lg shadow-inner">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">
-              📊 Summary of ROI in Development of Flats Project
-            </h2>
-            <ul className="space-y-2 text-gray-700">
-              <li>
-                💰 Total Investment in Land:{" "}
-                <b>
-                  ₹ {result.totalInvestment.toLocaleString()} (
-                  {result.investmentCrores.toFixed(2)} Cr)
-                </b>
-              </li>
-              <li>
-                🏢 Constructable Area per Floor:{" "}
-                <b>{result.constructableSqFtPerFloor.toLocaleString()} sq.ft</b>
-              </li>
-              <li>🏗️ Total Floors Allowed: <b>{result.floors}</b></li>
-              <li>
-                📐 Total Sellable Area: <b>{result.totalSellableSqFt.toLocaleString()} sq.ft</b>
-              </li>
-              <li>
-                🧑‍🤝‍🧑 Landowner Share (40%):{" "}
-                <b>{result.landOwnerSqFt.toLocaleString()} sq.ft</b>
-              </li>
-              <li>
-                💵 Sale Value of Landowner Flats:{" "}
-                <b>
-                  ₹ {result.saleValue.toLocaleString()} ({result.saleValueCrores.toFixed(2)} Cr)
-                </b>
-              </li>
-              <li>📈 ROI: <b>{result.roiPercent.toFixed(2)}%</b></li>
-            </ul>
+          <div className="mt-8 space-y-8">
+            <div className="bg-gray-50 p-6 rounded-lg shadow-inner">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                📊 Summary of ROI in Development of Flats Project
+              </h2>
+              <ul className="space-y-2 text-gray-700">
+                <li>
+                  💰 Total Investment in Land (Owner):{" "}
+                  <b>
+                    ₹ {result.totalInvestment.toLocaleString()} ({result.investmentCrores.toFixed(2)} Cr)
+                  </b>
+                </li>
+                <li>
+                  🏢 Constructable Area per Floor:{" "}
+                  <b>{result.constructableSqFtPerFloor.toLocaleString()} sq.ft</b>
+                </li>
+                <li>🏗️ Total Floors Allowed: <b>{result.floors}</b></li>
+                <li>
+                  📐 Total Constructed/Sellable Area:{" "}
+                  <b>{result.totalSellableSqFt.toLocaleString()} sq.ft</b>
+                </li>
+                <li>
+                  🧑‍🤝‍🧑 Landowner Share (40%):{" "}
+                  <b>{result.landOwnerSqFt.toLocaleString()} sq.ft</b>
+                </li>
+                <li>
+                  💵 Sale Value of Landowner Flats:{" "}
+                  <b>
+                    ₹ {result.ownerSaleValue.toLocaleString()} ({result.ownerSaleValueCrores.toFixed(2)} Cr)
+                  </b>
+                </li>
+                <li>
+                  📈 Owner ROI: <b>{result.ownerRoiPercent.toFixed(2)}%</b>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-indigo-50 p-6 rounded-lg shadow-inner">
+              <h2 className="text-xl font-bold text-indigo-900 mb-4">👷 Developer Economics</h2>
+              <ul className="space-y-2 text-indigo-900/90">
+                <li>
+                  🧮 Developer Share of Area (60%):{" "}
+                  <b>{result.developerShareSqFt.toLocaleString()} sq.ft</b>
+                </li>
+                <li>
+                  🧱 Construction Cost @ ₹2,000/sq.ft (on total constructed area):{" "}
+                  <b>
+                    ₹ {result.constructionCost.toLocaleString()} ({result.constructionCostCr.toFixed(2)} Cr)
+                  </b>
+                </li>
+                <li>
+                  🗂️ Administrative Expenses @ 20% of construction:{" "}
+                  <b>
+                    ₹ {result.adminCost.toLocaleString()} ({result.adminCostCr.toFixed(2)} Cr)
+                  </b>
+                </li>
+                <li>
+                  💼 Total Developer Investment (Construction + Admin):{" "}
+                  <b>
+                    ₹ {result.totalDevInvestment.toLocaleString()} ({result.totalDevInvestmentCr.toFixed(2)} Cr)
+                  </b>
+                </li>
+                <li>
+                  🏷️ Sale Value of Developer Flats (60%):{" "}
+                  <b>
+                    ₹ {result.developerSaleValue.toLocaleString()} ({result.developerSaleValueCr.toFixed(2)} Cr)
+                  </b>
+                </li>
+                <li>
+                  📊 Developer ROI: <b>{result.developerRoiPercent.toFixed(2)}%</b>
+                </li>
+              </ul>
+              <p className="text-xs text-indigo-900/70 mt-3">
+                Note: In a typical JDA, the developer bears full construction & admin costs on the entire constructed
+                area and receives revenue only on their share of flats.
+              </p>
+            </div>
           </div>
         )}
       </div>
