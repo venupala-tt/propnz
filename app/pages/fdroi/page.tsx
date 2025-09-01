@@ -132,7 +132,7 @@ export default function ROICalculatorPage() {
             <label className="block font-medium text-gray-700 mb-1">Selling Price per Sq.Ft (₹)</label>
             <input
               type="number"
-              placeholder="Enter selling price per sq.ft"
+              placeholder="Enter selling price of Flats per sq.ft (after 2 years of project completion)"
               value={sellingPriceSqFt}
               onChange={(e) =>
                 setSellingPriceSqFt(e.target.value === "" ? "" : Number(e.target.value))
