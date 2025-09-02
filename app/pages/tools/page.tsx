@@ -28,12 +28,20 @@ export default function ToolsPage() {
           <h2 className="text-lg font-semibold">Capital Gains Calculator</h2>
         </Link>
 
-        {/* Real Estate Unit Converter */}
+ {/* Property Registration Costs Calculator */}
+        <Link
+          href="../pages/regcalc"
+          className="block rounded-lg shadow-lg p-6 bg-gradient-to-r from-green-600 to-teal-500 text-white hover:shadow-xl transition-all"
+        >
+          <h2 className="text-lg font-semibold">Property Registration Costs Calculator</h2>
+        </Link>
+        
+        {/* Real Estate Units Converter */}
         <Link
           href="../pages/rcalc"
           className="block rounded-lg shadow-lg p-6 bg-gradient-to-r from-green-600 to-teal-500 text-white hover:shadow-xl transition-all"
         >
-          <h2 className="text-lg font-semibold">Real Estate Unit Converter</h2>
+          <h2 className="text-lg font-semibold">Real Estate Units Converter</h2>
         </Link>
 
         {/* Flats Development ROI Calculator for Land Owner */}
