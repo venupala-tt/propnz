@@ -88,8 +88,8 @@ export default function Page() {
         <div>
           <label>Area</label>
           <select value={area} onChange={(e) => setArea(e.target.value as AreaType)}>
-            <option>Other Areas</option>
             <option>Gram Panchayat</option>
+            <option>Other Areas</option>
           </select>
         </div>
         <div>
