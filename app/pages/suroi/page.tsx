@@ -119,18 +119,21 @@ export default function ROICalculatorPage() {
         transition={{ duration: 0.5 }}
         className="max-w-4xl mx-auto"
       >
-        {/* --- Caption above heading --- */}
-        <p className="text-lg text-gray-700 mb-2 italic">
-          Do you know you can make money by reselling single unit flats... Buy
-          an old flat, renovate, rent it out and get rental income, then resell
-          for higher price. Fill the data below and check it yourself !!!
-        </p>
-        <p className="mb-6 text-sm text-blue-700">
-          To know the availability of Single Unit Flats ...{" "}
-          <Link href="/contact" className="underline font-medium">
-            please Contact Us
-          </Link>
-        </p>
+        {/* --- Highlighted Caption above heading --- */}
+        <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-xl mb-6 shadow-sm">
+          <p className="text-lg text-gray-700 mb-2 italic">
+            Do you know you can make money by reselling single unit flats... Buy
+            an old flat, renovate, rent it out and get rental income, then
+            resell for higher price. Fill the data below and check it yourself
+            !!!
+          </p>
+          <p className="text-sm text-blue-700">
+            To know the availability of Single Unit Flats ...{" "}
+            <Link href="/contact" className="underline font-medium">
+              please Contact Us
+            </Link>
+          </p>
+        </div>
 
         <h1 className="text-3xl font-bold mb-6">
           Flat Reselling ROI Calculator
