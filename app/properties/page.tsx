@@ -18,12 +18,23 @@ export default async function Home() {
   const propEntries = await getPropEntries();
 
   return (
+    
     <main
       className="flex min-h-screen flex-col items-center justify-center 
       p-6 sm:p-12 lg:p-24 
       bg-gradient-to-br from-blue-100 via-white to-purple-100 
       animate-gradientWave"
     >
+      {/* Top-right link */}
+      <div className="flex justify-end mb-6">
+        <Link
+          href="../pages/book-an-expert"
+          className="text-blue-600 font-semibold hover:underline"
+        >
+          Book Our Expert
+        </Link>
+      </div>
+      
       <div
         className="w-full max-w-5xl rounded-2xl shadow-lg 
         bg-white/80 backdrop-blur-sm p-8 sm:p-12 
