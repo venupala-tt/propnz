@@ -28,14 +28,6 @@ export default function ToolsPage() {
           <h2 className="text-lg font-semibold">Interior Design Calculator</h2>
         </Link>
 
-        {/* Capital Gains Calculator */}
-        <Link
-          href="../pages/cgc"
-          className="block rounded-lg shadow-lg p-6 bg-gradient-to-r from-green-600 to-teal-500 text-white hover:shadow-xl transition-all"
-        >
-          <h2 className="text-lg font-semibold">Capital Gains Calculator</h2>
-        </Link>
-
  {/* Property Registration Costs Calculator */}
         <Link
           href="../pages/regcalc"
@@ -70,6 +62,14 @@ export default function ToolsPage() {
           <h2 className="text-lg font-semibold">
             Single Unit Flats ROI Calculator
           </h2>
+        </Link>
+
+          {/* Capital Gains Calculator */}
+        <Link
+          href="../pages/cgc"
+          className="block rounded-lg shadow-lg p-6 bg-gradient-to-r from-green-600 to-teal-500 text-white hover:shadow-xl transition-all"
+        >
+          <h2 className="text-lg font-semibold">Capital Gains Calculator</h2>
         </Link>
 
         {/* More Tools */}
