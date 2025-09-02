@@ -34,7 +34,7 @@ export default async function Home() {
           bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
           bg-clip-text text-transparent animate-gradientWave"
         >
-          Our Properties
+          Hot Properties
         </h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
