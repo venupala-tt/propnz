@@ -83,7 +83,7 @@ export default function Page() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-6">
-      <header><h1 className="text-3xl font-bold">Telangana Property Cost Calculator</h1></header>
+      <header><h1 className="text-3xl font-bold">Telangana Property Registration Cost Calculator</h1></header>
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label>Area</label>
