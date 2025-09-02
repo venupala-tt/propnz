@@ -2,15 +2,60 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+
+// --- Minimal UI replacements (no shadcn needed) ---
+function Card({ children, className = "" }) {
+  return (
+    <div className={`rounded-2xl shadow p-4 bg-white ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+function CardHeader({ children }) {
+  return <div className="mb-2">{children}</div>;
+}
+
+function CardTitle({ children }) {
+  return <h2 className="text-xl font-semibold">{children}</h2>;
+}
+
+function CardContent({ children, className = "" }) {
+  return <div className={className}>{children}</div>;
+}
+
+function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
+  return (
+    <input
+      {...props}
+      className={`w-full border rounded-lg p-2 ${props.className || ""}`}
+    />
+  );
+}
+
+function Label({ children }) {
+  return (
+    <label className="block mb-1 text-sm font-medium text-gray-700">
+      {children}
+    </label>
+  );
+}
+
+function Button({
+  children,
+  className = "",
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      {...props}
+      className={`px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+// --------------------------------------------------
 
 // Utility: IRR calculation via Newton-Raphson
 function calculateIRR(cashflows: number[], guess = 0.1): number {
@@ -22,6 +67,7 @@ function calculateIRR(cashflows: number[], guess = 0.1): number {
       npv += cashflows[t] / Math.pow(1 + rate, t);
       dnpv += (-t * cashflows[t]) / Math.pow(1 + rate, t + 1);
     }
+    if (dnpv === 0) break;
     const newRate = rate - npv / dnpv;
     if (Math.abs(newRate - rate) < 1e-7) return newRate;
     rate = newRate;
