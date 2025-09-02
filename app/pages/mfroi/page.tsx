@@ -140,38 +140,70 @@ export default function MultifamilyROICalculator() {
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
           🏢 Multifamily Property ROI Calculator (with IRR, NPV & Cash Flow Table)
         </h1>
-
         {/* Inputs */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {/* ... same input fields as before ... */}
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Purchase Price (₹)</label>
+            <input type="number" value={purchasePrice} onChange={(e) => setPurchasePrice(Number(e.target.value))} className="w-full border p-2 rounded" />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Units</label>
+            <input type="number" value={units} onChange={(e) => setUnits(Number(e.target.value))} className="w-full border p-2 rounded" />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Average Rent (₹ per month)</label>
+            <input type="number" value={avgRent} onChange={(e) => setAvgRent(Number(e.target.value))} className="w-full border p-2 rounded" />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Vacancy Rate (%)</label>
+            <input type="number" value={vacancyRate} onChange={(e) => setVacancyRate(Number(e.target.value))} className="w-full border p-2 rounded" />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Other Income (₹)</label>
+            <input type="number" value={otherIncome} onChange={(e) => setOtherIncome(Number(e.target.value))} className="w-full border p-2 rounded" />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Fixed Expenses (₹)</label>
+            <input type="number" value={fixedExpenses} onChange={(e) => setFixedExpenses(Number(e.target.value))} className="w-full border p-2 rounded" />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Variable Expense Rate (%)</label>
+            <input type="number" value={variableExpenseRate} onChange={(e) => setVariableExpenseRate(Number(e.target.value))} className="w-full border p-2 rounded" />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Loan Amount (₹)</label>
+            <input type="number" value={loanAmount} onChange={(e) => setLoanAmount(Number(e.target.value))} className="w-full border p-2 rounded" />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Interest Rate (%)</label>
+            <input type="number" value={interestRate} onChange={(e) => setInterestRate(Number(e.target.value))} className="w-full border p-2 rounded" />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Loan Tenure (years)</label>
+            <input type="number" value={loanTenure} onChange={(e) => setLoanTenure(Number(e.target.value))} className="w-full border p-2 rounded" />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Exit Cap Rate (%)</label>
+            <input type="number" value={exitCapRate} onChange={(e) => setExitCapRate(Number(e.target.value))} className="w-full border p-2 rounded" />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Selling Costs (%)</label>
+            <input type="number" value={sellingCostsRate} onChange={(e) => setSellingCostsRate(Number(e.target.value))} className="w-full border p-2 rounded" />
+          </div>
           <div>
             <label className="block font-medium text-gray-700 mb-1">Holding Period (years)</label>
-            <input
-              type="number"
-              value={holdingPeriod}
-              onChange={(e) => setHoldingPeriod(Number(e.target.value))}
-              className="w-full border p-2 rounded"
-            />
+            <input type="number" value={holdingPeriod} onChange={(e) => setHoldingPeriod(Number(e.target.value))} className="w-full border p-2 rounded" />
           </div>
           <div>
             <label className="block font-medium text-gray-700 mb-1">Discount Rate (% for NPV)</label>
-            <input
-              type="number"
-              value={discountRate}
-              onChange={(e) => setDiscountRate(Number(e.target.value))}
-              className="w-full border p-2 rounded"
-            />
+            <input type="number" value={discountRate} onChange={(e) => setDiscountRate(Number(e.target.value))} className="w-full border p-2 rounded" />
           </div>
         </div>
 
-        <button
-          onClick={handleCalculate}
-          className="mt-6 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-        >
+        <button onClick={handleCalculate} className="mt-6 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
           Calculate ROI
         </button>
 
-        {/* Results */}
         {result && (
           <div className="mt-8 bg-gray-50 p-6 rounded-lg shadow-inner">
             <h2 className="text-xl font-bold text-gray-800 mb-4">📊 Results</h2>
@@ -191,7 +223,6 @@ export default function MultifamilyROICalculator() {
               <li>📈 IRR: <b>{result.irr.toFixed(2)}%</b></li>
             </ul>
 
-            {/* Cash Flow Table */}
             <div className="mt-6">
               <h3 className="text-lg font-semibold mb-2">📅 Cash Flow by Year</h3>
               <table className="w-full border-collapse border border-gray-300">
@@ -205,9 +236,7 @@ export default function MultifamilyROICalculator() {
                   {result.table.map((row: any) => (
                     <tr key={row.year} className="text-center">
                       <td className="border border-gray-300 px-4 py-2">{row.year}</td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {row.cashFlow.toLocaleString()}
-                      </td>
+                      <td className="border border-gray-300 px-4 py-2">{row.cashFlow.toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
