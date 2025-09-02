@@ -182,7 +182,7 @@ export default function MultifamilyROICalculator() {
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-4">Multifamily ROI Calculator</h1>
+      <h1 className="text-2xl font-semibold mb-4">Multifamily ROI Calculator (USA)</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <section className="p-4 border rounded-lg">
           <h2 className="font-medium mb-3">Property & Income</h2>
