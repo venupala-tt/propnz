@@ -9,6 +9,8 @@ export default function MultifamilyROICalculator() {
   const [vacancyRate, setVacancyRate] = useState<number | "">("");
   const [operatingExpenseRate, setOperatingExpenseRate] = useState<number | "">("");
   const [loanAmount, setLoanAmount] = useState<number | "">("");
+  const [interestRate, setInterestRate] = useState<number | "">("");
+  const [loanTenure, setLoanTenure] = useState<number | "">("");
 
   const [result, setResult] = useState<any>(null);
 
@@ -19,7 +21,9 @@ export default function MultifamilyROICalculator() {
       avgRent === "" ||
       vacancyRate === "" ||
       operatingExpenseRate === "" ||
-      loanAmount === ""
+      loanAmount === "" ||
+      interestRate === "" ||
+      loanTenure === ""
     ) {
       setResult(null);
       return;
@@ -31,28 +35,45 @@ export default function MultifamilyROICalculator() {
     const vacancy = Number(vacancyRate) / 100;
     const expensesRate = Number(operatingExpenseRate) / 100;
     const loan = Number(loanAmount);
+    const annualInterestRate = Number(interestRate) / 100;
+    const tenureYears = Number(loanTenure);
 
-    // Gross Potential Rent (GPR)
+    // 1. Equity (down payment)
+    const equityInvestment = price - loan;
+
+    // 2. Gross Potential Rent
     const gpr = totalUnits * rent * 12;
 
-    // Vacancy Loss
+    // 3. Vacancy Loss
     const vacancyLoss = gpr * vacancy;
 
-    // Effective Gross Income (EGI)
+    // 4. Effective Gross Income
     const egi = gpr - vacancyLoss;
 
-    // Operating Expenses
+    // 5. Operating Expenses
     const operatingExpenses = egi * expensesRate;
 
-    // Net Operating Income (NOI)
+    // 6. Net Operating Income
     const noi = egi - operatingExpenses;
+
+    // 7. Debt Service (EMI calc)
+    const monthlyRate = annualInterestRate / 12;
+    const months = tenureYears * 12;
+
+    const emi =
+      (loan * monthlyRate * Math.pow(1 + monthlyRate, months)) /
+      (Math.pow(1 + monthlyRate, months) - 1);
+
+    const annualDebtService = emi * 12;
+
+    // 8. Cash Flow After Debt
+    const cashFlowAfterDebt = noi - annualDebtService;
+
+    // 9. Correct Cash-on-Cash ROI
+    const roi = (cashFlowAfterDebt / equityInvestment) * 100;
 
     // Cap Rate
     const capRate = noi / price;
-
-    // ROI (Net Income / Initial Investment)
-    const equityInvestment = price - loan;
-    const roi = (noi / equityInvestment) * 100;
 
     setResult({
       gpr,
@@ -61,7 +82,10 @@ export default function MultifamilyROICalculator() {
       operatingExpenses,
       noi,
       capRate,
+      annualDebtService,
+      cashFlowAfterDebt,
       roi,
+      equityInvestment,
     });
   };
 
@@ -79,7 +103,9 @@ export default function MultifamilyROICalculator() {
             <input
               type="number"
               value={purchasePrice}
-              onChange={(e) => setPurchasePrice(e.target.value === "" ? "" : Number(e.target.value))}
+              onChange={(e) =>
+                setPurchasePrice(e.target.value === "" ? "" : Number(e.target.value))
+              }
               className="w-full border p-2 rounded"
             />
           </div>
@@ -93,7 +119,7 @@ export default function MultifamilyROICalculator() {
             />
           </div>
           <div>
-            <label className="block font-medium text-gray-700 mb-1">Average Rent (₹ per month)</label>
+            <label className="block font-medium text-gray-700 mb-1">Average Rent (₹/month)</label>
             <input
               type="number"
               value={avgRent}
@@ -106,7 +132,9 @@ export default function MultifamilyROICalculator() {
             <input
               type="number"
               value={vacancyRate}
-              onChange={(e) => setVacancyRate(e.target.value === "" ? "" : Number(e.target.value))}
+              onChange={(e) =>
+                setVacancyRate(e.target.value === "" ? "" : Number(e.target.value))
+              }
               className="w-full border p-2 rounded"
             />
           </div>
@@ -126,7 +154,31 @@ export default function MultifamilyROICalculator() {
             <input
               type="number"
               value={loanAmount}
-              onChange={(e) => setLoanAmount(e.target.value === "" ? "" : Number(e.target.value))}
+              onChange={(e) =>
+                setLoanAmount(e.target.value === "" ? "" : Number(e.target.value))
+              }
+              className="w-full border p-2 rounded"
+            />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Interest Rate (% per year)</label>
+            <input
+              type="number"
+              value={interestRate}
+              onChange={(e) =>
+                setInterestRate(e.target.value === "" ? "" : Number(e.target.value))
+              }
+              className="w-full border p-2 rounded"
+            />
+          </div>
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Loan Tenure (years)</label>
+            <input
+              type="number"
+              value={loanTenure}
+              onChange={(e) =>
+                setLoanTenure(e.target.value === "" ? "" : Number(e.target.value))
+              }
               className="w-full border p-2 rounded"
             />
           </div>
@@ -150,6 +202,9 @@ export default function MultifamilyROICalculator() {
               <li>⚙️ Operating Expenses: <b>₹ {result.operatingExpenses.toLocaleString()}</b></li>
               <li>📈 Net Operating Income (NOI): <b>₹ {result.noi.toLocaleString()}</b></li>
               <li>🏷️ Cap Rate: <b>{(result.capRate * 100).toFixed(2)}%</b></li>
+              <li>💳 Annual Debt Service: <b>₹ {result.annualDebtService.toLocaleString()}</b></li>
+              <li>💵 Cash Flow After Debt: <b>₹ {result.cashFlowAfterDebt.toLocaleString()}</b></li>
+              <li>💰 Equity Investment: <b>₹ {result.equityInvestment.toLocaleString()}</b></li>
               <li>💹 ROI (Cash-on-Cash): <b>{result.roi.toFixed(2)}%</b></li>
             </ul>
           </div>
