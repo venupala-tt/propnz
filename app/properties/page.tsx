@@ -25,16 +25,7 @@ export default async function Home() {
       bg-gradient-to-br from-blue-100 via-white to-purple-100 
       animate-gradientWave"
     >
-      {/* Top-right link */}
-      <div className="flex justify-end mb-6">
-        <Link
-          href="../pages/book-an-expert"
-          className="text-blue-600 font-semibold hover:underline"
-        >
-          Book Our Expert
-        </Link>
-      </div>
-      
+          
       <div
         className="w-full max-w-5xl rounded-2xl shadow-lg 
         bg-white/80 backdrop-blur-sm p-8 sm:p-12 
@@ -47,6 +38,15 @@ export default async function Home() {
         >
           Hot Properties
         </h1>
+         {/* Top-right link */}
+      <div className="flex justify-end mb-6">
+        <Link
+          href="../pages/book-an-expert"
+          className="text-blue-600 font-semibold hover:underline"
+        >
+          Book Our Expert
+        </Link>
+      </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {propEntries.items.map(( pty ) => {
