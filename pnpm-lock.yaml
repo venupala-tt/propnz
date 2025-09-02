@@ -74,6 +74,11 @@ importers:
       types:
         specifier: ^0.1.1
         version: 0.1.1
+        '@/components/ui/input':
+    '@/components/ui/label':
+    '@/components/ui/button':
+    '@/components/ui/card':
+    'framer-motion':
     devDependencies:
       '@contentful/rich-text-types':
         specifier: ^17.1.0
