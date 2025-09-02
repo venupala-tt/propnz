@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 // --- Minimal UI replacements (no shadcn needed) ---
 function Card({ children, className = "" }) {
@@ -119,10 +120,16 @@ export default function ROICalculatorPage() {
         className="max-w-4xl mx-auto"
       >
         {/* --- Caption above heading --- */}
-        <p className="text-lg text-gray-700 mb-4 italic">
+        <p className="text-lg text-gray-700 mb-2 italic">
           Do you know you can make money by reselling single unit flats... Buy
           an old flat, renovate, rent it out and get rental income, then resell
           for higher price. Fill the data below and check it yourself !!!
+        </p>
+        <p className="mb-6 text-sm text-blue-700">
+          To know the availability of Single Unit Flats ...{" "}
+          <Link href="/contact" className="underline font-medium">
+            please Contact Us
+          </Link>
         </p>
 
         <h1 className="text-3xl font-bold mb-6">
@@ -201,7 +208,7 @@ export default function ROICalculatorPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Results</CardTitle>
+            <CardTitle>Summary of Profit & ROI</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
             <p>
@@ -227,6 +234,12 @@ export default function ROICalculatorPage() {
             </p>
             <p>
               <strong>Equity IRR:</strong> {(irrEquity * 100).toFixed(2)}%
+            </p>
+            <p className="mt-4 text-sm text-blue-700">
+              Eager to know more about Single Unit Flats available?{" "}
+              <Link href="/contact" className="underline font-medium">
+                please Contact Us
+              </Link>
             </p>
           </CardContent>
         </Card>
