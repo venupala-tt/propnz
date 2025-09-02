@@ -118,6 +118,13 @@ export default function ROICalculatorPage() {
         transition={{ duration: 0.5 }}
         className="max-w-4xl mx-auto"
       >
+        {/* --- Caption above heading --- */}
+        <p className="text-lg text-gray-700 mb-4 italic">
+          Do you know you can make money by reselling single unit flats... Buy
+          an old flat, renovate, rent it out and get rental income, then resell
+          for higher price. Fill the data below and check it yourself !!!
+        </p>
+
         <h1 className="text-3xl font-bold mb-6">
           Flat Reselling ROI Calculator
         </h1>
@@ -153,11 +160,17 @@ export default function ROICalculatorPage() {
             </div>
             <div>
               <Label>Years Rented</Label>
-              <Input
-                type="number"
+              <select
                 value={years}
                 onChange={(e) => setYears(Number(e.target.value))}
-              />
+                className="w-full border rounded-lg p-2"
+              >
+                {Array.from({ length: 10 }, (_, i) => i + 1).map((yr) => (
+                  <option key={yr} value={yr}>
+                    {yr}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <Label>Maintenance / Year</Label>
