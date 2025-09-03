@@ -31,16 +31,6 @@ export default async function Home() {
         bg-white/80 backdrop-blur-sm p-8 sm:p-12 
         animate-fadeInBounce"
       >
-        {/* Top-right link */}
-        <div className="flex justify-end mb-6">
-          <Link
-            href="../pages/book-an-expert"
-            className="text-blue-600 font-semibold hover:underline"
-          >
-            Book Our Expert
-          </Link>
-        </div>
-
         <h1
           className="text-3xl sm:text-4xl font-bold text-center mb-12 
           bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
