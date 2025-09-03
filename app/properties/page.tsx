@@ -40,12 +40,16 @@ export default async function Home() {
         </h1>
          {/* Top-right link */}
       <div className="flex justify-end mb-6">
+
         <Link
-          href="../pages/book-an-expert"
-          className="text-blue-600 font-semibold hover:underline"
-        >
-          Book Our Expert
-        </Link>
+              href="/pages/book-an-expert"
+              className="px-6 py-3 rounded-xl shadow-lg font-semibold text-white 
+                         bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+                         hover:opacity-90 transition text-center sm:text-left"
+            >
+              Book Our Expert
+         </Link>
+       
       </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
