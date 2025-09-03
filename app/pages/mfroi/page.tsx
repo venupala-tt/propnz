@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from 'react'
 
-// Multifamily ROI Calculator - Next.js page (page.tsx)
+// Multifamily ROI Calculator USA - Next.js page (page.tsx)
 // Tailwind CSS used for styling (no imports required here)
 
 export default function MultifamilyROICalculator() {
