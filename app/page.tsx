@@ -25,16 +25,17 @@ export default function HomePage() {
             PropMatics
           </h1>
 
-          <p className="text-base text-gray-700 max-w-xl mx-auto mb-4">
-            Learn & Build scalable, performant, and visually appealing property
-            solutions.
-          </p>
+          {/* Subheading + Book Our Expert inline (responsive) */}
+          <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between max-w-4xl mx-auto mb-4 gap-3">
+            <p className="text-base text-gray-700 text-center sm:text-left">
+              Learn & Build scalable, performant, and visually appealing property solutions.
+            </p>
 
-          {/* Book Our Expert link */}
-          <div className="w-full flex justify-end">
             <Link
               href="/pages/book-an-expert"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+              className="px-6 py-3 rounded-xl shadow-lg font-semibold text-white 
+                         bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+                         hover:opacity-90 transition text-center sm:text-left"
             >
               Book Our Expert
             </Link>
