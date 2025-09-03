@@ -29,6 +29,16 @@ export default function HomePage() {
             Learn & Build scalable, performant, and visually appealing property
             solutions.
           </p>
+
+          {/* Book Our Expert link */}
+          <div className="w-full flex justify-end">
+            <Link
+              href="/pages/book-an-expert"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+            >
+              Book Our Expert
+            </Link>
+          </div>
         </div>
 
         {/* Highlights Section */}
