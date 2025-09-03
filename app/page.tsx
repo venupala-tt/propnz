@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
 import dynamic from "next/dynamic";
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "../components/SearchBar";
 
 
 export default function HomePage() {
