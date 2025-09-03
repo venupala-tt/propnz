@@ -14,6 +14,17 @@ export default function ProductsPage() {
         bg-white/80 backdrop-blur-sm p-8 sm:p-12 
         animate-fadeInBounce"
       >
+         {/* Top-right link */}
+      <div className="flex justify-end mb-6">
+       <Link
+              href="/pages/book-an-expert"
+              className="px-6 py-3 rounded-xl shadow-lg font-semibold text-white 
+                         bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+                         hover:opacity-90 transition text-center sm:text-left"
+            >
+              Book Our Expert
+            </Link>
+        </div>
         <h2
           className="text-3xl sm:text-4xl font-bold text-center mb-12 
           bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
