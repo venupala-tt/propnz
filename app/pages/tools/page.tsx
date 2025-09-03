@@ -78,7 +78,7 @@ export default function ToolsPage() {
           href="../pages/mfroi"
           className="block rounded-lg shadow-lg p-6 bg-gradient-to-r from-green-600 to-teal-500 text-white hover:shadow-xl transition-all"
         >
-          <h2 className="text-lg font-semibold">Multi Family Flats ROI</h2>
+          <h2 className="text-lg font-semibold">Multi Family Flats ROI USA</h2>
         </Link>
 
           {/* Capital Gains Calculator */}
