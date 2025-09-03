@@ -3,15 +3,17 @@ import Link from "next/link";
 export default function ToolsPage() {
   return (
     <section className="px-6 py-12 max-w-3xl mx-auto">
-      {/* Top-right link */}
-      <div className="flex justify-end mb-6">
-        <Link
-          href="../pages/book-an-expert"
-          className="text-blue-600 font-semibold hover:underline"
-        >
-          Book Our Expert
-        </Link>
-      </div>
+   {/* Top-right link */}
+        <div className="flex justify-end mb-6">
+       <Link
+              href="/pages/book-an-expert"
+              className="px-6 py-3 rounded-xl shadow-lg font-semibold text-white 
+                         bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+                         hover:opacity-90 transition text-center sm:text-left"
+            >
+              Book Our Expert
+            </Link>
+        </div>
       <h1 className="text-3xl font-bold mb-6 text-center">Property Tools</h1>
       <p className="text-gray-600 text-center mb-10">
         Explore our handy property calculators and tools to make informed
