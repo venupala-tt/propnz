@@ -1,10 +1,24 @@
 import { NextResponse } from "next/server";
 import { createClient } from "contentful";
 
+// Create Contentful client
 const client = createClient({
-  space: "ghxp9r5ui85n",
-  accessToken: "9276aed838db6b7ac88ee1d2fad33f33e3f98cef0dc6b44504f2281a420e5358",
+  space: process.env.CONTENTFUL_SPACE_ID!,
+  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
 });
+
+// Helper: extract plain text from Contentful Rich Text
+function extractTextFromRichText(richText: any): string {
+  if (!richText?.content) return "";
+  return richText.content
+    .map((node: any) =>
+      node.content
+        ? node.content.map((c: any) => c.value || "").join(" ")
+        : ""
+    )
+    .join(" ")
+    .trim();
+}
 
 export async function GET(req: Request) {
   try {
@@ -16,17 +30,18 @@ export async function GET(req: Request) {
       query: q,
     });
 
-    const results = entries.items.map((item: any) => ({
+    const results = (entries.items || []).map((item: any) => ({
       id: item.sys.id,
       title: item.fields.title || "Untitled",
-      description: item.fields.description || "",
-      location: item.fields.location || "",
+      description: extractTextFromRichText(item.fields.description) || "",
+      location: item.fields.location
+        ? `${item.fields.location.lat}, ${item.fields.location.lon}`
+        : "",
     }));
 
-    return NextResponse.json(results); // ✅ always return an array
-  } catch (err: any) {
-    console.error("Contentful API Error:", err.message || err);
-    // ✅ return empty array instead of error object
-    return NextResponse.json([], { status: 200 });
+    return NextResponse.json(results);
+  } catch (err) {
+    console.error("Contentful API Error:", err);
+    return NextResponse.json([]);
   }
 }
