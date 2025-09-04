@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { client } from "contentful";
+import { createClient } from "contentful";
 
 
 export async function GET(req: Request) {
@@ -10,7 +10,15 @@ export async function GET(req: Request) {
     return NextResponse.json([]);
   }
 
-  try {
+	  try {
+
+	  const client = createClient({
+	    space: "ghxp9r5ui85n",
+	    accessToken: "9276aed838db6b7ac88ee1d2fad33f33e3f98cef0dc6b44504f2281a420e5358",
+	  });
+
+  
+  
     const entries = await client.getEntries({
       content_type: "property", // change to your Contentful content type ID
       query: query, // full-text search
