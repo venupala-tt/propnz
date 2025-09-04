@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
 import dynamic from "next/dynamic";
-import SearchBar from "../components/SearchBar";
-
+ 
 
 export default function HomePage() {
   return (
@@ -14,8 +13,7 @@ export default function HomePage() {
         animate-gradientWave"
       >
          <h1 className="text-2xl font-bold mb-6">Property Search</h1>
-      <SearchBar />
-        {/* Hero Section */}
+         {/* Hero Section */}
         <div
           className="w-full max-w-4xl rounded-xl shadow-md 
           bg-white/80 backdrop-blur-sm p-6 sm:p-8 
