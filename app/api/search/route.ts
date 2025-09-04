@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { createClient } from "contentful";
 
 const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID!,
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
+  space: process.env.CONTENTFUL_SPACE_ID,
+  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
 });
 
 export async function GET(req: Request) {
