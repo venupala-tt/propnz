@@ -34,7 +34,9 @@ export async function GET(req: Request) {
       id: item.sys.id,
       title: item.fields.title || "Untitled",
       description: extractTextFromRichText(item.fields.description) || "",
-      location: item.fields.location
+      location: item.fields.city // ✅ Prefer city field
+        ? item.fields.city
+        : item.fields.location
         ? `${item.fields.location.lat}, ${item.fields.location.lon}`
         : "",
     }));
