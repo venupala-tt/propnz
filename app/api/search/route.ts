@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "contentful";
 
-// Create Contentful client
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID!,
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
@@ -12,13 +11,15 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const q = searchParams.get("q")?.toLowerCase() || "";
 
-    // Fetch entries from Contentful (content type: property)
+    console.log("Incoming search query:", q);
+
     const entries = await client.getEntries({
       content_type: "property",
       query: q,
     });
 
-    // Map Contentful data to the format expected by SearchBar.tsx
+    console.log("Fetched entries:", entries.items.length);
+
     const results = entries.items.map((item: any) => ({
       id: item.sys.id,
       title: item.fields.title || "Untitled",
@@ -27,8 +28,8 @@ export async function GET(req: Request) {
     }));
 
     return NextResponse.json(results);
-  } catch (err) {
-    console.error("Contentful API Error:", err);
-    return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
+  } catch (err: any) {
+    console.error("Contentful API Error:", err.message || err);
+    return NextResponse.json({ error: err.message || "Failed to fetch data" }, { status: 500 });
   }
 }
