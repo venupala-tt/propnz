@@ -1,25 +1,34 @@
 import { NextResponse } from "next/server";
+import { createClient } from "contentful";
 
-const mockData = [
-  { id: "1", title: "Luxury Apartment", description: "3BHK in city center", location: "Hyderabad" },
-  { id: "2", title: "Villa with Garden", description: "Spacious villa with greenery", location: "Bangalore" },
-  { id: "3", title: "Affordable Studio", description: "Perfect for singles", location: "Chennai" },
-];
+// Create Contentful client
+const client = createClient({
+  space: process.env.CONTENTFUL_SPACE_ID!,
+  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
+});
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const q = searchParams.get("q")?.toLowerCase() || "";
 
-    const results = mockData.filter(
-      (item) =>
-        item.title.toLowerCase().includes(q) ||
-        item.description.toLowerCase().includes(q) ||
-        item.location.toLowerCase().includes(q)
-    );
+    // Fetch entries from Contentful (content type: property)
+    const entries = await client.getEntries({
+      content_type: "property",
+      query: q,
+    });
+
+    // Map Contentful data to the format expected by SearchBar.tsx
+    const results = entries.items.map((item: any) => ({
+      id: item.sys.id,
+      title: item.fields.title || "Untitled",
+      description: item.fields.description || "",
+      location: item.fields.location || "",
+    }));
 
     return NextResponse.json(results);
   } catch (err) {
-    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+    console.error("Contentful API Error:", err);
+    return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
   }
 }
