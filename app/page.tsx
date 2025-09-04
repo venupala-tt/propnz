@@ -12,7 +12,6 @@ export default function HomePage() {
         bg-gradient-to-br from-blue-100 via-white to-purple-100 
         animate-gradientWave"
       >
-         <h1 className="text-2xl font-bold mb-6">Property Search</h1>
          {/* Hero Section */}
         <div
           className="w-full max-w-4xl rounded-xl shadow-md 
