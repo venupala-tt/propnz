@@ -24,11 +24,11 @@ export default async function PropertiesPage() {
           const { title, slug, image } = pty.fields;
 
           // ✅ prepend https:
-                  const testimgUrl =  image.fields.file.url;
+            const imgUrl =  image.fields.file.url;
 
-          const imgUrl = testimgUrl
-            ? `https:${image.fields.file.url}`
-            : "/placeholder.png";
+     //     const imgUrl = testimgUrl
+         //   ? `https:${image.fields.file.url}`
+         //   : "/placeholder.png";
 
           return (
             <Link
