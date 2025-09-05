@@ -30,7 +30,7 @@ export default function HomePage() {
                          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
                          hover:opacity-90 transition"
             >
-              Book Our Expert
+              Reach Out to Our Property Expert
             </Link>
           </div>
 
