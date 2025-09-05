@@ -24,7 +24,8 @@ export async function GET(req: Request) {
     const results = data.items.map((item: any) => ({
       id: item.sys.id,
       title: item.fields.title,
-      slug: `/properties/${item.fields.slug}`,
+      // ✅ Fixed path
+      slug: `/properties/propdetails/${item.fields.slug}`,
     }));
 
     return NextResponse.json(results);
