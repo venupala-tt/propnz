@@ -22,7 +22,7 @@ export default function HomePage() {
           <div className="flex-1 text-center sm:text-left">
            
             <h2 className="text-lg font-semibold mb-2">
-              Learn & Build scalable, performant, and visually appealing property solutions.
+              Learn & Build scalable, performant visually appealing property solutions.
             </h2>
             <Link
               href="/pages/book-an-expert"
