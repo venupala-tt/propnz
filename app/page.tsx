@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
 import SearchBar from "../components/SearchBar";
@@ -11,48 +12,43 @@ export default function HomePage() {
         bg-gradient-to-br from-blue-100 via-white to-purple-100 
         animate-gradientWave"
       >
-        {/* Property Search */}
-        <div className="w-full flex justify-center sm:justify-end items-center mb-4 sticky top-0 z-50 bg-gradient-to-br from-blue-100 via-white to-purple-100 p-2 shadow-md">
-          <div className="flex flex-col items-center sm:items-end w-full sm:w-auto">
-            <h1 className="text-lg font-semibold mb-2">Property Search</h1>
-            <SearchBar />
-          </div>
-        </div>
-
-        {/* Hero Section */}
+        {/* Hero + Search Section Combined */}
         <div
-          className="w-full max-w-4xl rounded-xl shadow-md 
-          bg-white/80 backdrop-blur-sm p-6 sm:p-8 
-          animate-fadeInBounce text-center"
+          className="w-full max-w-5xl rounded-xl shadow-md 
+          bg-white/80 backdrop-blur-sm p-6 sm:p-10 
+          animate-fadeInBounce flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-6"
         >
-          <h1
-            className="text-3xl sm:text-4xl font-bold mb-4 
-            bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-            bg-clip-text text-transparent animate-gradientWave"
-          >
-            PropMatics
-          </h1>
-
-          <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between max-w-4xl mx-auto mb-4 gap-3">
-            <p className="text-base text-gray-700 text-center sm:text-left">
+          {/* Hero Content */}
+          <div className="flex-1 text-center sm:text-left">
+            <h1
+              className="text-3xl sm:text-4xl font-bold mb-4 
+              bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+              bg-clip-text text-transparent animate-gradientWave"
+            >
+              PropMatics
+            </h1>
+            <p className="text-base text-gray-700 mb-4">
               Learn & Build scalable, performant, and visually appealing property solutions.
             </p>
-
             <Link
               href="/pages/book-an-expert"
               className="px-6 py-3 rounded-xl shadow-lg font-semibold text-white 
                          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-                         hover:opacity-90 transition text-center sm:text-left"
+                         hover:opacity-90 transition"
             >
               Book Our Expert
             </Link>
           </div>
+
+          {/* Search Box */}
+          <div className="w-full sm:w-80 flex flex-col items-center sm:items-end">
+            <h2 className="text-lg font-semibold mb-2">Property Search</h2>
+            <SearchBar />
+          </div>
         </div>
 
         {/* Highlights Section */}
-        <div
-          className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 w-full max-w-5xl"
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 w-full max-w-5xl">
           <Link
             href="/products"
             className="group p-4 rounded-lg bg-white shadow-md hover:shadow-xl 
