@@ -1,49 +1,35 @@
 import { NextResponse } from "next/server";
-import { createClient } from "contentful";
 
-// Create Contentful client
-const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID!,
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
-});
-
-// Helper: extract plain text from Contentful Rich Text
-function extractTextFromRichText(richText: any): string {
-  if (!richText?.content) return "";
-  return richText.content
-    .map((node: any) =>
-      node.content
-        ? node.content.map((c: any) => c.value || "").join(" ")
-        : ""
-    )
-    .join(" ")
-    .trim();
-}
+const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
+const CONTENTFUL_ACCESS_TOKEN = process.env.CONTENTFUL_ACCESS_TOKEN!;
+const CONTENTFUL_ENVIRONMENT = "master";
 
 export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const query = searchParams.get("q")?.toLowerCase() || "";
+
+  if (!query || query.length < 2) {
+    return NextResponse.json([]);
+  }
+
   try {
-    const { searchParams } = new URL(req.url);
-    const q = searchParams.get("q")?.toLowerCase() || "";
+    const res = await fetch(
+      `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?access_token=${CONTENTFUL_ACCESS_TOKEN}&content_type=property&query=${encodeURIComponent(
+        query
+      )}`
+    );
 
-    const entries = await client.getEntries({
-      content_type: "property",
-      query: q,
-    });
+    const data = await res.json();
 
-    const results = (entries.items || []).map((item: any) => ({
+    const results = data.items.map((item: any) => ({
       id: item.sys.id,
-      title: item.fields.title || "Untitled",
-      description: extractTextFromRichText(item.fields.description) || "",
-      location: item.fields.city // ✅ Prefer city field
-        ? item.fields.city
-        : item.fields.location
-        ? `${item.fields.location.lat}, ${item.fields.location.lon}`
-        : "",
+      title: item.fields.title,
+      slug: `/properties/${item.fields.slug}`,
     }));
 
     return NextResponse.json(results);
-  } catch (err) {
-    console.error("Contentful API Error:", err);
-    return NextResponse.json([]);
+  } catch (error) {
+    console.error("Contentful search error:", error);
+    return NextResponse.json({ error: "Failed to fetch search results" }, { status: 500 });
   }
 }
