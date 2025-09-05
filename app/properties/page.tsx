@@ -21,9 +21,12 @@ export default async function PropertiesPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6 flex flex-col items-center">
       {/* Page Heading */}
-      <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-8">
-        Trending Properties
-      </h1>
+      <h2
+          className="text-3xl sm:text-4xl font-bold text-center mb-12 
+          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+          bg-clip-text text-transparent animate-gradientWave"
+        >        Trending Properties
+      </h2>
 
       <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {data.items.map((pty: any) => {
