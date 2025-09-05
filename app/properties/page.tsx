@@ -1,4 +1,3 @@
-// new
 import Link from "next/link";
 import Image from "next/image";
 
@@ -19,63 +18,69 @@ export default async function PropertiesPage() {
   const data = await res.json();
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6 flex flex-col items-center">
-      {/* Page Heading */}
-      <h2
-          className="text-3xl sm:text-4xl font-bold text-center mb-12 
-          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-          bg-clip-text text-transparent animate-gradientWave"
-        >        Trending Properties
-      </h2>
+    <section className="w-full py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Heading */}
+        <div className="text-center mb-14">
+          <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+            Trending Properties
+          </h2>
+          <p className="mt-4 text-lg leading-8 text-gray-600">
+            Explore our curated list of trending properties that fit your investment and lifestyle.
+          </p>
+        </div>
 
-      <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data.items.map((pty: any) => {
-          const { title, slug, image } = pty.fields;
+        {/* Properties Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          {data.items.map((pty: any) => {
+            const { title, slug, image } = pty.fields;
 
-          let imgUrl = "/placeholder.png";
-          if (image?.sys?.id && data.includes?.Asset) {
-            const asset = data.includes.Asset.find(
-              (a: any) => a.sys.id === image.sys.id
-            );
-            if (asset?.fields?.file?.url) {
-              imgUrl = `https:${asset.fields.file.url}`;
+            let imgUrl = "/placeholder.png";
+            if (image?.sys?.id && data.includes?.Asset) {
+              const asset = data.includes.Asset.find(
+                (a: any) => a.sys.id === image.sys.id
+              );
+              if (asset?.fields?.file?.url) {
+                imgUrl = `https:${asset.fields.file.url}`;
+              }
             }
-          }
 
-          return (
-            <div
-              key={slug}
-              className="group rounded-xl bg-white shadow-md hover:shadow-xl 
-              transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
-            >
-              {/* Image as clickable link */}
-              <Link href={`/properties/propdetails/${slug}`}>
-                <div className="relative w-full h-48">
-                  <Image
-                    src={imgUrl}
-                    alt={title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw,
-                           (max-width: 1200px) 50vw,
-                           33vw"
-                  />
-                </div>
-              </Link>
-
-              {/* Title as clickable link */}
-              <div className="p-6">
-                <Link
-                  href={`/properties/propdetails/${slug}`}
-                  className="text-xl font-semibold mb-2 text-gray-800 group-hover:text-purple-600 hover:underline"
-                >
-                  {title}
+            return (
+              <div
+                key={slug}
+                className="group flex flex-col items-center rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden bg-white"
+              >
+                {/* Image with hover overlay */}
+                <Link href={`/properties/propdetails/${slug}`} className="w-full relative">
+                  <div className="relative w-full h-56 overflow-hidden">
+                    <Image
+                      src={imgUrl}
+                      alt={title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw,
+                             (max-width: 1200px) 50vw,
+                             33vw"
+                    />
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </div>
                 </Link>
+
+                {/* Title */}
+                <div className="p-6 text-center">
+                  <Link
+                    href={`/properties/propdetails/${slug}`}
+                    className="text-lg font-semibold text-gray-900 hover:text-purple-600 transition-colors"
+                  >
+                    {title}
+                  </Link>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-    </main>
+    </section>
   );
 }
