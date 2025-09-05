@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 interface Property {
   id: string;
   title: string;
-  description: string;
-  location: string;
+  slug: string;
 }
 
 export default function SearchBar() {
@@ -53,13 +53,13 @@ export default function SearchBar() {
 
         <ul className="space-y-2">
           {results.map((item) => (
-            <li
-              key={item.id}
-              className="p-4 bg-white rounded-xl shadow hover:shadow-md transition"
-            >
-              <h3 className="text-lg font-semibold">{item.title}</h3>
-              <p className="text-gray-600 text-sm">{item.description}</p>
-              <span className="text-xs text-gray-400">{item.location}</span>
+            <li key={item.id}>
+              <Link
+                href={item.slug}
+                className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition text-blue-600 font-medium"
+              >
+                {item.title}
+              </Link>
             </li>
           ))}
         </ul>
