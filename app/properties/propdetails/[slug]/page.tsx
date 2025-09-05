@@ -48,6 +48,8 @@ export default async function PropPage({ params }: PropPageProps) {
   const propdetail = await fetchPropPost(slug);
   const pt  = propdetail.fields.ptitle;
     const pd  = propdetail.fields.description;
+      const image  = propdetail.fields.image;
+
 
 // 🔹 Find the linked asset in "includes.Asset"
           let imgUrl = "/placeholder.png";
