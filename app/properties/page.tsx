@@ -7,7 +7,8 @@ export default async function PropertiesPage() {
   const CONTENTFUL_ENVIRONMENT = "master";
 
   const res = await fetch(
-    `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?access_token=${CONTENTFUL_ACCESS_TOKEN}&content_type=property&include=1`,
+    `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?access_token=${CONTENTFUL_ACCESS_TOKEN}&content_type=property&include=2`, 
+    // 🔹 use include=2 to fetch linked assets
     { cache: "no-store" }
   );
 
@@ -15,18 +16,24 @@ export default async function PropertiesPage() {
     throw new Error("Failed to fetch properties");
   }
 
-  const propEntries = await res.json();
+  const data = await res.json();
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6 flex flex-col items-center">
       <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {propEntries.items.map((pty: any) => {
+        {data.items.map((pty: any) => {
           const { title, slug, image } = pty.fields;
 
-          // ✅ prepend https:
-          const imgUrl = image?.fields?.file?.url
-            ? `https:${image.fields.file.url}`
-            : "/placeholder.png";
+          // 🔹 Find the linked asset in "includes.Asset"
+          let imgUrl = "/placeholder.png";
+          if (image?.sys?.id && data.includes?.Asset) {
+            const asset = data.includes.Asset.find(
+              (a: any) => a.sys.id === image.sys.id
+            );
+            if (asset?.fields?.file?.url) {
+              imgUrl = `https:${asset.fields.file.url}`;
+            }
+          }
 
           return (
             <Link
@@ -41,10 +48,9 @@ export default async function PropertiesPage() {
                   alt={title}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 
-                         (max-width: 1200px) 50vw, 
+                  sizes="(max-width: 768px) 100vw,
+                         (max-width: 1200px) 50vw,
                          33vw"
-                  priority={false}
                 />
               </div>
 
