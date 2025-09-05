@@ -1,113 +1,97 @@
-
-/* PROP DETAILS PAGE */
-import { createClient } from "contentful";
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { PropItem } from "../../../../app/types";
+import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 
-const client = createClient({
-  accessToken: "9276aed838db6b7ac88ee1d2fad33f33e3f98cef0dc6b44504f2281a420e5358",
-  space: "ghxp9r5ui85n",
-});
+const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
+const CONTENTFUL_ACCESS_TOKEN = process.env.CONTENTFUL_ACCESS_TOKEN!;
+const CONTENTFUL_ENVIRONMENT = "master";
 
-export async function generateStaticParams() {
-  const queryOptions = {
-    content_type: "property",
-    select: "fields.slug",
+async function getProperty(slug: string) {
+  const res = await fetch(
+    `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?access_token=${CONTENTFUL_ACCESS_TOKEN}&content_type=property&fields.slug=${slug}&include=2&limit=1`,
+    { cache: "no-store" }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch property details");
+  }
+
+  const data = await res.json();
+  if (!data.items.length) {
+    return null;
+  }
+
+  const property = data.items[0];
+  const imageId = property.fields.image?.sys?.id;
+
+  // ?? resolve linked image asset
+  let imageUrl = null;
+  if (imageId && data.includes?.Asset) {
+    const asset = data.includes.Asset.find((a: any) => a.sys.id === imageId);
+    imageUrl = asset?.fields?.file?.url
+      ? `https:${asset.fields.file.url}`
+      : null;
+  }
+
+  return {
+    id: property.sys.id,
+    title: property.fields.title,
+    description: property.fields.description || null,
+    location: property.fields.location || "",
+    imageUrl,
   };
-
-  const properties = await client.getEntries(queryOptions);
-
-  return properties.items.map((property) => {
-    return ({
-      slug: property.fields.slug,
-      fallback: 'false'
-    });
-  });
-
 }
 
-const fetchPropPost = async (slug: string): Promise<PropItem> => {
-  const queryOptions = {
-    content_type: "property",
-    "fields.slug[match]": slug
-  };
+export default async function PropertyPage({ params }: { params: { slug: string } }) {
+  const property = await getProperty(params.slug);
 
-  // console.log("QO: " + queryOptions);
-  const queryResult = await client.getEntries(queryOptions);
-
-  return queryResult.items[0] as unknown as PropItem;
-};
-
-type PropPageProps = {
-  params: Promise<{ slug: string }>;
-};
-
-export default async function PropPage({ params }: PropPageProps) {
-  const { slug } = await params;
-  const propdetail = await fetchPropPost(slug);
-  const pt  = propdetail.fields.ptitle;
-    const pd  = propdetail.fields.description;
-      const image  = propdetail.fields.image;
-
-
-// 🔹 Find the linked asset in "includes.Asset"
-          let imgUrl = "/placeholder.png";
-          if (image?.sys?.id && data.includes?.Asset) {
-            const asset = data.includes.Asset.find(
-              (a: any) => a.sys.id === image.sys.id
-            );
-            if (asset?.fields?.file?.url) {
-              imgUrl = `https:${asset.fields.file.url}`;
-            }
-          }
-  
-  
-  
-  // const imageUrl = heroImage?.fields?.file?.url
-  // const imageUrl = propdetail.fields.heroImage
-     //         ? `https:${propdetail.fields.heroImage}`
-       //       : "/default-blog.jpg"; 
-
+  if (!property) {
+    notFound();
+  }
 
   return (
-    <main
-      className="flex min-h-screen flex-col items-center justify-center 
-      p-6 sm:p-12 lg:p-24 
-      bg-gradient-to-br from-blue-100 via-white to-purple-100 
-      animate-gradientWave"
-    >
-      <div
-        className="w-full max-w-3xl rounded-2xl shadow-lg 
-        bg-white/80 backdrop-blur-sm p-8 sm:p-12 
-        animate-fadeInBounce"
-      >
-        
-        <h1
-          className="text-3xl sm:text-4xl font-bold text-center mb-4 
-          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-          bg-clip-text text-transparent animate-gradientWave"
-        >
-          {pt}
-        </h1>
-
-    
-
-        <div className="prose prose-lg max-w-none text-gray-700">
-          {documentToReactComponents(pd)}
-        </div>
-
-        <div className="mt-8 text-center">
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6 flex flex-col items-center">
+      <div className="w-full max-w-3xl bg-white shadow-md rounded-xl p-8">
+        {/* Back Button */}
+        <div className="mb-6">
           <Link
             href="/properties"
-            className="inline-block px-6 py-3 rounded-lg font-semibold text-white 
-            bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-            hover:from-blue-700 hover:via-purple-600 hover:to-pink-600 
-            transition-all duration-300 animate-fadeInBounce"
+            className="inline-block px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 rounded-lg shadow hover:opacity-90 transition"
           >
-            ← Back to Properties
+            ? Back to Properties
           </Link>
         </div>
+
+        {/* Title */}
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">{property.title}</h1>
+
+        {/* Image */}
+        {property.imageUrl && (
+          <div className="relative w-full h-64 mb-6">
+            <Image
+              src={property.imageUrl}
+              alt={property.title}
+              fill
+              className="object-cover rounded-lg shadow"
+              sizes="(max-width: 768px) 100vw,
+                     (max-width: 1200px) 80vw,
+                     800px"
+            />
+          </div>
+        )}
+
+        {/* Description */}
+        {property.description && (
+          <div className="prose prose-lg max-w-none mb-6">
+            {documentToReactComponents(property.description)}
+          </div>
+        )}
+
+        {/* Location */}
+        {property.location && (
+          <p className="text-sm text-gray-500">?? {property.location}</p>
+        )}
       </div>
     </main>
   );
