@@ -1,5 +1,5 @@
 
-/* PROP DETAILS PAGE */
+/* PROP DETAILS PAGE 5th */
 import { createClient } from "contentful";
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { PropItem } from "../../../../app/types";
