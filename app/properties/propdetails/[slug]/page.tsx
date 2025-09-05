@@ -1,99 +1,121 @@
 
-/* PROP DETAILS PAGE */
-import { createClient } from "contentful";
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { PropItem } from "../../../../app/types";
+import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import type { Document } from "@contentful/rich-text-types";
 
-const client = createClient({
-  accessToken: "9276aed838db6b7ac88ee1d2fad33f33e3f98cef0dc6b44504f2281a420e5358",
-  space: "ghxp9r5ui85n",
-});
+const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
+const CONTENTFUL_ACCESS_TOKEN = process.env.CONTENTFUL_ACCESS_TOKEN!;
+const CONTENTFUL_ENVIRONMENT = "master";
 
-export async function generateStaticParams() {
-  const queryOptions = {
-    content_type: "property",
-    select: "fields.slug",
+type Property = {
+  id: string;
+  title: string;
+  description: Document | string | null;
+  location: string;
+  imageUrl: string | null;
+};
+
+async function getProperty(slug: string): Promise<Property | null> {
+  const res = await fetch(
+    `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?access_token=${CONTENTFUL_ACCESS_TOKEN}&content_type=property&fields.slug=${slug}&include=2&limit=1`,
+    { cache: "no-store" }
+  );
+
+  if (!res.ok) {
+    console.error("Contentful fetch failed", res.status);
+    return null;
+  }
+
+  const data = await res.json();
+  if (!data.items?.length) {
+    return null;
+  }
+
+  const property = data.items[0];
+  const fields = property.fields || {};
+
+  // Safe values
+  const title: string = fields.title || "Untitled";
+  const description: Document | string | null =
+    fields.description || null;
+  const location: string = fields.location || "";
+
+  // Safe image resolution
+  let imageUrl: string | null = null;
+  const imageId = fields.image?.sys?.id;
+  if (imageId && data.includes?.Asset) {
+    const asset = data.includes.Asset.find((a: any) => a.sys.id === imageId);
+    if (asset?.fields?.file?.url) {
+      imageUrl = `https:${asset.fields.file.url}`;
+    }
+  }
+
+  return {
+    id: property.sys.id,
+    title,
+    description,
+    location,
+    imageUrl,
   };
-
-  const properties = await client.getEntries(queryOptions);
-
-  return properties.items.map((property) => {
-    return ({
-      slug: property.fields.slug,
-      fallback: 'false'
-    });
-  });
-
 }
 
-const fetchPropPost = async (slug: string): Promise<PropItem> => {
-  const queryOptions = {
-    content_type: "property",
-    "fields.slug[match]": slug
-  };
+export default async function PropertyPage({ params }: { params: { slug: string } }) {
+  const property = await getProperty(params.slug);
 
-  // console.log("QO: " + queryOptions);
-  const queryResult = await client.getEntries(queryOptions);
-
-  return queryResult.items[0] as unknown as PropItem;
-};
-
-type PropPageProps = {
-  params: Promise<{ slug: string }>;
-};
-
-export default async function PropPage({ params }: PropPageProps) {
-  const { slug } = await params;
-  const propdetail = await fetchPropPost(slug);
-  const pt  = propdetail.fields.ptitle;
-    const pd  = propdetail.fields.description;
-
-  
-  // const imageUrl = heroImage?.fields?.file?.url
-  // const imageUrl = propdetail.fields.heroImage
-     //         ? `https:${propdetail.fields.heroImage}`
-       //       : "/default-blog.jpg"; 
-
+  if (!property) {
+    notFound();
+  }
 
   return (
-    <main
-      className="flex min-h-screen flex-col items-center justify-center 
-      p-6 sm:p-12 lg:p-24 
-      bg-gradient-to-br from-blue-100 via-white to-purple-100 
-      animate-gradientWave"
-    >
-      <div
-        className="w-full max-w-3xl rounded-2xl shadow-lg 
-        bg-white/80 backdrop-blur-sm p-8 sm:p-12 
-        animate-fadeInBounce"
-      >
-        
-        <h1
-          className="text-3xl sm:text-4xl font-bold text-center mb-4 
-          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-          bg-clip-text text-transparent animate-gradientWave"
-        >
-          {pt}
-        </h1>
-
-    
-
-        <div className="prose prose-lg max-w-none text-gray-700">
-          {documentToReactComponents(pd)}
-        </div>
-
-        <div className="mt-8 text-center">
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6 flex flex-col items-center">
+      <div className="w-full max-w-3xl bg-white shadow-md rounded-xl p-8">
+        {/* Back Button */}
+        <div className="mb-6">
           <Link
             href="/properties"
-            className="inline-block px-6 py-3 rounded-lg font-semibold text-white 
-            bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-            hover:from-blue-700 hover:via-purple-600 hover:to-pink-600 
-            transition-all duration-300 animate-fadeInBounce"
+            className="inline-block px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 rounded-lg shadow hover:opacity-90 transition"
           >
             ← Back to Properties
           </Link>
         </div>
+
+        {/* Hero Section with Title + Image */}
+        {property.imageUrl && (
+          <div className="relative w-full h-72 sm:h-96 mb-8 rounded-xl overflow-hidden shadow-lg">
+            <Image
+              src={property.imageUrl}
+              alt={property.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw,
+                     (max-width: 1200px) 80vw,
+                     1000px"
+            />
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">
+                {property.title}
+              </h1>
+            </div>
+          </div>
+        )}
+
+        {/* Description */}
+        {property.description && (
+          <div className="prose prose-lg max-w-none mb-6">
+            {typeof property.description === "string" ? (
+              <p>{property.description}</p>
+            ) : (
+              documentToReactComponents(property.description as Document)
+            )}
+          </div>
+        )}
+
+        {/* Location */}
+        {property.location && (
+          <p className="text-sm text-gray-500">📍 {property.location}</p>
+        )}
       </div>
     </main>
   );
