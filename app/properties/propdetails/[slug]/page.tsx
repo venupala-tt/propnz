@@ -4,9 +4,9 @@ import { notFound } from "next/navigation";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import type { Document } from "@contentful/rich-text-types";
 
-const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
-const CONTENTFUL_ACCESS_TOKEN = process.env.CONTENTFUL_ACCESS_TOKEN!;
-const CONTENTFUL_ENVIRONMENT = "master";
+const SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
+const TOKEN = process.env.CONTENTFUL_ACCESS_TOKEN!;
+const ENV = "master";
 
 type Property = {
   id: string;
@@ -18,7 +18,7 @@ type Property = {
 
 async function getProperty(slug: string): Promise<Property | null> {
   const res = await fetch(
-    `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?access_token=${CONTENTFUL_ACCESS_TOKEN}&content_type=property&fields.slug=${slug}&include=2&limit=1`,
+    `https://cdn.contentful.com/spaces/${SPACE_ID}/environments/${ENV}/entries?access_token=${TOKEN}&content_type=property&fields.slug=${slug}&include=2&limit=1`,
     { cache: "no-store" }
   );
 
@@ -28,20 +28,25 @@ async function getProperty(slug: string): Promise<Property | null> {
   }
 
   const data = await res.json();
-  if (!data.items?.length) {
-    return null;
-  }
+  if (!data.items?.length) return null;
 
-  const property = data.items[0];
-  const fields = property.fields || {};
+  const fields = data.items[0].fields || {};
 
-  // Safe values
-  const title: string = fields.title || "Untitled";
+  // Safe title
+  const title: string = fields.title || "Untitled Property";
+
+  // Handle description (rich text or plain text)
   const description: Document | string | null =
-    fields.description || null;
+    fields.description && typeof fields.description === "object"
+      ? (fields.description as Document)
+      : typeof fields.description === "string"
+      ? fields.description
+      : null;
+
+  // Safe location
   const location: string = fields.location || "";
 
-  // Safe image resolution
+  // Resolve image
   let imageUrl: string | null = null;
   const imageId = fields.image?.sys?.id;
   if (imageId && data.includes?.Asset) {
@@ -52,7 +57,7 @@ async function getProperty(slug: string): Promise<Property | null> {
   }
 
   return {
-    id: property.sys.id,
+    id: data.items[0].sys.id,
     title,
     description,
     location,
