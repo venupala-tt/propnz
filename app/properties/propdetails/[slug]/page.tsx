@@ -7,7 +7,15 @@ const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
 const CONTENTFUL_ACCESS_TOKEN = process.env.CONTENTFUL_ACCESS_TOKEN!;
 const CONTENTFUL_ENVIRONMENT = "master";
 
-async function getProperty(slug: string) {
+type Property = {
+  id: string;
+  title: string;
+  description: any; // Contentful rich text JSON
+  location: string;
+  imageUrl: string | null; // ✅ explicitly allow null
+};
+
+async function getProperty(slug: string): Promise<Property | null> {
   const res = await fetch(
     `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?access_token=${CONTENTFUL_ACCESS_TOKEN}&content_type=property&fields.slug=${slug}&include=2&limit=1`,
     { cache: "no-store" }
@@ -25,8 +33,7 @@ async function getProperty(slug: string) {
   const property = data.items[0];
   const imageId = property.fields.image?.sys?.id;
 
-  // ?? resolve linked image asset
-  let imageUrl = null;
+  let imageUrl: string | null = null; // ✅ fixed type
   if (imageId && data.includes?.Asset) {
     const asset = data.includes.Asset.find((a: any) => a.sys.id === imageId);
     imageUrl = asset?.fields?.file?.url
@@ -59,7 +66,7 @@ export default async function PropertyPage({ params }: { params: { slug: string 
             href="/properties"
             className="inline-block px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 rounded-lg shadow hover:opacity-90 transition"
           >
-            ? Back to Properties
+            ← Back to Properties
           </Link>
         </div>
 
@@ -90,7 +97,7 @@ export default async function PropertyPage({ params }: { params: { slug: string 
 
         {/* Location */}
         {property.location && (
-          <p className="text-sm text-gray-500">?? {property.location}</p>
+          <p className="text-sm text-gray-500">📍 {property.location}</p>
         )}
       </div>
     </main>
