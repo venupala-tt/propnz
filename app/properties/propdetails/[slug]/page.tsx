@@ -1,4 +1,6 @@
 
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -18,47 +20,38 @@ type Property = {
 };
 
 async function getProperty(slug: string): Promise<Property | null> {
-  const res = await fetch(
-    `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?access_token=${CONTENTFUL_ACCESS_TOKEN}&content_type=property&fields.slug=${slug}&include=2&limit=1`,
-    { cache: "no-store" }
-  );
+  try {
+    const res = await fetch(
+      `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?access_token=${CONTENTFUL_ACCESS_TOKEN}&content_type=property&fields.slug=${slug}&include=2&limit=1`,
+      { cache: "no-store" }
+    );
 
-  if (!res.ok) {
-    console.error("Contentful fetch failed", res.status);
-    return null;
-  }
+    if (!res.ok) return null;
 
-  const data = await res.json();
-  if (!data.items?.length) {
-    return null;
-  }
+    const data = await res.json();
+    if (!data.items?.length) return null;
 
-  const property = data.items[0];
-  const fields = property.fields || {};
+    const property = data.items[0];
+    const fields = property.fields || {};
 
-  // Safe values
-  const title: string = fields.title || "Untitled";
-  const description: Document | string | null =
-    fields.description || null;
-  const location: string = fields.location || "";
+    const title: string = fields.title || "Untitled";
+    const description: Document | string | null = fields.description || null;
+    const location: string = fields.location || "";
 
-  // Safe image resolution
-  let imageUrl: string | null = null;
-  const imageId = fields.image?.sys?.id;
-  if (imageId && data.includes?.Asset) {
-    const asset = data.includes.Asset.find((a: any) => a.sys.id === imageId);
-    if (asset?.fields?.file?.url) {
-      imageUrl = `https:${asset.fields.file.url}`;
+    let imageUrl: string | null = null;
+    const imageId = fields.image?.sys?.id;
+    if (imageId && data.includes?.Asset) {
+      const asset = data.includes.Asset.find((a: any) => a.sys.id === imageId);
+      if (asset?.fields?.file?.url) {
+        imageUrl = `https:${asset.fields.file.url}`;
+      }
     }
-  }
 
-  return {
-    id: property.sys.id,
-    title,
-    description,
-    location,
-    imageUrl,
-  };
+    return { id: property.sys.id, title, description, location, imageUrl };
+  } catch (err) {
+    console.error("Error fetching property", err);
+    return null;
+  }
 }
 
 export default async function PropertyPage({ params }: { params: { slug: string } }) {
@@ -82,12 +75,13 @@ export default async function PropertyPage({ params }: { params: { slug: string 
         </div>
 
         {/* Hero Section with Title + Image */}
-        {property.imageUrl && (
+        {property.imageUrl ? (
           <div className="relative w-full h-72 sm:h-96 mb-8 rounded-xl overflow-hidden shadow-lg">
             <Image
               src={property.imageUrl}
               alt={property.title}
               fill
+              priority
               className="object-cover"
               sizes="(max-width: 768px) 100vw,
                      (max-width: 1200px) 80vw,
@@ -99,6 +93,8 @@ export default async function PropertyPage({ params }: { params: { slug: string 
               </h1>
             </div>
           </div>
+        ) : (
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">{property.title}</h1>
         )}
 
         {/* Description */}
