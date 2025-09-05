@@ -101,13 +101,7 @@ export default function Navbar() {
             </a>
                 {/* Wishlink */}
             <a href="https://www.wishlink.com/propmatics" target="_blank" rel="noopener noreferrer">
-               <img
-              src="/wishlink-favicon.ico"
-              alt="Wishlink"
-              width={24}
-              height={24}
-              className="rounded"
-            />
+              <img src="wishlink-favicon.png">
            </a>
            </div>
       </div>
