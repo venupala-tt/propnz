@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
-import SearchBar from "./components/SearchBar";
+import SearchBar from "../components/SearchBar";
 
 export default function HomePage() {
   return (
