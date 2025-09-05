@@ -21,9 +21,9 @@ export default function HomePage() {
           {/* Hero Content */}
           <div className="flex-1 text-center sm:text-left">
            
-            <p className="text-base text-gray-700 mb-4">
+            <h2 className="text-lg font-semibold mb-2">
               Learn & Build scalable, performant, and visually appealing property solutions.
-            </p>
+            </h2>
             <Link
               href="/pages/book-an-expert"
               className="px-6 py-3 rounded-xl shadow-lg font-semibold text-white 
