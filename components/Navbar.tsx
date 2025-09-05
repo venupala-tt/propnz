@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -18,6 +19,7 @@ export default function Navbar() {
     { href: "/products", label: "Products" },
     { href: "/pages/tools", label: "Prop Tools" },
     { href: "/blog", label: "Blogs" },
+    { href: "/pages/book-an-expert", label: "Book Expert" },
     { href: "/contact", label: "Contact" },
   ];
 
@@ -100,7 +102,7 @@ export default function Navbar() {
                 {/* Wishlink */}
             <a href="https://www.wishlink.com/propmatics" target="_blank" rel="noopener noreferrer">
                <img
-              src="/wishlink-favicon.ico"  // make sure it's inside /public
+              src="/wishlink-favicon.ico"
               alt="Wishlink"
               width={24}
               height={24}
