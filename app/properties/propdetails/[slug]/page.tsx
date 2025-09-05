@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import type { Document } from "@contentful/rich-text-types";
 
 const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
 const CONTENTFUL_ACCESS_TOKEN = process.env.CONTENTFUL_ACCESS_TOKEN!;
@@ -10,9 +11,9 @@ const CONTENTFUL_ENVIRONMENT = "master";
 type Property = {
   id: string;
   title: string;
-  description: any; // Contentful rich text JSON
+  description: Document | string | null;
   location: string;
-  imageUrl: string | null; // ✅ explicitly allow null
+  imageUrl: string | null;
 };
 
 async function getProperty(slug: string): Promise<Property | null> {
@@ -22,30 +23,39 @@ async function getProperty(slug: string): Promise<Property | null> {
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch property details");
+    console.error("Contentful fetch failed", res.status);
+    return null;
   }
 
   const data = await res.json();
-  if (!data.items.length) {
+  if (!data.items?.length) {
     return null;
   }
 
   const property = data.items[0];
-  const imageId = property.fields.image?.sys?.id;
+  const fields = property.fields || {};
 
-  let imageUrl: string | null = null; // ✅ fixed type
+  // Safe values
+  const title: string = fields.title || "Untitled";
+  const description: Document | string | null =
+    fields.description || null;
+  const location: string = fields.location || "";
+
+  // Safe image resolution
+  let imageUrl: string | null = null;
+  const imageId = fields.image?.sys?.id;
   if (imageId && data.includes?.Asset) {
     const asset = data.includes.Asset.find((a: any) => a.sys.id === imageId);
-    imageUrl = asset?.fields?.file?.url
-      ? `https:${asset.fields.file.url}`
-      : null;
+    if (asset?.fields?.file?.url) {
+      imageUrl = `https:${asset.fields.file.url}`;
+    }
   }
 
   return {
     id: property.sys.id,
-    title: property.fields.title,
-    description: property.fields.description || null,
-    location: property.fields.location || "",
+    title,
+    description,
+    location,
     imageUrl,
   };
 }
@@ -91,7 +101,11 @@ export default async function PropertyPage({ params }: { params: { slug: string 
         {/* Description */}
         {property.description && (
           <div className="prose prose-lg max-w-none mb-6">
-            {documentToReactComponents(property.description)}
+            {typeof property.description === "string" ? (
+              <p>{property.description}</p>
+            ) : (
+              documentToReactComponents(property.description as Document)
+            )}
           </div>
         )}
 
