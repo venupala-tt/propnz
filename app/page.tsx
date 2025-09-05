@@ -20,13 +20,7 @@ export default function HomePage() {
         >
           {/* Hero Content */}
           <div className="flex-1 text-center sm:text-left">
-            <h1
-              className="text-3xl sm:text-4xl font-bold mb-4 
-              bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-              bg-clip-text text-transparent animate-gradientWave"
-            >
-              PropMatics
-            </h1>
+           
             <p className="text-base text-gray-700 mb-4">
               Learn & Build scalable, performant, and visually appealing property solutions.
             </p>
