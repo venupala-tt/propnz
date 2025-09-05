@@ -3,7 +3,6 @@ import { Package, Wrench, FileText } from "lucide-react";
 import dynamic from "next/dynamic";
 import SearchBar from "../components/SearchBar";
 
-
 export default function HomePage() {
   return (
     <div className="flex items-start">
@@ -13,13 +12,19 @@ export default function HomePage() {
         bg-gradient-to-br from-blue-100 via-white to-purple-100 
         animate-gradientWave"
       >
-         <h1 className="text-2xl font-bold mb-6">Property Search</h1>
-      <SearchBar />
+        {/* Property Search moved to top-right and sticky */}
+        <div className="w-full flex justify-center sm:justify-end items-center mb-4 sticky top-0 z-50 bg-gradient-to-br from-blue-100 via-white to-purple-100 p-2 shadow-md">
+          <div className="flex flex-col items-center sm:items-end w-full sm:w-auto">
+            <h1 className="text-lg font-semibold mb-2">Property Search</h1>
+            <SearchBar />
+          </div>
+        </div>
+
         {/* Hero Section */}
         <div
           className="w-full max-w-4xl rounded-xl shadow-md 
           bg-white/80 backdrop-blur-sm p-6 sm:p-8 
-          animate-fadeInBounce text-center mt-6"
+          animate-fadeInBounce text-center"
         >
           <h1
             className="text-3xl sm:text-4xl font-bold mb-4 
@@ -135,9 +140,6 @@ export default function HomePage() {
           </Link>
         </div>
       </main>
-
-      {/* Right Sidebar aligned with Hero section and sticky */}
-     
     </div>
   );
 }
