@@ -49,6 +49,18 @@ export default async function PropPage({ params }: PropPageProps) {
   const pt  = propdetail.fields.ptitle;
     const pd  = propdetail.fields.description;
 
+// 🔹 Find the linked asset in "includes.Asset"
+          let imgUrl = "/placeholder.png";
+          if (image?.sys?.id && data.includes?.Asset) {
+            const asset = data.includes.Asset.find(
+              (a: any) => a.sys.id === image.sys.id
+            );
+            if (asset?.fields?.file?.url) {
+              imgUrl = `https:${asset.fields.file.url}`;
+            }
+          }
+  
+  
   
   // const imageUrl = heroImage?.fields?.file?.url
   // const imageUrl = propdetail.fields.heroImage
