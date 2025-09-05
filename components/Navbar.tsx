@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { FaYoutube, FaInstagram, FaFacebook, FaLinkedin } from "react-icons/fa";
-import SearchBar from "../components/SearchBar"; // import here
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +37,7 @@ export default function Navbar() {
     >
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center p-4">
         <div className="flex w-full justify-between items-center">
-          {/* Logo */}
+          {/* Logo Only */}
           <Link href="/" className="flex items-center">
             <Image
               src="/logo.png"
@@ -48,7 +47,7 @@ export default function Navbar() {
               priority
             />
           </Link>
-
+         
           {/* Mobile Menu Button */}
           <button
             className="md:hidden text-gray-700"
@@ -84,12 +83,8 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Search + Social Icons (top right) */}
-        <div className="hidden md:flex flex-col items-end space-y-2 ml-6">
-          <div className="w-64">
-            <SearchBar />
-          </div>
-          <div className="flex space-x-4">
+         {/* Social Icons */}
+          <div className="hidden md:flex space-x-4">
             <a href="https://www.youtube.com/@propmatics" target="_blank" rel="noopener noreferrer">
               <FaYoutube className="text-red-600 hover:scale-110 transition-transform" size={22} />
             </a>
@@ -102,17 +97,17 @@ export default function Navbar() {
             <a href="https://www.linkedin.com/in/proptyme-property-management-services-50a612184/" target="_blank" rel="noopener noreferrer">
               <FaLinkedin className="text-blue-700 hover:scale-110 transition-transform" size={22} />
             </a>
+                {/* Wishlink */}
             <a href="https://www.wishlink.com/propmatics" target="_blank" rel="noopener noreferrer">
-              <img
-                src="/wishlink-favicon.ico"
-                alt="Wishlink"
-                width={24}
-                height={24}
-                className="rounded"
-              />
-            </a>
-          </div>
-        </div>
+               <img
+              src="/wishlink-favicon.ico"  // make sure it's inside /public
+              alt="Wishlink"
+              width={24}
+              height={24}
+              className="rounded"
+            />
+           </a>
+           </div>
       </div>
 
       {/* Mobile Menu */}
