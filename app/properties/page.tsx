@@ -1,110 +1,71 @@
-
-import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import type { Document } from "@contentful/rich-text-types";
+import { BlogQueryResult, PropQueryResult } from "../../app/types";
 
-const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
-const CONTENTFUL_ACCESS_TOKEN = process.env.CONTENTFUL_ACCESS_TOKEN!;
-const CONTENTFUL_ENVIRONMENT = "master";
 
-type Property = {
-  id: string;
-  title: string;
-  description: Document | string | null;
-  imageUrl: string | null;
+import { createClient } from "contentful";
+
+const client = createClient({
+  space: "ghxp9r5ui85n",
+  accessToken: "9276aed838db6b7ac88ee1d2fad33f33e3f98cef0dc6b44504f2281a420e5358",
+});
+
+const getPropEntries = async (): Promise<PropQueryResult> => {
+  const entries = await client.getEntries({ content_type: "property" });
+  return entries as unknown as PropQueryResult;
 };
 
-async function getProperty(slug: string): Promise<Property | null> {
-  const res = await fetch(
-    `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?access_token=${CONTENTFUL_ACCESS_TOKEN}&content_type=property&fields.slug=${slug}&include=2&limit=1`,
-    { cache: "no-store" }
-  );
-
-  if (!res.ok) {
-    console.error("Failed to fetch property", res.status);
-    return null;
-  }
-
-  const data = await res.json();
-  if (!data.items?.length) {
-    return null;
-  }
-
-  const property = data.items[0];
-  const fields = property.fields || {};
-
-  const title: string = fields.title || "Untitled";
-  const description: Document | string | null = fields.description || null;
-
-  let imageUrl: string | null = null;
-  const imageId = fields.image?.sys?.id;
-  if (imageId && data.includes?.Asset) {
-    const asset = data.includes.Asset.find((a: any) => a.sys.id === imageId);
-    if (asset?.fields?.file?.url) {
-      imageUrl = `https:${asset.fields.file.url}`;
-    }
-  }
-
-  return {
-    id: property.sys.id,
-    title,
-    description,
-    imageUrl,
-  };
-}
-
-export default async function PropertyPage({ params }: { params: { slug: string } }) {
-  const property = await getProperty(params.slug);
-
-  if (!property) {
-    notFound();
-  }
+export default async function Home() {
+  const propEntries = await getPropEntries();
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6 flex flex-col items-center">
-      <div className="w-full max-w-3xl bg-white shadow-md rounded-xl overflow-hidden">
-        {/* Back Button */}
-        <div className="p-4">
-          <Link
-            href="/properties"
-            className="inline-block px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 rounded-lg shadow hover:opacity-90 transition"
-          >
-            ← Back to Properties
-          </Link>
-        </div>
+    <main
+      className="flex min-h-screen flex-col items-center justify-center 
+      p-6 sm:p-12 lg:p-24 
+      bg-gradient-to-br from-blue-100 via-white to-purple-100 
+      animate-gradientWave"
+    >
+      <div
+        className="w-full max-w-5xl rounded-2xl shadow-lg 
+        bg-white/80 backdrop-blur-sm p-8 sm:p-12 
+        animate-fadeInBounce"
+      >
+        <h1
+          className="text-3xl sm:text-4xl font-bold text-center mb-12 
+          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+          bg-clip-text text-transparent animate-gradientWave"
+        >
+          Our Properties
+        </h1>
 
-        {/* Image */}
-        {property.imageUrl && (
-          <div className="relative w-full h-64 sm:h-96">
-            <Image
-              src={property.imageUrl}
-              alt={property.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw,
-                     (max-width: 1200px) 80vw,
-                     1000px"
-            />
-          </div>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          {propEntries.items.map(( pty ) => {
+            const { ptitle, slug, image} = pty.fields;
+            const imgUrl =  image.fields.file.url;
+            console.log("URL" + imgUrl);
+            
 
-        {/* Title + Description */}
-        <div className="p-6">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-800">
-            {property.title}
-          </h1>
-
-          {property.description && (
-            <div className="prose prose-lg max-w-none text-gray-700">
-              {typeof property.description === "string" ? (
-                <p>{property.description}</p>
-              ) : (
-                documentToReactComponents(property.description as Document)
-              )}
-            </div>
-          )}
+            return (
+              <Link
+                key={slug}
+                href={`../properties/propdetails/${slug}`}
+                className="group rounded-xl bg-white shadow-md hover:shadow-xl 
+                transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
+              >
+                <img
+                  src={imgUrl}
+                  alt={ptitle}
+                  className="w-full h-48 object-cover"
+                />
+               
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold mb-2 text-gray-800 group-hover:text-purple-600">
+                    {ptitle}
+                  </h2>
+                  
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </main>
