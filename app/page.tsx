@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
+import dynamic from "next/dynamic";
+import SearchBar from "../components/SearchBar";
+
 
 export default function HomePage() {
   return (
@@ -10,6 +13,8 @@ export default function HomePage() {
         bg-gradient-to-br from-blue-100 via-white to-purple-100 
         animate-gradientWave"
       >
+         <h1 className="text-2xl font-bold mb-6">Property Search</h1>
+      <SearchBar />
         {/* Hero Section */}
         <div
           className="w-full max-w-4xl rounded-xl shadow-md 
@@ -42,7 +47,9 @@ export default function HomePage() {
         </div>
 
         {/* Highlights Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 w-full max-w-5xl">
+        <div
+          className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 w-full max-w-5xl"
+        >
           {/* Products Card */}
           <Link
             href="/products"
@@ -101,8 +108,10 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* CTA Section */}
-        <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
+        {/* CTA Section as Cards */}
+        <div
+          className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10"
+        >
           {/* Explore Our Products Card */}
           <Link
             href="/products"
@@ -126,6 +135,9 @@ export default function HomePage() {
           </Link>
         </div>
       </main>
+
+      {/* Right Sidebar aligned with Hero section and sticky */}
+     
     </div>
   );
 }
