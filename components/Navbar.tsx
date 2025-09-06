@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { FaYoutube, FaInstagram, FaFacebook, FaLinkedin } from "react-icons/fa";
 // import WishlinkIcon from "../components/Icons/WishlinkIcon.tsx"; 
-import WishlinkIcon from "../components/icons/WishlinkIcon.tsx"; 
+// import WishlinkIcon from "../components/icons/WishlinkIcon.tsx"; 
 
 
 
