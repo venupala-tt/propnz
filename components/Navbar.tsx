@@ -104,13 +104,13 @@ export default function Navbar() {
             <a href="https://www.linkedin.com/in/proptyme-property-management-services-50a612184/" target="_blank" rel="noopener noreferrer">
               <FaLinkedin className="text-blue-700 hover:scale-110 transition-transform" size={22} />
             </a>
-                {/* Wishlink */}
+           /*     {/* Wishlink */}
             <a  href="https://www.wishlink.com/propmatics"  target="_blank"  rel="noopener noreferrer">
   <WishlinkIcon
     size={22}
     className="text-purple-600 hover:scale-110 transition-transform"
   />
-</a>
+</a> */
 
             
            </div>
