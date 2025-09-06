@@ -5,8 +5,9 @@ import { useState } from "react";
 export default function RegisterPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
 
-  async function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -14,43 +15,38 @@ export default function RegisterPage() {
     });
 
     if (res.ok) {
-      alert("Registered! You can login now.");
-      window.location.href = "/login";
+      alert("Registration successful! You can now log in.");
     } else {
-      const data = await res.json();
-      alert(data.error);
+      alert("Error registering user.");
     }
-  }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="p-6 bg-white rounded-xl shadow-lg w-96"
-      >
-        <h2 className="text-2xl font-bold mb-4">Register</h2>
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-xl font-bold mb-4">Register</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-64">
         <input
           type="text"
           placeholder="Name"
-          className="w-full mb-2 p-2 border rounded"
+          className="border p-2 rounded"
+          value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
-          required
         />
         <input
           type="email"
           placeholder="Email"
-          className="w-full mb-2 p-2 border rounded"
+          className="border p-2 rounded"
+          value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
-          required
         />
         <input
           type="password"
           placeholder="Password"
-          className="w-full mb-4 p-2 border rounded"
+          className="border p-2 rounded"
+          value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
-          required
         />
-        <button className="w-full bg-blue-600 text-white p-2 rounded">
+        <button type="submit" className="bg-green-600 text-white p-2 rounded">
           Register
         </button>
       </form>
