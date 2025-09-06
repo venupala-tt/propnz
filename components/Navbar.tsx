@@ -7,6 +7,10 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { FaYoutube, FaInstagram, FaFacebook, FaLinkedin } from "react-icons/fa";
+import WishlinkIcon from "@/components/icons/WishlinkIcon"; // add at top
+
+
+
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -100,9 +104,14 @@ export default function Navbar() {
               <FaLinkedin className="text-blue-700 hover:scale-110 transition-transform" size={22} />
             </a>
                 {/* Wishlink */}
-            <a href="https://www.wishlink.com/propmatics" target="_blank" rel="noopener noreferrer">
-              <img src="wishlink-favicon.png" />
-           </a>
+            <a  href="https://www.wishlink.com/propmatics"  target="_blank"  rel="noopener noreferrer">
+  <WishlinkIcon
+    size={22}
+    className="text-purple-600 hover:scale-110 transition-transform"
+  />
+</a>
+
+            
            </div>
       </div>
 
