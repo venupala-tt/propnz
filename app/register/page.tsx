@@ -1,9 +1,10 @@
+"use client";
 import { useState } from "react";
 
-export default function Register() {
+export default function RegisterPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const res = await fetch("/api/register", {
       method: "POST",
