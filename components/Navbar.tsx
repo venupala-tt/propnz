@@ -1,4 +1,3 @@
-// added BAE
 "use client";
 
 import Link from "next/link";
@@ -7,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { FaYoutube, FaInstagram, FaFacebook, FaLinkedin } from "react-icons/fa";
-import WishlinkIcon from "@/components/icons/WishlinkIcon"; // add at top
+import WishlinkIcon from "../icons/WishlinkIcon"; 
 
 
 
