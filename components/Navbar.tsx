@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { FaYoutube, FaInstagram, FaFacebook, FaLinkedin } from "react-icons/fa";
-import WishlinkIcon from "../icons/WishlinkIcon.tsx"; 
+import WishlinkIcon from "WishlinkIcon.tsx"; 
 
 
 
