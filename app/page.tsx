@@ -22,7 +22,7 @@ export default function HomePage() {
 <div  className="w-full max-w-5xl rounded-xl shadow-md  bg-white/80 backdrop-blur-sm p-4 sm:p-6 animate-fadeInBounce flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-4"
 >         
             <h2 className="text-lg font-semibold mb-2">
-              Learn & Build scalable, Property Solutions that are visually appealing
+              Learn & Build scalable, Property Solutions
             </h2>
             <Link
               href="/pages/book-an-expert"
