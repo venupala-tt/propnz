@@ -1,16 +1,26 @@
-// Filename - lib/mongodb.js
-
 import mongoose from "mongoose";
 
-const connectDB = async () => {
-    try {
-        if (mongoose.connection.readyState === 0) {
-            await mongoose.connect("mongodb://127.0.0.1:27017/propmatics");
-            console.log("db connected");
-        }
-    } catch (error) {
-        console.log("ERR" + error);
-    }
-};
+const MONGODB_URI = process.env.MONGODB_URI;
 
-export default connectDB;
+if (!MONGODB_URI) {
+  throw new Error("Please add your MongoDB URI to .env.local");
+}
+
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
+export default async function dbConnect() {
+  if (cached.conn) return cached.conn;
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(MONGODB_URI, {
+      bufferCommands: false,
+    }).then((mongoose) => mongoose);
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
+}
