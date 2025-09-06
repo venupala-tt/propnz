@@ -1,3 +1,4 @@
+// added BAE
 "use client";
 
 import Link from "next/link";
@@ -6,12 +7,6 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { FaYoutube, FaInstagram, FaFacebook, FaLinkedin } from "react-icons/fa";
-// import WishlinkIcon from "../components/Icons/WishlinkIcon.tsx"; 
-// import WishlinkIcon from "../components/icons/WishlinkIcon.tsx"; 
-
-
-
-
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -104,15 +99,10 @@ export default function Navbar() {
             <a href="https://www.linkedin.com/in/proptyme-property-management-services-50a612184/" target="_blank" rel="noopener noreferrer">
               <FaLinkedin className="text-blue-700 hover:scale-110 transition-transform" size={22} />
             </a>
-           //   {/* Wishlink */}
-       //     <a  href="https://www.wishlink.com/propmatics"  target="_blank"  rel="noopener noreferrer">
- // <WishlinkIcon
-   // size={22}
-   // className="text-purple-600 hover:scale-110 transition-transform"
-//  />
-// </a> */
-
-            
+                {/* Wishlink */}
+            <a href="https://www.wishlink.com/propmatics" target="_blank" rel="noopener noreferrer">
+              <img src="wishlink-favicon.png" />
+           </a>
            </div>
       </div>
 
