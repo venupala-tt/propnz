@@ -11,9 +11,10 @@ export default function DashboardPage() {
 
   if (!session) {
     return (
-      <p className="text-center mt-20">
-        Not logged in. <a href="/login" className="text-blue-600">Login</a>
-      </p>
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <p>You are not logged in.</p>
+        <a href="/login" className="mt-2 text-blue-600 underline">Go to Login</a>
+      </div>
     );
   }
 
