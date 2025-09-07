@@ -1,33 +1,42 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { connectDB } from "../../../lib/mongodb";
+import mongoose, { Schema, models } from "mongoose";
+
+// Define schema
+const ContactSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    category: { type: String, required: true },
+    message: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now },
+  },
+  { timestamps: true }
+);
+
+// Avoid model recompilation in dev
+const Contact = models.Contact || mongoose.model("Contact", ContactSchema);
 
 export async function POST(req: Request) {
-  const { name, email, category, message } = await req.json();
-
   try {
-    const transporter = nodemailer.createTransport({
-      service: "Gmail", // or any SMTP provider
-      auth: {
-        user: process.env.MY_EMAIL,
-        pass: process.env.MY_PASSWORD,
-      },
-    });
+    const body = await req.json();
+    const { name, email, category, message } = body;
 
-    await transporter.sendMail({
-    //  console.log("Trying to send email");
-      from: email,
-      to: process.env.CONTACT_RECEIVER, // your email
-      subject: `New Book an Expert request: ${category}`,
-      text: `
-        Name: ${name}
-        Email: ${email}
-        Category: ${category}
-        Message: ${message}
-      `,
-    });
+    if (!name || !email || !category || !message) {
+      return NextResponse.json({ error: "All fields required" }, { status: 400 });
+    }
 
-    return NextResponse.json({ success: true });
+    await connectDB();
+
+    const newContact = new Contact({ name, email, category, message });
+    await newContact.save();
+
+    return NextResponse.json(
+      { message: "Contact saved successfully" },
+      { status: 201 }
+    );
   } catch (error) {
-    return NextResponse.json({ success: false, error }, { status: 500 });
+    console.error("❌ Contact API error:", error);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
