@@ -6,17 +6,16 @@ import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const validateForm = () => {
-    if (!email || !password) {
-      setError("Both email and password are required.");
+    if (!form.email || !form.password) {
+      setError("Both fields are required.");
       return false;
     }
-    if (!/\S+@\S+\.\S+/.test(email)) {
+    if (!/\S+@\S+\.\S+/.test(form.email)) {
       setError("Please enter a valid email.");
       return false;
     }
@@ -32,17 +31,18 @@ export default function LoginPage() {
 
     try {
       const res = await signIn("credentials", {
-        redirect: false, // prevent NextAuth default redirect
-        email,
-        password,
+        redirect: false,
+        email: form.email,
+        password: form.password,
       });
 
       if (res?.ok) {
-        router.push("/dashboard"); // ✅ Redirect on success
+        router.push("/dashboard");
       } else {
         setError("Invalid email or password.");
       }
     } catch (err) {
+      console.error(err);
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -58,15 +58,15 @@ export default function LoginPage() {
             type="email"
             placeholder="Email"
             className="border p-2 rounded"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
           <input
             type="password"
             placeholder="Password"
             className="border p-2 rounded"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
