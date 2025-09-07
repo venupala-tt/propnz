@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-        "bcryptjs": "^2.4.3",
+        "bcrypt": "^5.1.1"
         "jsonwebtoken": "^9.0.2",
      "next-auth": "^4.24.11",
     "mongoose": "^8.5.2",
@@ -43,6 +43,9 @@
     "swr": "^2.0.1",
     "types": "^0.1.1"
    
+  },
+  "engines": {
+    "node": "18.x"
   },
   "devDependencies": {
     "@contentful/rich-text-types": "^17.1.0",
