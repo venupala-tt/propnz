@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 const services = {
    "digital-services": {
     title: "Digital Services for Real Estate",
-    image: "/digital-services.jpg",
+    image: "/digital-services.png",
     description:
       "Digital Services for Real Estate for residential, commercial, and industrial construction projects.",
     details: [
