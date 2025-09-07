@@ -1,6 +1,24 @@
-import ContactForm from "../../../components/boe-ContactForm";
+"use client";
+import { useState } from "react";
 
 export default function BookAnExpertPage() {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Example: You can later post this to an API route (/api/contact)
+    console.log("Form submitted:", formData);
+
+    setSubmitted(true);
+    setFormData({ name: "", email: "", message: "" });
+  };
+
   return (
     <main
       className="flex min-h-screen flex-col items-center justify-center 
@@ -27,22 +45,51 @@ export default function BookAnExpertPage() {
         </p>
 
         {/* Contact Form */}
-        <div className="space-y-6">
-          <ContactForm />
+        {!submitted ? (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <input
+              type="text"
+              name="name"
+              placeholder="Your Name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-purple-400 outline-none"
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Your Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-purple-400 outline-none"
+              required
+            />
+            <textarea
+              name="message"
+              placeholder="Your Message"
+              value={formData.message}
+              onChange={handleChange}
+              rows={4}
+              className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-purple-400 outline-none"
+              required
+            />
 
-          {/* Gradient Submit Button */}
-          <div className="flex justify-center">
+            {/* Gradient Submit Button */}
             <button
               type="submit"
-              form="contact-form" // ✅ ensure your ContactForm uses id="contact-form"
-              className="px-8 py-3 rounded-xl shadow-lg font-semibold text-white 
+              className="w-full px-8 py-3 rounded-xl shadow-lg font-semibold text-white 
                 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
                 hover:opacity-90 transition-all duration-300"
             >
               Submit Request
             </button>
+          </form>
+        ) : (
+          <div className="text-center text-green-600 font-semibold">
+            ✅ Thank you! Your request has been submitted.
           </div>
-        </div>
+        )}
       </div>
     </main>
   );
