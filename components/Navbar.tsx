@@ -42,7 +42,7 @@ export default function Navbar() {
           {/* Logo Only */}
           <Link href="/" className="flex items-center">
             <Image
-              src="/logo.png"
+              src="/logo-new.png"
               alt="PropMatics Logo"
               width={250}
               height={80}
