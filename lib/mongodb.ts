@@ -1,22 +1,28 @@
 import mongoose from "mongoose";
 
-let isConnected = false; // Track the connection status (important for Vercel serverless)
+const MONGODB_URI = process.env.MONGODB_URI as string;
 
-// Function to connect to MongoDB
-export const connectDB = async () => {
-  if (isConnected) {
-    return;
+if (!MONGODB_URI) {
+  throw new Error("⚠️ Please define the MONGODB_URI in .env.local");
+}
+
+// Global cache object for Vercel hot reloads
+let cached = (global as any).mongoose;
+
+if (!cached) {
+  cached = (global as any).mongoose = { conn: null, promise: null };
+}
+
+export async function connectDB() {
+  if (cached.conn) return cached.conn;
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(MONGODB_URI, {
+      bufferCommands: false,
+      dbName: "propmatics", // ✅ always use this DB
+    }).then((mongoose) => mongoose);
   }
 
-  try {
-    await mongoose.connect(process.env.MONGODB_URI as string, {
-      dbName: "propmatics", // ✅ ensures all models use the propmatics DB
-    });
-
-    isConnected = true;
-    console.log("✅ MongoDB connected to propmatics database");
-  } catch (error) {
-    console.error("❌ MongoDB connection error:", error);
-    throw new Error("Failed to connect to MongoDB");
-  }
-};
+  cached.conn = await cached.promise;
+  return cached.conn;
+}
