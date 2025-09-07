@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "/app/providers";
 
+
 export const metadata: Metadata = {
   title: "Propmatics",
   description: "Your real estate platform",
