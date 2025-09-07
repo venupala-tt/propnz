@@ -16,7 +16,7 @@ export default function Home() {
       >
 {/* Top-right link */}
         <div className="flex justify-end mb-6">
-          <h2>Looking for any specific need??</h2>
+          <h2>Looking for any personalized service ??</h2>
        <Link
               href="/pages/book-an-expert"
               className="px-6 py-3 rounded-xl shadow-lg font-semibold text-white 
