@@ -29,17 +29,18 @@ const handler = NextAuth({
   ],
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60, // default 1 day
+    maxAge: 24 * 60 * 60, // default = 1 day
   },
   callbacks: {
-    async jwt({ token, user, account, trigger, session }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.user = user;
       }
 
-      // If "remember" flag was passed, extend session
-      if (session?.remember) {
+      // If login included "remember", set long expiry (30 days)
+      if (session?.remember === true) {
         token.remember = true;
+        token.exp = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60; // 30 days
       }
       return token;
     },
@@ -47,9 +48,6 @@ const handler = NextAuth({
       session.user = token.user;
       session.remember = token.remember || false;
       return session;
-    },
-    async redirect({ url, baseUrl }) {
-      return "/dashboard";
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
