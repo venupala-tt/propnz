@@ -2,57 +2,43 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connectDB } from "../../../lib/mongodb";
 import User from "../../../models/User";
-import bcrypt from "bcryptjs"; // ✅ use bcryptjs (safer on Vercel)
+import bcrypt from "bcryptjs";
 
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
+        email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
-        remember: { label: "Remember Me", type: "boolean" },
       },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
-
+      async authorize(credentials: any) {
         await connectDB();
+
         const user = await User.findOne({ email: credentials.email });
-        if (!user) return null;
+        if (!user) {
+          throw new Error("No user found with this email");
+        }
 
-        const isValid = await bcrypt.compare(credentials.password, user.password);
-        if (!isValid) return null;
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+        if (!isPasswordValid) {
+          throw new Error("Invalid password");
+        }
 
-        return { id: user._id.toString(), name: user.name, email: user.email };
+        return { id: user._id, name: user.name, email: user.email };
       },
     }),
   ],
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60, // default 1 day
   },
-  callbacks: {
-    async jwt({ token, user, session }) {
-      if (user) token.user = user;
-
-      // extend session if remember is set
-      if (session?.remember) {
-        token.remember = true;
-        token.exp = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60; // 30 days
-      }
-
-      return token;
-    },
-    async session({ session, token }) {
-      session.user = token.user;
-      session.remember = token.remember || false;
-      return session;
-    },
-  },
-  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login",
   },
+  secret: process.env.NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };
