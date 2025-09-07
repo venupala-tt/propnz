@@ -1,14 +1,16 @@
-import type { Metadata } from "next";
 import "./globals.css";
-import { Providers } from "/app/providers";
+import Providers from "./providers"; // ✅ relative path, not "/app/providers"
 
-
-export const metadata: Metadata = {
+export const metadata = {
   title: "Propmatics",
-  description: "Your real estate platform",
+  description: "Real estate portal",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body>
