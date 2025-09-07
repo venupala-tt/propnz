@@ -4,6 +4,13 @@ import { Hammer, Zap, Home, PenTool, FileText, Compass } from "lucide-react";
 export default function ServicesPage() {
   const services = [
     {
+      slug: "Digital Services for Property Business",
+      title: "Digital Services for Property Business",
+      icon: <Hammer size={24} />,
+      description: "Professional designing of brochures, websites, data analysis and reports for real estate businesses.",
+      image: "/digital-services.jpg",
+    },
+    {
       slug: "construction-planning",
       title: "Construction Planning Services",
       icon: <Hammer size={24} />,
