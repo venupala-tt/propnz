@@ -43,13 +43,17 @@ export default function ROICalculatorPage() {
     const landOwnerSqFt = totalSellableSqFt * 0.4; // 40% Owner
     const developerShareSqFt = totalSellableSqFt * 0.6; // 60% Developer
 
+    // ✅ Number of flats as Landowner Share
+    const landOwnerFlats = Math.floor(landOwnerSqFt / 1100);
+
     // 5) Owner sale value & ROI
     const ownerSaleValue = landOwnerSqFt * sellPrice;
-    const ownerRoiPercent = ((ownerSaleValue - totalInvestment) / totalInvestment) * 100;
+    const ownerRoiPercent =
+      ((ownerSaleValue - totalInvestment) / totalInvestment) * 100;
 
     // 6) Developer costs & ROI (assumptions provided)
-    const constructionCost = totalSellableSqFt * 2000; // ₹2,000 / sq.ft on entire constructed area
-    const adminCost = constructionCost * 0.20;         // +20% administrative expenses
+    const constructionCost = totalSellableSqFt * 2000; // ₹2,000 / sq.ft
+    const adminCost = constructionCost * 0.2; // +20% administrative
     const totalDevInvestment = constructionCost + adminCost;
 
     const developerSaleValue = developerShareSqFt * sellPrice; // revenue on 60% share
@@ -73,6 +77,7 @@ export default function ROICalculatorPage() {
       floors,
       totalSellableSqFt,
       landOwnerSqFt,
+      landOwnerFlats, // ✅ added
       ownerSaleValue,
       ownerRoiPercent,
       investmentCrores,
@@ -118,18 +123,24 @@ export default function ROICalculatorPage() {
           </div>
 
           <div>
-            <label className="block font-medium text-gray-700 mb-1">Cost per Sq.Yard (₹)</label>
+            <label className="block font-medium text-gray-700 mb-1">
+              Cost per Sq.Yard (₹)
+            </label>
             <input
               type="number"
               placeholder="Enter cost per sq.yd"
               value={costPerSqYd}
-              onChange={(e) => setCostPerSqYd(e.target.value === "" ? "" : Number(e.target.value))}
+              onChange={(e) =>
+                setCostPerSqYd(e.target.value === "" ? "" : Number(e.target.value))
+              }
               className="w-full border p-2 rounded"
             />
           </div>
 
           <div>
-            <label className="block font-medium text-gray-700 mb-1">Selling Price per Sq.Ft (₹)</label>
+            <label className="block font-medium text-gray-700 mb-1">
+              Selling Price per Sq.Ft (₹)
+            </label>
             <input
               type="number"
               placeholder="Enter selling price of Flats per sq.ft (after 2 years of project completion)"
@@ -164,17 +175,21 @@ export default function ROICalculatorPage() {
                   </b>
                 </li>
                 <li>
-                  🏢 Constructable Area per Floor:{" "}
+                  📐 Constructable Area per Floor:{" "}
                   <b>{result.constructableSqFtPerFloor.toLocaleString()} sq.ft</b>
                 </li>
-                <li>🏗️ Total Floors Allowed: <b>{result.floors}</b></li>
+                <li>🏢 Total Floors Allowed: <b>{result.floors}</b></li>
                 <li>
-                  📐 Total Constructed/Sellable Area:{" "}
+                  📏 Total Constructed/Sellable Area:{" "}
                   <b>{result.totalSellableSqFt.toLocaleString()} sq.ft</b>
                 </li>
                 <li>
                   🧑‍🤝‍🧑 Landowner Share (40%):{" "}
                   <b>{result.landOwnerSqFt.toLocaleString()} sq.ft</b>
+                </li>
+                <li>
+                  🏘️ Number of Flats as Landowner Share:{" "}
+                  <b>{result.landOwnerFlats}</b> (each ~1100 sq.ft)
                 </li>
                 <li>
                   💵 Sale Value of Landowner Flats:{" "}
@@ -189,10 +204,10 @@ export default function ROICalculatorPage() {
             </div>
 
             <div className="bg-indigo-50 p-6 rounded-lg shadow-inner">
-              <h2 className="text-xl font-bold text-indigo-900 mb-4">👷 Developer Economics</h2>
+              <h2 className="text-xl font-bold text-indigo-900 mb-4">🏗️ Developer Economics</h2>
               <ul className="space-y-2 text-indigo-900/90">
                 <li>
-                  🧮 Developer Share of Area (60%):{" "}
+                  📐 Developer Share of Area (60%):{" "}
                   <b>{result.developerShareSqFt.toLocaleString()} sq.ft</b>
                 </li>
                 <li>
@@ -202,25 +217,25 @@ export default function ROICalculatorPage() {
                   </b>
                 </li>
                 <li>
-                  🗂️ Administrative Expenses @ 20% of construction:{" "}
+                  📝 Administrative Expenses @ 20% of construction:{" "}
                   <b>
                     ₹ {result.adminCost.toLocaleString()} ({result.adminCostCr.toFixed(2)} Cr)
                   </b>
                 </li>
                 <li>
-                  💼 Total Developer Investment (Construction + Admin):{" "}
+                  💰 Total Developer Investment (Construction + Admin):{" "}
                   <b>
                     ₹ {result.totalDevInvestment.toLocaleString()} ({result.totalDevInvestmentCr.toFixed(2)} Cr)
                   </b>
                 </li>
                 <li>
-                  🏷️ Sale Value of Developer Flats (60%):{" "}
+                  🏘️ Sale Value of Developer Flats (60%):{" "}
                   <b>
                     ₹ {result.developerSaleValue.toLocaleString()} ({result.developerSaleValueCr.toFixed(2)} Cr)
                   </b>
                 </li>
                 <li>
-                  📊 Developer ROI: <b>{result.developerRoiPercent.toFixed(2)}%</b>
+                  📈 Developer ROI: <b>{result.developerRoiPercent.toFixed(2)}%</b>
                 </li>
               </ul>
               <p className="text-xs text-indigo-900/70 mt-3">
