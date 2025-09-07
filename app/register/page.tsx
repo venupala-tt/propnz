@@ -34,6 +34,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
+      // Call register API
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -41,7 +42,7 @@ export default function RegisterPage() {
       });
 
       if (res.ok) {
-        // ✅ Auto login after successful registration
+        // Auto-login after successful registration
         const loginRes = await signIn("credentials", {
           redirect: false,
           email: form.email,
@@ -58,6 +59,7 @@ export default function RegisterPage() {
         setError(data.error || "Error registering user.");
       }
     } catch (err) {
+      console.error(err);
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
