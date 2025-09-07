@@ -16,7 +16,8 @@ async function dbConnect() {
   }
 
   cached.conn = await cached.promise;
+  (global as any).mongoose = cached; // keep it cached across hot reloads
   return cached.conn;
 }
 
-export default dbConnect();
+export default dbConnect;
