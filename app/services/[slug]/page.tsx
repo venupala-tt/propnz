@@ -2,6 +2,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 const services = {
+   "digital-services": {
+    title: "Digital Services for Real Estate",
+    image: "/digital-services.jpg",
+    description:
+      "Digital Services for Real Estate for residential, commercial, and industrial construction projects.",
+    details: [
+      "Flyers",
+      "Websites",
+      "Data Analysis",
+    ],
+  },
   "construction-planning": {
     title: "Construction Planning Services",
     image: "/construction-planning.jpg",
