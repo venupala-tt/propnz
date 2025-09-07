@@ -1,17 +1,22 @@
 import mongoose from "mongoose";
 
-let isConnected = false;
+let isConnected = false; // Track the connection status (important for Vercel serverless)
 
+// Function to connect to MongoDB
 export const connectDB = async () => {
-  if (isConnected) return;
+  if (isConnected) {
+    return;
+  }
 
   try {
     await mongoose.connect(process.env.MONGODB_URI as string, {
-      dbName: "propmatics",  // ✅ ensures the DB name is always correct
+      dbName: "propmatics", // ✅ ensures all models use the propmatics DB
     });
+
     isConnected = true;
     console.log("✅ MongoDB connected to propmatics database");
-  } catch (err) {
-    console.error("❌ MongoDB connection error:", err);
+  } catch (error) {
+    console.error("❌ MongoDB connection error:", error);
+    throw new Error("Failed to connect to MongoDB");
   }
 };
