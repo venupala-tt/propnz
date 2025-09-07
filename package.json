@@ -45,7 +45,7 @@
    
   },
   "engines": {
-    "node": "18.x"
+    "node": "22.x"
   },
   "devDependencies": {
     "@contentful/rich-text-types": "^17.1.0",
