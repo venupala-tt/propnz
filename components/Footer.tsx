@@ -1,5 +1,4 @@
-import { FaYoutube, FaInstagram, FaFacebook, FaLinkedin } from "react-icons/fa";
-import Image from "next/image";
+import { FaYoutube, FaInstagram, FaFacebook, FaLinkedin, FaMapMarkerAlt, FaEnvelope } from "react-icons/fa";
 import Link from "next/link";
 
 export default function Footer() {
@@ -18,131 +17,88 @@ export default function Footer() {
           <h2 className="text-lg font-semibold mb-4 text-gray-700">Useful Links</h2>
           <ul className="space-y-2">
             <li>
-              <Link
-             //       { href: "/contact", label: "Contact" },
-                href="/pages/contact"
-                className="text-gray-600 hover:text-blue-600 transition"
-              >
-            Contact Us
-            </Link>
-            </li>
-            <li>
-              <Link
-                href="/pages/cancellation-refund-policy"
-                className="text-gray-600 hover:text-blue-600 transition"
-              >
+              <Link href="/pages/cancellation-refund-policy" className="text-gray-600 hover:text-blue-600 transition">
                 Cancellation-Refund-Policy
               </Link>
             </li>
             <li>
-              <Link
-                href="/pages/pricing"
-                className="text-gray-600 hover:text-blue-600 transition"
-              >
+              <Link href="/pages/pricing" className="text-gray-600 hover:text-blue-600 transition">
                 Pricing
               </Link>
             </li>
-                        <li>
-              <Link
-                href="/pages/privacy-policy"
-                className="text-gray-600 hover:text-blue-600 transition"
-              >
+            <li>
+              <Link href="/pages/privacy-policy" className="text-gray-600 hover:text-blue-600 transition">
                 Privacy Policy
               </Link>
             </li>
-               <li>
-              <Link
-                href="/pages/shipping-policy"
-                className="text-gray-600 hover:text-blue-600 transition"
-              >
+            <li>
+              <Link href="/pages/shipping-policy" className="text-gray-600 hover:text-blue-600 transition">
                 Shipping Policy
               </Link>
             </li>
             <li>
-              <Link
-                href="/pages/terms-conditions"
-                className="text-gray-600 hover:text-blue-600 transition"
-              >
-            Terms Conditions
+              <Link href="/pages/terms-conditions" className="text-gray-600 hover:text-blue-600 transition">
+                Terms & Conditions
               </Link>
             </li>
           </ul>
         </div>
 
+        {/* Contact Us Section */}
+        <div className="text-center md:text-left">
+          <h2 className="text-lg font-semibold mb-4 text-gray-700">Contact Us</h2>
+          <ul className="space-y-3 text-gray-600">
+            <li className="flex items-center justify-center md:justify-start gap-2">
+              <FaMapMarkerAlt className="text-blue-600" />
+              <span>Hyderabad, Telangana, India</span>
+            </li>
+            <li className="flex items-center justify-center md:justify-start gap-2">
+              <FaEnvelope className="text-blue-600" />
+              <a href="mailto:info@propmatics.com" className="hover:text-blue-600">
+                info@propmatics.com
+              </a>
+            </li>
+            <li>
+              <Link href="/pages/contact" className="text-blue-600 font-medium hover:underline">
+                Contact Us Page
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Social + Map (always full width below grid) */}
+      <div className="mt-10 flex flex-col items-center space-y-6">
         {/* Social Links */}
         <div className="flex justify-center space-x-6">
-          {/* YouTube Animated Gradient */}
-          <a
-            href="https://www.youtube.com/@propmatics"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="YouTube"
-            className="transition-all duration-200 transform hover:scale-110 animate-fadeInBounce delay-[0ms] hover:drop-shadow-youtube"
-          >
-            <FaYoutube
-              size={24}
-              className="text-red-600 hover:text-transparent hover:bg-gradient-to-r hover:from-red-500 hover:via-orange-500 hover:to-red-700 hover:bg-clip-text hover:animate-gradientWave"
-            />
+          <a href="https://www.youtube.com/@propmatics" target="_blank" rel="noopener noreferrer" title="YouTube">
+            <FaYoutube size={24} className="text-red-600 hover:scale-110 transition-transform" />
           </a>
-
-          {/* Instagram Animated Gradient */}
-          <a
-            href="https://www.instagram.com/propmatics/"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Instagram"
-            className="transition-all duration-200 transform hover:scale-110 animate-fadeInBounce delay-[150ms] hover:drop-shadow-instagram"
-          >
-            <FaInstagram
-              size={24}
-              className="text-pink-500 hover:text-transparent hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-600 hover:bg-clip-text hover:animate-gradientWave"
-            />
+          <a href="https://www.instagram.com/propmatics/" target="_blank" rel="noopener noreferrer" title="Instagram">
+            <FaInstagram size={24} className="text-pink-500 hover:scale-110 transition-transform" />
           </a>
-
-          {/* Facebook Animated Gradient */}
-          <a
-            href="https://www.facebook.com/profile.php?id=100063560241775"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Facebook"
-            className="transition-all duration-200 transform hover:scale-110 animate-fadeInBounce delay-[300ms] hover:drop-shadow-facebook"
-          >
-            <FaFacebook
-              size={24}
-              className="text-blue-600 hover:text-transparent hover:bg-gradient-to-r hover:from-blue-400 hover:via-blue-600 hover:to-blue-800 hover:bg-clip-text hover:animate-gradientWave"
-            />
+          <a href="https://www.facebook.com/profile.php?id=100063560241775" target="_blank" rel="noopener noreferrer" title="Facebook">
+            <FaFacebook size={24} className="text-blue-600 hover:scale-110 transition-transform" />
           </a>
-
-          {/* LinkedIn Animated Gradient */}
-          <a
-            href="https://www.linkedin.com/in/proptyme-property-management-services-50a612184/"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="LinkedIn"
-            className="transition-all duration-200 transform hover:scale-110 animate-fadeInBounce delay-[450ms] hover:drop-shadow-linkedin"
-          >
-            <FaLinkedin
-              size={24}
-              className="text-blue-700 hover:text-transparent hover:bg-gradient-to-r hover:from-blue-400 hover:via-blue-600 hover:to-blue-900 hover:bg-clip-text hover:animate-gradientWave"
-            />
+          <a href="https://www.linkedin.com/in/proptyme-property-management-services-50a612184/" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+            <FaLinkedin size={24} className="text-blue-700 hover:scale-110 transition-transform" />
           </a>
+          <a href="https://www.wishlink.com/propmatics" target="_blank" rel="noopener noreferrer" title="Wishlink">
+            <img src="/wishlink-favicon.ico" alt="Wishlink" width={24} height={24} className="rounded hover:scale-110 transition-transform" />
+          </a>
+        </div>
 
-          {/* Wishlink */}
-          <a
-            href="https://www.wishlink.com/propmatics"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Wishlink"
-            className="transition-all duration-200 transform hover:scale-110 animate-fadeInBounce delay-[600ms]"
-          >    
-            <img
-              src="/wishlink-favicon.ico"  // make sure it's inside /public
-              alt="Wishlink"
-              width={24}
-              height={24}
-              className="rounded"
-            />
-          </a> 
+        {/* Google Map Embed */}
+        <div className="w-full h-56 md:h-64 lg:h-72">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.406893731863!2d78.48667151516434!3d17.38504458807578!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb99f5a58c0a6d%3A0xb1ed2cfa53a58e61!2sHyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1694000000000!5m2!1sen!2sin"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
         </div>
       </div>
     </footer>
