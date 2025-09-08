@@ -1,5 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card";
-
 export default function RealEstateServicesPage() {
   const services = [
     {
@@ -76,19 +74,17 @@ export default function RealEstateServicesPage() {
         {/* Services Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, idx) => (
-            <Card
+            <div
               key={idx}
-              className="rounded-2xl shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300"
+              className="flex flex-col rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 p-6 text-center bg-white"
             >
-              <CardContent className="p-6 text-center">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  {service.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-6">
-                  {service.description}
-                </p>
-              </CardContent>
-            </Card>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                {service.title}
+              </h3>
+              <p className="text-gray-600 text-sm leading-6">
+                {service.description}
+              </p>
+            </div>
           ))}
         </div>
       </div>
