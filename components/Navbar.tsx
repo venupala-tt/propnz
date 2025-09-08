@@ -20,7 +20,6 @@ export default function Navbar() {
     { href: "/pages/tools", label: "Prop Tools" },
     { href: "/blog", label: "Blogs" },
     { href: "/pages/book-an-expert", label: "Book Expert" },
-    { href: "/contact", label: "Contact" },
   ];
 
   useEffect(() => {
