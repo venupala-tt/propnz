@@ -19,11 +19,12 @@ export default function Footer() {
           <ul className="space-y-2">
             <li>
               <Link
-                href="/pages/book-an-expert"
+                    { href: "/contact", label: "Contact" },
+                href="/pages/contact"
                 className="text-gray-600 hover:text-blue-600 transition"
               >
-               Book Our Expert
-              </Link>
+            Contact Us
+            </Link>
             </li>
             <li>
               <Link
