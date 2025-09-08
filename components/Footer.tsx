@@ -69,7 +69,7 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <Link href="/pages/contact" className="text-blue-600 font-medium hover:underline">
+              <Link href="/contact" className="text-blue-600 font-medium hover:underline">
                 Contact Us Page
               </Link>
             </li>
