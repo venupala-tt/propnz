@@ -43,9 +43,12 @@ export async function POST(req: Request) {
 
     // ? Send Email Notification
     await transporter.sendMail({
-      from: `"Propmatics" <${process.env.EMAIL_FROM}>`,
-      to: process.env.EMAIL_FROM, // send to your email
-      subject: "?? New Expert Booking Request",
+      // from: `"Propmatics" <${process.env.EMAIL_FROM}>`,
+      from: email,
+      to: process.env.MY_EMAIL,
+//      to: process.env.EMAIL_FROM, // send to your email
+        subject: `New Expert Booking Request from ${name}`,
+//      subject: "?? New Expert Booking Request",
       html: `
         <h3>New Booking Request</h3>
         <p><strong>Name:</strong> ${name}</p>
