@@ -1,14 +1,24 @@
 import { FaYoutube, FaInstagram, FaFacebook, FaLinkedin, FaMapMarkerAlt, FaEnvelope } from "react-icons/fa";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
     <footer className="bg-gray-100 text-center py-10 mt-10">
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Copyright */}
-        <div className="flex flex-col justify-center items-center md:items-start">
-          <p className="text-sm text-gray-600">
-            © {new Date().getFullYear()} PropMatics by Tech Talents
+        {/* Logo + Tagline */}
+        <div className="flex flex-col items-center md:items-start space-y-4">
+          <Link href="/" className="inline-block transform transition-transform duration-300 hover:scale-105">
+            <Image
+              src="/logo.png" // make sure your logo is inside /public
+              alt="PropMatics Logo"
+              width={150}
+              height={50}
+              className="object-contain"
+            />
+          </Link>
+          <p className="text-gray-700 text-sm md:text-base max-w-xs">
+            Learn & Build scalable, Property Solutions.
           </p>
         </div>
 
@@ -100,6 +110,13 @@ export default function Footer() {
             ></iframe>
           </div>
         </div>
+      </div>
+
+      {/* Copyright at Bottom */}
+      <div className="mt-10 border-t border-gray-300 pt-4">
+        <p className="text-sm text-gray-600 text-center">
+          © {new Date().getFullYear()} PropMatics by Tech Talents
+        </p>
       </div>
     </footer>
   );
