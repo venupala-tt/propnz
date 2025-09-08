@@ -32,22 +32,20 @@ export async function POST(req: Request) {
     const newContact = new Contact({ name, email, category, message });
     await newContact.save();
 
-    // ✅ Setup Nodemailer Transport
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_SERVER_HOST,
-      port: Number(process.env.EMAIL_SERVER_PORT),
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_SERVER_USER,
-        pass: process.env.EMAIL_SERVER_PASSWORD,
-      },
+     // Create Nodemailer transporter
+      const transporter = nodemailer.createTransport({
+        service: 'Gmail', // Can also use SMTP config
+        auth: {
+          user: process.env.MY_EMAIL,
+          pass: process.env.MY_PASSWORD,
+        },
     });
 
-    // ✅ Send Email Notification
+    // ? Send Email Notification
     await transporter.sendMail({
       from: `"Propmatics" <${process.env.EMAIL_FROM}>`,
       to: process.env.EMAIL_FROM, // send to your email
-      subject: "📩 New Expert Booking Request",
+      subject: "?? New Expert Booking Request",
       html: `
         <h3>New Booking Request</h3>
         <p><strong>Name:</strong> ${name}</p>
@@ -62,7 +60,7 @@ export async function POST(req: Request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("❌ Contact API error:", error);
+    console.error("? Contact API error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
