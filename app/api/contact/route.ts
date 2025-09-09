@@ -5,19 +5,22 @@ export async function POST(req: Request) {
   try {
     const { name, email, message } = await req.json();
 
-    // Create Nodemailer transporter
+    // Create Nodemailer transporter for Namecheap SMTP
     const transporter = nodemailer.createTransport({
-      service: 'Gmail', // Can also use SMTP config
+      host: "server248.web-hosting.com", // Namecheap Private Email SMTP
+      port: 465,                     // Use 465 for SSL or 587 for TLS
+      secure: true,                  // true for 465, false for 587
       auth: {
-        user: process.env.MY_EMAIL,
-        pass: process.env.MY_PASSWORD,
+        user: process.env.NCSMTP_USER, // your full email, e.g. info@propmatics.com
+        pass: process.env.NCSMTP_PASS, // your email password
       },
     });
 
     // Send the email
     await transporter.sendMail({
-      from: email,
-      to: process.env.MY_EMAIL,
+      from: process.env.NCSMTP_USER,
+      to: process.env.NCSMTP_USER, // send to yourself
+      replyTo: email,            // person who filled the form
       subject: `New Contact Form Submission from ${name}`,
       text: message,
       html: `<p><strong>Name:</strong> ${name}</p>
