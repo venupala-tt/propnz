@@ -115,7 +115,7 @@ export default function Footer() {
       {/* Copyright at Bottom */}
       <div className="mt-10 border-t border-gray-300 pt-4">
         <p className="text-sm text-gray-600 text-center">
-          © {new Date().getFullYear()} PropMatics by Tech Talents
+          © {new Date().getFullYear()} PropMatics by <a href="www.techtalents.in" target="_blank"> Tech Talents</a>
         </p>
       </div>
     </footer>
