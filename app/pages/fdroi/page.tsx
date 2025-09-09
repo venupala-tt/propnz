@@ -109,7 +109,7 @@ export default function ROICalculatorPage() {
         {/* Inputs */}
         <div className="space-y-4">
           <div>
-            <label className="block font-medium text-gray-700 mb-1">Plot Size</label>
+            <label className="block font-medium text-gray-700 mb-1">Plot Size </label>
             <select
               value={plotSize}
               onChange={(e) => setPlotSize(Number(e.target.value))}
@@ -124,7 +124,7 @@ export default function ROICalculatorPage() {
 
           <div>
             <label className="block font-medium text-gray-700 mb-1">
-              Cost per Sq.Yard (₹)
+              Investment: Cost per Sq.Yard (₹)
             </label>
             <input
               type="number"
@@ -139,7 +139,7 @@ export default function ROICalculatorPage() {
 
           <div>
             <label className="block font-medium text-gray-700 mb-1">
-              Selling Price per Sq.Ft (₹)
+             After completion,  Selling Price per Sq.Ft (₹)
             </label>
             <input
               type="number"
