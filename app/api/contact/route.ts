@@ -5,22 +5,22 @@ export async function POST(req: Request) {
   try {
     const { name, email, message } = await req.json();
 
-    // Create Nodemailer transporter for Namecheap SMTP
+    // Create transporter using Namecheap SMTP (custom hostname)
     const transporter = nodemailer.createTransport({
-      host: "server248.web-hosting.com", // Namecheap Private Email SMTP
-      port: 465,                     // Use 465 for SSL or 587 for TLS
-      secure: true,                  // true for 465, false for 587
+      host: process.env.NCSMTP_HOST, // server248.web-hosting.com
+      port: 465, // or 587 if TLS
+      secure: true, // true for port 465 (SSL)
       auth: {
-        user: process.env.NCSMTP_USER, // your full email, e.g. info@propmatics.com
-        pass: process.env.NCSMTP_PASS, // your email password
+        user: process.env.NCSMTP_USER, // full email address
+        pass: process.env.NCSMTP_PASS, // mailbox password
       },
     });
 
-    // Send the email
+    // Send email
     await transporter.sendMail({
       from: process.env.NCSMTP_USER,
-      to: process.env.NCSMTP_USER, // send to yourself
-      replyTo: email,            // person who filled the form
+      to: process.env.CONTACT_RECEIVER,
+      replyTo: email,
       subject: `New Contact Form Submission from ${name}`,
       text: message,
       html: `<p><strong>Name:</strong> ${name}</p>
@@ -31,6 +31,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Email send error:', error);
-    return NextResponse.json({ success: false }, { status: 500 });
+    return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
   }
 }
