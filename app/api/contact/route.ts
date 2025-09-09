@@ -5,20 +5,46 @@ export async function POST(req: Request) {
   try {
     const { name, email, message } = await req.json();
 
-    // Create transporter using Namecheap SMTP (custom hostname)
-   const transporter = nodemailer.createTransport({
-  host: process.env.NCSMTP_HOST, // server248.web-hosting.com
-  port: 587,                     // TLS
-  secure: false,                 // false for port 587
-  auth: {
-    user: process.env.NCSMTP_USER, // full email
-    pass: process.env.NCSMTP_PASS, // mailbox password
-  },
-  tls: {
-    rejectUnauthorized: false, // helps if certificate mismatch
-  },
-});
+    const smtpOptions = {
+      host: process.env.NCSMTP_HOST || "server248.web-hosting.com",
+      auth: {
+        user: process.env.NCSMTP_USER,
+        pass: process.env.NCSMTP_PASS,
+      },
+      authMethod: "LOGIN" as const,
+      tls: {
+        rejectUnauthorized: false,
+      },
+    };
 
+    let transporter;
+    let portUsed = 587;
+
+    try {
+      // Try port 587 (STARTTLS)
+      transporter = nodemailer.createTransport({
+        ...smtpOptions,
+        port: 587,
+        secure: false,
+      });
+
+      await transporter.verify();
+      console.log("✅ Connected using port 587");
+      portUsed = 587;
+    } catch (err) {
+      console.warn("⚠️ Port 587 failed, retrying with 465...", err);
+
+      // Fallback to port 465 (SSL)
+      transporter = nodemailer.createTransport({
+        ...smtpOptions,
+        port: 465,
+        secure: true,
+      });
+
+      await transporter.verify();
+      console.log("✅ Connected using port 465");
+      portUsed = 465;
+    }
 
     // Send email
     await transporter.sendMail({
@@ -32,9 +58,9 @@ export async function POST(req: Request) {
              <p><strong>Message:</strong> ${message}</p>`,
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, portUsed });
   } catch (error) {
-    console.error('Email send error:', error);
+    console.error('❌ Email send error:', error);
     return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
   }
 }
