@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import Link from "next/link";
 
 export default function UnitConverterPage() {
   const [value, setValue] = useState<number | "">("");
@@ -13,11 +14,9 @@ export default function UnitConverterPage() {
   const [costValue, setCostValue] = useState<number | "">("");
   const [costResult, setCostResult] = useState<number | null>(null);
 
-  // Tooltip toggle
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
 
-  // Close tooltip when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
@@ -30,7 +29,6 @@ export default function UnitConverterPage() {
     };
   }, []);
 
-  // Conversion factors relative to square feet
   const conversionRates: Record<string, number> = {
     sqft: 1,
     sqyd: 1 / 9,
@@ -92,7 +90,17 @@ export default function UnitConverterPage() {
 
   return (
     <section className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-white to-purple-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-6">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 max-w-2xl w-full space-y-10 transition-colors">
+      {/* Fixed Back Button */}
+      <div className="fixed top-4 right-4 z-50">
+        <Link
+          href="/pages/tools"
+          className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition shadow-md"
+        >
+          ⬅️ Back To Tools
+        </Link>
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 max-w-2xl w-full space-y-10 transition-colors relative">
         <h1 className="text-2xl font-bold text-center mb-4 text-gray-800 dark:text-gray-100">
           🏠 Real Estate Unit Converter
         </h1>
