@@ -6,15 +6,19 @@ export async function POST(req: Request) {
     const { name, email, message } = await req.json();
 
     // Create transporter using Namecheap SMTP (custom hostname)
-    const transporter = nodemailer.createTransport({
-      host: process.env.NCSMTP_HOST, // server248.web-hosting.com
-      port: 465, // or 587 if TLS
-      secure: true, // true for port 465 (SSL)
-      auth: {
-        user: process.env.NCSMTP_USER, // full email address
-        pass: process.env.NCSMTP_PASS, // mailbox password
-      },
-    });
+   const transporter = nodemailer.createTransport({
+  host: process.env.NCSMTP_HOST, // server248.web-hosting.com
+  port: 587,                     // TLS
+  secure: false,                 // false for port 587
+  auth: {
+    user: process.env.NCSMTP_USER, // full email
+    pass: process.env.NCSMTP_PASS, // mailbox password
+  },
+  tls: {
+    rejectUnauthorized: false, // helps if certificate mismatch
+  },
+});
+
 
     // Send email
     await transporter.sendMail({
