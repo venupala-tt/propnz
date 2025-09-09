@@ -191,7 +191,7 @@ export default function UnitConverterPage() {
           </div>
         </div>
 
-        {/* Cost Conversion Section */}
+        {/* Land Cost Conversion Section */}
         <div>
           <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-200">Cost Conversion</h2>
           <div className="space-y-4">
@@ -236,7 +236,7 @@ export default function UnitConverterPage() {
               onClick={handleCostConvert}
               className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
             >
-              Convert Cost
+              Convert Land Cost
             </button>
             {costResult !== null && (
               <div className="mt-4 text-center">
