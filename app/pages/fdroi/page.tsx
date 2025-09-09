@@ -31,11 +31,11 @@ export default function ROICalculatorPage() {
     const x = Number(projectDuration);
 
     // 1) Land Investment (Owner)
-    const totalInvestment = plotSize * cpPerYd;
+    const baseInvestment = plotSize * cpPerYd;
 
     // Interest at 8% for x years
-    const interest = totalInvestment * 0.08 * x;
-    const totalInvestmentWithInterest = totalInvestment + interest;
+    const interest = baseInvestment * 0.08 * x;
+    const totalInvestmentWithInterest = baseInvestment + interest;
 
     // 2) Constructable area (80% of plot) -> sq.ft
     const constructableSqYds = plotSize * 0.8;
@@ -70,7 +70,7 @@ export default function ROICalculatorPage() {
       ((ownerSaleValue - totalInvestmentWithInterest) / totalInvestmentWithInterest) * 100;
 
     // 6) Developer costs & ROI (assumptions provided)
-    const constructionCost = totalSellableSqFt * 2000; // ?2,000 / sq.ft
+    const constructionCost = totalSellableSqFt * 2000; // ₹2,000 / sq.ft
     const adminCost = constructionCost * 0.2; // +20% administrative
     const totalDevInvestment = constructionCost + adminCost;
 
@@ -80,6 +80,8 @@ export default function ROICalculatorPage() {
 
     // Crores conversions
     const toCrores = (v: number) => v / 10000000;
+    const baseInvestmentCr = toCrores(baseInvestment);
+    const interestCr = toCrores(interest);
     const investmentCrores = toCrores(totalInvestmentWithInterest);
     const ownerSaleValueCrores = toCrores(ownerSaleValue);
 
@@ -89,6 +91,8 @@ export default function ROICalculatorPage() {
     const developerSaleValueCr = toCrores(developerSaleValue);
 
     setResult({
+      baseInvestment,
+      interest,
       totalInvestmentWithInterest,
       constructableSqFtPerFloor,
       floors,
@@ -102,6 +106,8 @@ export default function ROICalculatorPage() {
       developerPerFlatPrice,
       ownerSaleValue,
       ownerRoiPercent,
+      baseInvestmentCr,
+      interestCr,
       investmentCrores,
       ownerSaleValueCrores,
       developerShareSqFt,
@@ -115,6 +121,7 @@ export default function ROICalculatorPage() {
       totalDevInvestmentCr,
       developerSaleValueCr,
       n,
+      x,
     });
   };
 
@@ -200,10 +207,13 @@ export default function ROICalculatorPage() {
               <h2 className="text-xl font-bold text-gray-800 mb-4">📈 Summary of ROI in Development of Flats Project</h2>
               <ul className="space-y-2 text-gray-700">
                 <li>
-                  💰 Total Investment by {result.n} Landowners (with 8% interest for {projectDuration} years):
-                  <b>
-                    ₹ {result.totalInvestmentWithInterest.toLocaleString()} ({result.investmentCrores.toFixed(2)} Cr)
-                  </b>
+                  💰 Base Investment by {result.n} Landowners: <b>₹ {result.baseInvestment.toLocaleString()} ({result.baseInvestmentCr.toFixed(2)} Cr)</b>
+                </li>
+                <li>
+                  ➕ Interest @ 8% for {result.x} years: <b>₹ {result.interest.toLocaleString()} ({result.interestCr.toFixed(2)} Cr)</b>
+                </li>
+                <li>
+                  🔹 Total Investment (Land + Interest): <b>₹ {result.totalInvestmentWithInterest.toLocaleString()} ({result.investmentCrores.toFixed(2)} Cr)</b>
                 </li>
                 <li>🏢 Constructable Area per Floor: <b>{result.constructableSqFtPerFloor.toLocaleString()} sq.ft</b></li>
                 <li>🏗️ Total Floors Allowed: <b>{result.floors}</b></li>
