@@ -59,8 +59,7 @@ export default function BookAnExpertPage() {
         </h1>
 
         <p className="text-gray-600 mb-8 text-center">
-          Schedule a consultation with our experts. Provide details about your
-          requirements and we will connect you with the right professional.
+          Provide details about your requirements and we will connect you with the right professional.
         </p>
 
         {/* Quick Info Section as Hover Tip */}
