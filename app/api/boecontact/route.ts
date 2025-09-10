@@ -33,19 +33,22 @@ export async function POST(req: Request) {
     await newContact.save();
 
      // Create Nodemailer transporter
-      const transporter = nodemailer.createTransport({
-        service: 'Gmail', // Can also use SMTP config
-        auth: {
-          user: process.env.MY_EMAIL,
-          pass: process.env.MY_PASSWORD,
-        },
+ 
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_SERVER_HOST,
+      port: Number(process.env.EMAIL_SERVER_PORT),
+      secure: Number(process.env.EMAIL_SERVER_PORT) === 465, // ✅ auto secure for 465
+      auth: {
+        user: process.env.EMAIL_SERVER_USER,
+        pass: process.env.EMAIL_SERVER_PASSWORD,
+      },
     });
 
     // ? Send Email Notification
     await transporter.sendMail({
-      // from: `"Propmatics" <${process.env.EMAIL_FROM}>`,
-      from: email,
-      to: process.env.MY_EMAIL,
+      from: `"${name}" <${process.env.EMAIL_FROM}>`,
+//      from: email,
+      to: process.env.CONTACT_RECEIVER,
 //      to: process.env.EMAIL_FROM, // send to your email
         subject: `New Expert Booking Request from ${name}`,
 //      subject: "?? New Expert Booking Request",
