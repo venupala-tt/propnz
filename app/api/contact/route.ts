@@ -1,66 +1,32 @@
-import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 export async function POST(req: Request) {
   try {
-    const { name, email, message } = await req.json();
+    const body = await req.json();
+    const { name, email, message } = body;
 
-    const smtpUser = process.env.NCSMTP_USER;
-    const smtpPass = process.env.NCSMTP_PASS;
-
-    // Debug log (don't log the real password!)
-    console.log("📧 Using SMTP user:", smtpUser);
-
-    const smtpOptions = {
-      host: process.env.NCSMTP_HOST || "server248.web-hosting.com",
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_SERVER_HOST,
+      port: Number(process.env.EMAIL_SERVER_PORT),
+      secure: Number(process.env.EMAIL_SERVER_PORT) === 465, // ✅ auto secure for 465
       auth: {
-        user: smtpUser,
-        pass: smtpPass,
+        user: process.env.EMAIL_SERVER_USER,
+        pass: process.env.EMAIL_SERVER_PASSWORD,
       },
-      authMethod: "LOGIN" as const,
-      tls: {
-        rejectUnauthorized: false,
-      },
-    };
-
-    let transporter;
-    let portUsed = 587;
-
-    try {
-      transporter = nodemailer.createTransport({
-        ...smtpOptions,
-        port: 587,
-        secure: false,
-      });
-      await transporter.verify();
-      console.log("✅ Connected using port 587");
-      portUsed = 587;
-    } catch (err) {
-      console.warn("⚠️ Port 587 failed, retrying with 465...", err);
-      transporter = nodemailer.createTransport({
-        ...smtpOptions,
-        port: 465,
-        secure: true,
-      });
-      await transporter.verify();
-      console.log("✅ Connected using port 465");
-      portUsed = 465;
-    }
-
-    await transporter.sendMail({
-      from: smtpUser,
-      to: process.env.CONTACT_RECEIVER,
-      replyTo: email,
-      subject: `New Contact Form Submission from ${name}`,
-      text: message,
-      html: `<p><strong>Name:</strong> ${name}</p>
-             <p><strong>Email:</strong> ${email}</p>
-             <p><strong>Message:</strong> ${message}</p>`,
     });
 
-    return NextResponse.json({ success: true, portUsed, smtpUser });
-  } catch (error) {
-    console.error('❌ Email send error:', error);
-    return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
+    await transporter.sendMail({
+      from: `"${name}" <${process.env.EMAIL_FROM}>`,
+      to: process.env.CONTACT_RECEIVER,
+      subject: `New Contact Form Message from ${name}`,
+      text: `You got a new message from:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+      replyTo: email, // ✅ allows you to reply directly
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("❌ Email send error:", error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
