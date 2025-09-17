@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -14,7 +14,6 @@ export default function RegisterPage() {
     setError("");
 
     try {
-      // Call your backend to create user
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -23,11 +22,11 @@ export default function RegisterPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.message || "Registration failed.");
+        setError(data.message || data.error || "Registration failed.");
         return;
       }
 
-      // ✅ Auto login after successful registration
+      // Auto login after successful registration
       const loginRes = await signIn("credentials", {
         redirect: false,
         email: form.email,
@@ -35,7 +34,7 @@ export default function RegisterPage() {
       });
 
       if (loginRes?.ok) {
-        router.push("/dashboard"); // 👈 Always redirect here
+        router.push("/dashboard");
       } else {
         setError("Registered, but login failed. Please sign in manually.");
       }
@@ -51,11 +50,20 @@ export default function RegisterPage() {
         <h2 className="text-xl font-bold mb-4 text-center">Register</h2>
         <form onSubmit={handleRegister} className="flex flex-col gap-3">
           <input
+            type="text"
+            placeholder="Name"
+            className="border p-2 rounded"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            required
+          />
+          <input
             type="email"
             placeholder="Email"
             className="border p-2 rounded"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required
           />
           <input
             type="password"
@@ -63,6 +71,7 @@ export default function RegisterPage() {
             className="border p-2 rounded"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
+            required
           />
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
