@@ -48,6 +48,9 @@ export async function POST(req: Request) {
 
     // ? Send Email Notification
     await transporter.sendMail({
+      console.log("SMTP_USER:", process.env.SMTP_USER);
+      console.log("SMTP_PASS length:", process.env.SMTP_PASS?.length);
+
       from: `"${name}" <${process.env.EMAIL_FROM}>`,
 //      from: email,
       to: process.env.CONTACT_RECEIVER,
