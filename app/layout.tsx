@@ -1,12 +1,7 @@
 import "./globals.css";
-import Navbar from '../components/Navbar'
+import Providers from "../components/Providers"; // wraps with SessionProvider
+import Navbar from "../components/Navbar";
 import Footer from '../components/Footer'
-import Providers from "../components/Providers"; // ✅ relative path, not "/app/providers"
-
-***********
-import "./globals.css";
-import Providers from "@/components/Providers"; // wraps with SessionProvider
-import Navbar from "@/components/Navbar";
 
 export const metadata = {
   title: "Propmatics",
