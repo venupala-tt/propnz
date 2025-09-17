@@ -1,16 +1,11 @@
-// app/dashboard/page.tsx
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route"; // 👈 adjust path if needed
+import { authOptions } from "@/lib/auth"; // 👈 import from lib
 
 export default async function DashboardPage() {
-  // Get user session from NextAuth
   const session = await getServerSession(authOptions);
 
-  // If no session → redirect to home (or login page)
-  if (!session) {
-    redirect("/");
-  }
+  if (!session) redirect("/");
 
   return (
     <div className="p-6">
