@@ -43,9 +43,7 @@ export async function POST(req: Request) {
         pass: process.env.EMAIL_SERVER_PASSWORD,
       },
         authMethod: "LOGIN";
-            console.log("SMTP_USER:", process.env.SMTP_USER);
-      console.log("SMTP_PASS length:", process.env.SMTP_PASS?.length);
-
+         
     });
 
     // ? Send Email Notification
