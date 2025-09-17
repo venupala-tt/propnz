@@ -42,7 +42,7 @@ export async function POST(req: Request) {
         user: process.env.EMAIL_SERVER_USER,
         pass: process.env.EMAIL_SERVER_PASSWORD,
       },
-        authMethod: "LOGIN";
+        authMethod: "LOGIN"
          
     });
 
