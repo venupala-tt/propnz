@@ -19,6 +19,7 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           <main>{children}</main>
+        <Footer />   {/* 👈 now footer will render on every page */}
         </Providers>
       </body>
     </html>
