@@ -1,15 +1,25 @@
 // lib/auth.ts
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import { connectDB } from "./mongodb";
+import User from "../models/User";
 
-// Example DB lookup
 async function getUser(email: string, password: string) {
-  if (email === "admin@site.com" && password === "admin123") {
-    return { id: "1", name: "Admin User", email, role: "admin" };
-  } else if (email === "user@site.com" && password === "user123") {
-    return { id: "2", name: "Regular User", email, role: "user" };
-  }
-  return null;
+  await connectDB();
+
+  const user = await User.findOne({ email });
+  if (!user) return null;
+
+  const isValid = await bcrypt.compare(password, user.password);
+  if (!isValid) return null;
+
+  return {
+    id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+    role: user.role || "user", // default role
+  };
 }
 
 export const authOptions: NextAuthOptions = {
@@ -21,12 +31,8 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const user = await getUser(
-          credentials?.email as string,
-          credentials?.password as string
-        );
-        if (user) return user;
-        return null;
+        if (!credentials?.email || !credentials?.password) return null;
+        return await getUser(credentials.email, credentials.password);
       },
     }),
   ],
