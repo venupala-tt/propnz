@@ -48,7 +48,8 @@ export async function POST(req: Request) {
 
     // ? Send Email Notification
     await transporter.sendMail({
-      from: `"${name}" <${process.env.EMAIL_FROM}>`,
+//      from: `"${name}" <${process.env.EMAIL_FROM}>`,
+      from: `"Propmatics" <info@propmatics.com>`,
 //      from: email,
       to: process.env.CONTACT_RECEIVER,
 //      to: process.env.EMAIL_FROM, // send to your email
