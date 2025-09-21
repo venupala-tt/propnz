@@ -39,8 +39,10 @@ export async function POST(req: Request) {
       port: Number(process.env.EMAIL_SERVER_PORT),
       secure: Number(process.env.EMAIL_SERVER_PORT) === 465, // ✅ auto secure for 465
       auth: {
-        user: process.env.EMAIL_SERVER_USER,
-        pass: process.env.EMAIL_SERVER_PASSWORD,
+       // user: process.env.EMAIL_SERVER_USER,
+       // pass: process.env.EMAIL_SERVER_PASSWORD,
+         user: "info@propmatics.com",
+        pass: "Thiru@987$_ap",
       },
         authMethod: "LOGIN"
          
