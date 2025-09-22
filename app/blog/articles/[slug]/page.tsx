@@ -42,7 +42,7 @@ type BlogPageProps = {
 export default async function BlogPage({ params }: BlogPageProps) {
   const { slug } = await params;
   const article = await fetchBlogPost(slug);
-  const { title, date, heroImage, content } = article.fields;
+  const { title, date, heroImage, body } = article.fields;
   
   // const imageUrl = heroImage?.fields?.file?.url
 
@@ -91,7 +91,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
         </p>
 
         <div className="prose prose-lg max-w-none text-gray-700">
-          {documentToReactComponents(content)}
+          {documentToReactComponents(body)}
         </div>
 
         <div className="mt-8 text-center">
