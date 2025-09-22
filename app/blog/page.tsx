@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { fetchBlogs } from "../lib/contentful";
+import { fetchBlogs } from "../../lib/contentful";
 
 export default function BlogPage() {
   const [blogs, setBlogs] = useState<any[]>([]);
@@ -16,6 +16,7 @@ export default function BlogPage() {
     loadBlogs();
   }, []);
 
+  // Filter blogs by active language tab
   const filteredBlogs = blogs.filter(blog => blog.fields.language === activeTab);
 
   return (
@@ -35,24 +36,31 @@ export default function BlogPage() {
 
       {/* Blog List */}
       <div className="grid md:grid-cols-2 gap-6">
-        {filteredBlogs.length === 0 && <p>No blogs available in {activeTab}</p>}
-        {filteredBlogs.map(blog => (
-          <div key={blog.sys.id} className="border rounded p-4 shadow-sm">
-            <img
-              src={blog.fields.heroImage.fields.file.url}
-              alt={blog.fields.title}
-              className="w-full h-48 object-cover rounded"
-            />
-            <h2 className="text-xl font-bold mt-2">{blog.fields.title}</h2>
-            <p className="mt-1 text-gray-700">{blog.fields.description}</p>
-            <Link
-              href={`/blog/${blog.fields.slug}`}
-              className="text-blue-500 mt-2 inline-block"
-            >
-              Read More
-            </Link>
-          </div>
-        ))}
+        {filteredBlogs.length === 0 && (
+          <p className="text-gray-600 col-span-2">No blogs available in {activeTab}.</p>
+        )}
+
+        {filteredBlogs.map(blog => {
+          const { title, description, slug, heroImage } = blog.fields;
+          return (
+            <div key={blog.sys.id} className="border rounded p-4 shadow-sm">
+              {/* Hero Image */}
+              {heroImage?.fields?.file?.url && (
+                <img
+                  src={heroImage.fields.file.url}
+                  alt={title}
+                  className="w-full h-48 object-cover rounded"
+                />
+              )}
+
+              <h2 className="text-xl font-bold mt-2">{title}</h2>
+              <p className="mt-1 text-gray-700">{description}</p>
+              <Link href={`/blog/articles/${slug}`} className="text-blue-500 mt-2 inline-block">
+                Read More
+              </Link>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
