@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchBlogs } from "../lib/contentful";
 import { getHeroUrl, safeString } from "../lib/contentful-helpers";
+import { Entry } from "contentful";
 
+// TypeScript types
 interface BlogFields {
   slug: string;
   title: string;
@@ -13,20 +15,19 @@ interface BlogFields {
   language?: string;
 }
 
-interface BlogItem {
-  fields: BlogFields;
-}
+type BlogItem = Entry<BlogFields>;
 
 export default function BlogPage() {
   const [blogs, setBlogs] = useState<BlogItem[]>([]);
   const [activeTab, setActiveTab] = useState<"English" | "Telugu">("English");
   const [loading, setLoading] = useState(true);
 
+  // Fetch blogs on client-side
   useEffect(() => {
     const loadBlogs = async () => {
       try {
         const items = await fetchBlogs();
-        setBlogs(items);
+        setBlogs(items); // ✅ matches Entry<BlogFields>[]
       } catch (error) {
         console.error("Failed to fetch blogs:", error);
       } finally {
@@ -44,6 +45,7 @@ export default function BlogPage() {
     );
   }
 
+  // Filter blogs by language
   const englishBlogs = blogs.filter(
     (blog) => safeString(blog.fields.language) === "English"
   );
