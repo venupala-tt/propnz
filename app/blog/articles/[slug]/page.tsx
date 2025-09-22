@@ -1,6 +1,7 @@
 // app/blog/articles/[slug]/page.tsx
 import Link from "next/link";
 import { fetchBlogBySlug } from "../../../lib/contentful";
+import { Asset } from "contentful";
 
 interface BlogPageProps {
   params: { slug: string };
@@ -23,12 +24,15 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
   const { title, body, heroImage, language } = blog.fields;
 
+  // Cast heroImage to Asset
+  const heroAsset = heroImage as Asset | undefined;
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Hero Image */}
-      {heroImage?.fields?.file?.url && (
+      {heroAsset?.fields?.file?.url && (
         <img
-          src={heroImage.fields.file.url}
+          src={heroAsset.fields.file.url}
           alt={title}
           className="w-full h-64 object-cover rounded mb-6"
         />
