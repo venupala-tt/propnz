@@ -24,15 +24,16 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
   const { title, body, heroImage, language } = blog.fields;
 
-  // Cast heroImage to Asset
+  // Cast heroImage to Asset and extract URL
   const heroAsset = heroImage as Asset | undefined;
+  const heroUrl: string | undefined = heroAsset?.fields?.file?.url;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Hero Image */}
-      {heroAsset?.fields?.file?.url && (
+      {heroUrl && (
         <img
-          src={heroAsset.fields.file.url}
+          src={heroUrl.startsWith("http") ? heroUrl : `https:${heroUrl}`}
           alt={title}
           className="w-full h-64 object-cover rounded mb-6"
         />
