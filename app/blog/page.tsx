@@ -1,116 +1,99 @@
-"use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { fetchBlogs } from "../lib/contentful";
-import { getHeroUrl, safeString } from "../lib/contentful-helpers";
+import { BlogQueryResult } from "../../app/types";
 
-// Blog typing
-interface BlogFields {
-  slug: string;
-  title: string;
-  description: string;
-  heroImage?: any;
-  language?: string;
-}
 
-interface BlogItem {
-  sys: { id: string };
-  fields: BlogFields;
-}
+import { createClient } from "contentful";
 
-export default function BlogPage() {
-  const [blogs, setBlogs] = useState<BlogItem[]>([]);
-  const [activeTab, setActiveTab] = useState<"English" | "Telugu">("English");
-  const [loading, setLoading] = useState(true);
+const client = createClient({
+  space: "ghxp9r5ui85n",
+  accessToken: "9276aed838db6b7ac88ee1d2fad33f33e3f98cef0dc6b44504f2281a420e5358",
+});
 
-  useEffect(() => {
-    const loadBlogs = async () => {
-      try {
-        const items: BlogItem[] = await fetchBlogs();
-        setBlogs(items);
-      } catch (error) {
-        console.error("Failed to fetch blogs:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadBlogs();
-  }, []);
+const getBlogEntries = async (): Promise<BlogQueryResult> => {
+  const entries = await client.getEntries({ content_type: "blogPost" });
+  return entries as unknown as BlogQueryResult;
+};
 
-  if (loading) {
-    return (
-      <div className="max-w-6xl mx-auto px-4 py-8 text-center">
-        Loading blogs...
-      </div>
-    );
-  }
-
-  const englishBlogs = blogs.filter(
-    (blog) => safeString(blog.fields.language) === "English"
-  );
-  const teluguBlogs = blogs.filter(
-    (blog) => safeString(blog.fields.language) === "Telugu"
-  );
-
-  const activeBlogs = activeTab === "English" ? englishBlogs : teluguBlogs;
+export default async function Home() {
+  const blogEntries = await getBlogEntries();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      {/* Tabs */}
-      <div className="flex gap-4 mb-6">
-        <button
-          onClick={() => setActiveTab("English")}
-          className={`px-4 py-2 rounded ${
-            activeTab === "English"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-700"
-          }`}
-        >
-          English
-        </button>
-        <button
-          onClick={() => setActiveTab("Telugu")}
-          className={`px-4 py-2 rounded ${
-            activeTab === "Telugu"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-700"
-          }`}
-        >
-          తెలుగు
-        </button>
-      </div>
-
-      {/* Blog list */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {activeBlogs.map((blog, index) => {
-          const { slug, title, description, heroImage } = blog.fields;
-          const safeSlug = safeString(slug, `blog-${index}`);
-          const safeTitle = safeString(title, "Untitled Blog");
-          const safeDescription = safeString(description);
-          const heroUrl = getHeroUrl(heroImage);
-
-          return (
-            <Link
-              key={safeSlug}
-              href={`/blog/articles/${safeSlug}`}
-              className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+    <main
+      className="flex min-h-screen flex-col items-center justify-center 
+      p-6 sm:p-12 lg:p-24 
+      bg-gradient-to-br from-blue-100 via-white to-purple-100 
+      animate-gradientWave"
+    >
+      <div
+        className="w-full max-w-5xl rounded-2xl shadow-lg 
+        bg-white/80 backdrop-blur-sm p-8 sm:p-12 
+        animate-fadeInBounce"
+      >
+   {/* Top-right link */}
+        <div className="flex justify-end mb-6">
+       <Link
+              href="/pages/book-an-expert"
+              className="px-6 py-3 rounded-xl shadow-lg font-semibold text-white 
+                         bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+                         hover:opacity-90 transition text-center sm:text-left"
             >
-              {heroUrl && (
+              Book Our Expert
+            </Link>
+        </div>
+        
+        <h1
+          className="text-3xl sm:text-4xl font-bold text-center mb-12 
+          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+          bg-clip-text text-transparent animate-gradientWave"
+        >
+          Our Blog
+        </h1>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          {blogEntries.items.map((singlePost) => {
+            const { slug, title, date, heroImage } = singlePost.fields;
+            
+              const imageUrl = heroImage.fields.file.url
+              ? `https:${heroImage.fields.file.url}`
+              : "/default-blog.jpg"; 
+
+
+         //    console.log("IMG asst" + heroImage.fields.file.url);
+
+//                    var imageURL = 'https:' + asset.fields.file.url;
+
+
+            return (
+              <Link
+                key={slug}
+                href={`../blog/articles/${slug}`}
+                className="group rounded-xl bg-white shadow-md hover:shadow-xl 
+                transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
+              >
                 <img
-                  src={heroUrl}
-                  alt={safeTitle}
+                  src={imageUrl}
+                  alt={title}
                   className="w-full h-48 object-cover"
                 />
-              )}
-              <div className="p-4">
-                <h2 className="text-xl font-bold mb-2">{safeTitle}</h2>
-                <p className="text-gray-600">{safeDescription}</p>
-              </div>
-            </Link>
-          );
-        })}
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold mb-2 text-gray-800 group-hover:text-purple-600">
+                    {title}
+                  </h2>
+                  <span className="text-sm text-gray-500">
+                    Posted on{" "}
+                    {new Date(date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
