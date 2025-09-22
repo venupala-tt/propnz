@@ -16,6 +16,7 @@
     "mongoose": "^8.5.2",
     "@contentful/f36-spinner": "^4.81.1",
     "@contentful/rich-text-react-renderer": "^16.1.0",
+       "@contentful/rich-text-types": "^16.6.6",
     "@types/lodash": "^4.17.20",
     "@types/nodemailer": "^6.4.17",
     "framer-motion": "^10.16.4",
