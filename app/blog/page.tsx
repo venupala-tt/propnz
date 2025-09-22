@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { fetchBlogs } from "../../lib/contentful";
+import { fetchBlogs } from "../lib/contentful";
 
 export default function BlogPage() {
   const [blogs, setBlogs] = useState<any[]>([]);
