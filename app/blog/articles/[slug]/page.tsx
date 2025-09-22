@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { fetchBlogBySlug } from "../../../lib/contentful";
 import { getHeroUrl, safeString } from "../../../lib/contentful-helpers";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { Document } from "@contentful/rich-text-types";
 
 interface BlogPageProps {
   params: { slug: string };
@@ -23,6 +25,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   }
 
   const { title, body, heroImage, language } = blog.fields;
+
   const safeTitle = safeString(title, "Untitled Blog");
   const heroUrl = getHeroUrl(heroImage);
 
@@ -40,8 +43,10 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       {/* Blog Title */}
       <h1 className="text-3xl font-bold mb-4">{safeTitle}</h1>
 
-      {/* Blog Body */}
-      <div className="prose prose-lg text-gray-700 mb-6">{body}</div>
+      {/* Blog Body (Rich Text) */}
+      <div className="prose prose-lg text-gray-700 mb-6">
+        {documentToReactComponents(body as Document)}
+      </div>
 
       {/* Back Link */}
       <Link href="/blog" className="text-blue-500 hover:underline">
