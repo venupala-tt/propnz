@@ -1,7 +1,7 @@
 // app/blog/articles/[slug]/page.tsx
 import Link from "next/link";
 import { fetchBlogBySlug } from "../../../lib/contentful";
-import { Asset } from "contentful";
+import { Asset, AssetFile } from "contentful";
 
 interface BlogPageProps {
   params: { slug: string };
@@ -24,9 +24,18 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
   const { title, body, heroImage, language } = blog.fields;
 
-  // Cast heroImage to Asset and extract URL
+  // Cast heroImage to Asset
   const heroAsset = heroImage as Asset | undefined;
-  const heroUrl: string | undefined = heroAsset?.fields?.file?.url;
+
+  // Narrow down url safely
+  let heroUrl: string | undefined;
+  const file = heroAsset?.fields?.file as AssetFile | string | undefined;
+
+  if (typeof file === "object" && file?.url) {
+    heroUrl = file.url;
+  } else if (typeof file === "string") {
+    heroUrl = file;
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -43,9 +52,7 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
       <h1 className="text-3xl font-bold mb-4">{title}</h1>
 
       {/* Blog Body */}
-      <div className="prose prose-lg text-gray-700 mb-6">
-        {body}
-      </div>
+      <div className="prose prose-lg text-gray-700 mb-6">{body}</div>
 
       {/* Back Link */}
       <Link href="/blog" className="text-blue-500 hover:underline">
