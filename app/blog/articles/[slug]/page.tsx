@@ -1,100 +1,122 @@
-import Link from "next/link";
-import { fetchBlogPost } from "../../../lib/contentful";
-import { getHeroUrl, safeString } from "../../../lib/contentful-helpers";
+
+import { createClient } from "contentful";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import { Document, BLOCKS, INLINES } from "@contentful/rich-text-types";
+import { BLOCKS } from "@contentful/rich-text-types";
+import { BlogItem } from "../../../../app/types";
+import Link from "next/link";
 
-interface BlogFields {
-  slug: string;
-  title: string;
-  description: string;
-  heroImage?: any;
-  language?: string;
-  body?: Document;
+const client = createClient({
+  accessToken: "9276aed838db6b7ac88ee1d2fad33f33e3f98cef0dc6b44504f2281a420e5358",
+  space: "ghxp9r5ui85n",
+});
+
+export async function generateStaticParams() {
+  const queryOptions = {
+    content_type: "blogPost",
+    select: "fields.slug",
+  };
+
+  const articles = await client.getEntries(queryOptions);
+
+  return articles.items.map((article) => ({
+    slug: article.fields.slug,
+    fallback: "false",
+  }));
 }
 
-interface BlogItem {
-  sys: { id: string };
-  fields: BlogFields;
-}
+const fetchBlogPost = async (slug: string): Promise<BlogItem> => {
+  const queryOptions = {
+    content_type: "blogPost",
+    "fields.slug[match]": slug,
+  };
 
-interface BlogPageProps {
-  params: { slug: string };
-}
+  const queryResult = await client.getEntries(queryOptions);
+  return queryResult.items[0] as unknown as BlogItem;
+};
 
-export default async function BlogSlugPage({ params }: BlogPageProps) {
-  const { slug } = params;
-  const blog: BlogItem | null = await fetchBlogPost(slug);
+type BlogPageProps = {
+  params: Promise<{ slug: string }>;
+};
 
-  if (!blog) {
-    return (
-      <div className="max-w-3xl mx-auto px-4 py-12 text-center">
-        <h1 className="text-3xl font-bold mb-4">Blog post not found</h1>
-        <Link href="/blog" className="text-blue-500 hover:underline">
-          ← Back to Blog
-        </Link>
-      </div>
-    );
-  }
+export default async function BlogPage({ params }: BlogPageProps) {
+  const { slug } = await params;
+  const article = await fetchBlogPost(slug);
+  const { title, date, heroImage, body } = article.fields;
 
-  const { title, body, heroImage, language } = blog.fields;
+  const imageUrl = heroImage?.fields?.file?.url
+    ? `https:${heroImage.fields.file.url}`
+    : "/default-blog.jpg";
 
-  const safeTitle = safeString(title, "Untitled Blog");
-  const safeLanguage = safeString(language, "Unknown");
-  const heroUrl = getHeroUrl(heroImage);
-
-  const renderOptions = {
+  // Custom renderer to handle embedded assets
+  const options = {
     renderNode: {
-      [BLOCKS.HEADING_1]: (_node: any, children: any) => (
-        <h1 className="text-3xl font-bold my-4">{children}</h1>
-      ),
-      [BLOCKS.HEADING_2]: (_node: any, children: any) => (
-        <h2 className="text-2xl font-semibold my-3">{children}</h2>
-      ),
-      [BLOCKS.PARAGRAPH]: (_node: any, children: any) => (
-        <p className="mb-3 text-gray-700">{children}</p>
-      ),
-      [BLOCKS.UL_LIST]: (_node: any, children: any) => (
-        <ul className="list-disc ml-6 mb-3">{children}</ul>
-      ),
-      [BLOCKS.OL_LIST]: (_node: any, children: any) => (
-        <ol className="list-decimal ml-6 mb-3">{children}</ol>
-      ),
-      [BLOCKS.LIST_ITEM]: (_node: any, children: any) => <li>{children}</li>,
-      [INLINES.HYPERLINK]: (node: any, children: any) => (
-        <a
-          href={node.data.uri}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 hover:underline"
-        >
-          {children}
-        </a>
-      ),
+      [BLOCKS.EMBEDDED_ASSET]: (node: any) => {
+        const { file, title, description } = node.data.target.fields;
+        const imageUrl = file.url ? `https:${file.url}` : "";
+        return (
+          <div className="my-6 flex justify-center">
+            <img
+              src={imageUrl}
+              alt={description || title || "Embedded Asset"}
+              className="rounded-lg shadow-md max-w-full h-auto"
+            />
+          </div>
+        );
+      },
     },
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      {heroUrl && (
+    <main
+      className="flex min-h-screen flex-col items-center justify-center 
+      p-6 sm:p-12 lg:p-24 
+      bg-gradient-to-br from-blue-100 via-white to-purple-100 
+      animate-gradientWave"
+    >
+      <div
+        className="w-full max-w-3xl rounded-2xl shadow-lg 
+        bg-white/80 backdrop-blur-sm p-8 sm:p-12 
+        animate-fadeInBounce"
+      >
         <img
-          src={heroUrl}
-          alt={safeTitle}
-          className="w-full h-64 object-cover rounded mb-6"
+          src={imageUrl}
+          alt={title}
+          className="w-full h-56 object-cover rounded-xl mb-6"
         />
-      )}
+        <h1
+          className="text-3xl sm:text-4xl font-bold text-center mb-4 
+          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+          bg-clip-text text-transparent animate-gradientWave"
+        >
+          {title}
+        </h1>
 
-      <h1 className="text-4xl font-bold mb-6">{safeTitle}</h1>
+        <p className="mb-6 text-sm text-gray-500 text-center">
+          Posted on{" "}
+          {new Date(date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </p>
 
-      {body && (
-        <div className="prose prose-lg text-gray-700 mb-6">
-          {documentToReactComponents(body, renderOptions)}
+        {/* Render rich text with embedded assets */}
+        <div className="prose prose-lg max-w-none text-gray-700">
+          {documentToReactComponents(body, options)}
         </div>
-      )}
 
-      <Link href="/blog" className="text-blue-500 hover:underline">
-        ← Back to Blog ({safeLanguage})
-      </Link>
-    </div>
+        <div className="mt-8 text-center">
+          <Link
+            href="/blog"
+            className="inline-block px-6 py-3 rounded-lg font-semibold text-white 
+            bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
+            hover:from-blue-700 hover:via-purple-600 hover:to-pink-600 
+            transition-all duration-300 animate-fadeInBounce"
+          >
+            ? Back to Blog
+          </Link>
+        </div>
+      </div>
+    </main>
   );
 }
