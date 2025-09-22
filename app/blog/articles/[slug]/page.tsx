@@ -1,7 +1,7 @@
 // app/blog/articles/[slug]/page.tsx
 import Link from "next/link";
 import { fetchBlogBySlug } from "../../../lib/contentful";
-import { Asset, AssetFile } from "contentful";
+import { getHeroUrl, safeString } from "../../../lib/contentful-helpers";
 
 interface BlogPageProps {
   params: { slug: string };
@@ -23,33 +23,22 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
   }
 
   const { title, body, heroImage, language } = blog.fields;
-
-  // Cast heroImage to Asset
-  const heroAsset = heroImage as Asset | undefined;
-
-  // Narrow down url safely
-  let heroUrl: string | undefined;
-  const file = heroAsset?.fields?.file as AssetFile | string | undefined;
-
-  if (typeof file === "object" && file?.url) {
-    heroUrl = file.url;
-  } else if (typeof file === "string") {
-    heroUrl = file;
-  }
+  const safeTitle = safeString(title, "Untitled Blog");
+  const heroUrl = getHeroUrl(heroImage);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Hero Image */}
       {heroUrl && (
         <img
-          src={heroUrl.startsWith("http") ? heroUrl : `https:${heroUrl}`}
-          alt={title}
+          src={heroUrl}
+          alt={safeTitle}
           className="w-full h-64 object-cover rounded mb-6"
         />
       )}
 
       {/* Blog Title */}
-      <h1 className="text-3xl font-bold mb-4">{title}</h1>
+      <h1 className="text-3xl font-bold mb-4">{safeTitle}</h1>
 
       {/* Blog Body */}
       <div className="prose prose-lg text-gray-700 mb-6">{body}</div>
