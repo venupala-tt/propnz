@@ -42,7 +42,7 @@ type BlogPageProps = {
 export default async function BlogPage({ params }: BlogPageProps) {
   const { slug } = await params;
   const article = await fetchBlogPost(slug);
-  const { title, date, heroImage, content, description } = article.fields;
+  const { title, date, heroImage, body, description } = article.fields;
   
   // const imageUrl = heroImage?.fields?.file?.url
 
@@ -90,10 +90,12 @@ export default async function BlogPage({ params }: BlogPageProps) {
           })}
         </p>
 
-        <div className="prose prose-lg max-w-none text-gray-700">
-          {documentToReactComponents(description)}
-        </div>
+       {/* Content is rich text */}
+<div className="prose prose-lg max-w-none text-gray-700">
+  {documentToReactComponents(body)}
+</div>
 
+        
         <div className="mt-8 text-center">
           <Link
             href="/blog"
