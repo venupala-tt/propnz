@@ -1,32 +1,28 @@
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import { BLOCKS } from "@contentful/rich-text-types";
 import Link from "next/link";
 import { fetchBlogPost } from "../../../lib/contentful";
-import { Asset } from "contentful"; // ✅ correct source
-import { EntrySkeletonType } from "contentful";
+import { getHeroUrl, safeString } from "../../../lib/contentful-helpers";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { Document, BLOCKS, INLINES } from "@contentful/rich-text-types";
+import { Entry } from "contentful";
+
+interface BlogFields {
+  slug: string;
+  title: string;
+  description: string;
+  heroImage?: any;
+  language?: string;
+  body?: Document;
+}
+
+type BlogItem = Entry<BlogFields>;
 
 interface BlogPageProps {
   params: { slug: string };
 }
 
-// Helper: Always return a safe string
-function safeString(value: unknown, fallback = ""): string {
-  return typeof value === "string" ? value : fallback;
-}
-
-// Helper: Get hero image URL safely
-function getHeroUrl(heroImage: unknown): string | undefined {
-  const asset = heroImage as Asset | undefined;
-  const url = asset?.fields?.file?.url;
-  if (typeof url === "string") {
-    return url.startsWith("http") ? url : `https:${url}`;
-  }
-  return undefined;
-}
-
-export default async function BlogPage({ params }: BlogPageProps) {
+export default async function BlogSlugPage({ params }: BlogPageProps) {
   const { slug } = params;
-  const blog = await fetchBlogPost(slug);
+  const blog: BlogItem | null = await fetchBlogPost(slug);
 
   if (!blog) {
     return (
@@ -45,6 +41,37 @@ export default async function BlogPage({ params }: BlogPageProps) {
   const safeLanguage = safeString(language, "Unknown");
   const heroUrl = getHeroUrl(heroImage);
 
+  const renderOptions = {
+    renderNode: {
+      [BLOCKS.HEADING_1]: (_node: any, children: any) => (
+        <h1 className="text-3xl font-bold my-4">{children}</h1>
+      ),
+      [BLOCKS.HEADING_2]: (_node: any, children: any) => (
+        <h2 className="text-2xl font-semibold my-3">{children}</h2>
+      ),
+      [BLOCKS.PARAGRAPH]: (_node: any, children: any) => (
+        <p className="mb-3 text-gray-700">{children}</p>
+      ),
+      [BLOCKS.UL_LIST]: (_node: any, children: any) => (
+        <ul className="list-disc ml-6 mb-3">{children}</ul>
+      ),
+      [BLOCKS.OL_LIST]: (_node: any, children: any) => (
+        <ol className="list-decimal ml-6 mb-3">{children}</ol>
+      ),
+      [BLOCKS.LIST_ITEM]: (_node: any, children: any) => <li>{children}</li>,
+      [INLINES.HYPERLINK]: (node: any, children: any) => (
+        <a
+          href={node.data.uri}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:underline"
+        >
+          {children}
+        </a>
+      ),
+    },
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Hero Image */}
@@ -57,16 +84,14 @@ export default async function BlogPage({ params }: BlogPageProps) {
       )}
 
       {/* Blog Title */}
-      <h1 className="text-4xl font-bold mb-4">{safeTitle}</h1>
+      <h1 className="text-4xl font-bold mb-6">{safeTitle}</h1>
 
       {/* Blog Body */}
-      <div className="prose prose-lg text-gray-700 mb-6">
-        {body && documentToReactComponents(body as any, {
-          renderNode: {
-            [BLOCKS.PARAGRAPH]: (node, children) => <p>{children}</p>,
-          },
-        })}
-      </div>
+      {body && (
+        <div className="prose prose-lg text-gray-700 mb-6">
+          {documentToReactComponents(body, renderOptions)}
+        </div>
+      )}
 
       {/* Back Link */}
       <Link href="/blog" className="text-blue-500 hover:underline">
