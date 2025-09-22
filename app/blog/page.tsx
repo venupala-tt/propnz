@@ -1,99 +1,59 @@
+"use client"; // Required for useState
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { BlogQueryResult } from "../../app/types";
+import { fetchBlogs } from "@/lib/contentful";
 
+export default function BlogPage() {
+  const [blogs, setBlogs] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState<"English" | "Telugu">("English");
 
-import { createClient } from "contentful";
+  useEffect(() => {
+    async function loadBlogs() {
+      const allBlogs = await fetchBlogs();
+      setBlogs(allBlogs);
+    }
+    loadBlogs();
+  }, []);
 
-const client = createClient({
-  space: "ghxp9r5ui85n",
-  accessToken: "9276aed838db6b7ac88ee1d2fad33f33e3f98cef0dc6b44504f2281a420e5358",
-});
-
-const getBlogEntries = async (): Promise<BlogQueryResult> => {
-  const entries = await client.getEntries({ content_type: "blogPost" });
-  return entries as unknown as BlogQueryResult;
-};
-
-export default async function Home() {
-  const blogEntries = await getBlogEntries();
+  const filteredBlogs = blogs.filter(blog => blog.fields.language === activeTab);
 
   return (
-    <main
-      className="flex min-h-screen flex-col items-center justify-center 
-      p-6 sm:p-12 lg:p-24 
-      bg-gradient-to-br from-blue-100 via-white to-purple-100 
-      animate-gradientWave"
-    >
-      <div
-        className="w-full max-w-5xl rounded-2xl shadow-lg 
-        bg-white/80 backdrop-blur-sm p-8 sm:p-12 
-        animate-fadeInBounce"
-      >
-   {/* Top-right link */}
-        <div className="flex justify-end mb-6">
-       <Link
-              href="/pages/book-an-expert"
-              className="px-6 py-3 rounded-xl shadow-lg font-semibold text-white 
-                         bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-                         hover:opacity-90 transition text-center sm:text-left"
-            >
-              Book Our Expert
-            </Link>
-        </div>
-        
-        <h1
-          className="text-3xl sm:text-4xl font-bold text-center mb-12 
-          bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 
-          bg-clip-text text-transparent animate-gradientWave"
-        >
-          Our Blog
-        </h1>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          {blogEntries.items.map((singlePost) => {
-            const { slug, title, date, heroImage } = singlePost.fields;
-            
-              const imageUrl = heroImage.fields.file.url
-              ? `https:${heroImage.fields.file.url}`
-              : "/default-blog.jpg"; 
-
-
-         //    console.log("IMG asst" + heroImage.fields.file.url);
-
-//                    var imageURL = 'https:' + asset.fields.file.url;
-
-
-            return (
-              <Link
-                key={slug}
-                href={`../blog/articles/${slug}`}
-                className="group rounded-xl bg-white shadow-md hover:shadow-xl 
-                transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
-              >
-                <img
-                  src={imageUrl}
-                  alt={title}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold mb-2 text-gray-800 group-hover:text-purple-600">
-                    {title}
-                  </h2>
-                  <span className="text-sm text-gray-500">
-                    Posted on{" "}
-                    {new Date(date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      {/* Tabs */}
+      <div className="flex space-x-4 mb-6">
+        {["English", "Telugu"].map(tab => (
+          <button
+            key={tab}
+            className={`px-4 py-2 rounded ${activeTab === tab ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+            onClick={() => setActiveTab(tab as "English" | "Telugu")}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
-    </main>
+
+      {/* Blog List */}
+      <div className="grid md:grid-cols-2 gap-6">
+        {filteredBlogs.length === 0 && <p>No blogs available in {activeTab}</p>}
+        {filteredBlogs.map(blog => (
+          <div key={blog.sys.id} className="border rounded p-4 shadow-sm">
+            <img
+              src={blog.fields.heroImage.fields.file.url}
+              alt={blog.fields.title}
+              className="w-full h-48 object-cover rounded"
+            />
+            <h2 className="text-xl font-bold mt-2">{blog.fields.title}</h2>
+            <p className="mt-1 text-gray-700">{blog.fields.description}</p>
+            <Link
+              href={`/blog/${blog.fields.slug}`}
+              className="text-blue-500 mt-2 inline-block"
+            >
+              Read More
+            </Link>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
