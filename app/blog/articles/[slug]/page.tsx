@@ -1,4 +1,4 @@
-import { fetchBlogBySlug } from "@/lib/contentful";
+import { fetchBlogBySlug } from "../../lib/contentful";
 import Link from "next/link";
 
 interface BlogProps {
