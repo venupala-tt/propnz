@@ -4,12 +4,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { fetchBlogs } from "../lib/contentful";
-import { Asset, AssetFile } from "contentful";
+import { getHeroUrl, safeString } from "../lib/contentful-helpers";
 
 export default async function BlogPage() {
   const blogs = await fetchBlogs();
 
-  // Separate English and Telugu blogs
   const englishBlogs = blogs.filter(
     (blog) => blog.fields.language === "English"
   );
@@ -17,23 +16,7 @@ export default async function BlogPage() {
     (blog) => blog.fields.language === "Telugu"
   );
 
-  // Tab state
   const [activeTab, setActiveTab] = useState<"English" | "Telugu">("English");
-
-  // Helper to extract hero image URL safely
-  const getHeroUrl = (heroImage: unknown): string | undefined => {
-    const asset = heroImage as Asset | undefined;
-    const file = asset?.fields?.file as AssetFile | string | undefined;
-
-    if (typeof file === "object" && file?.url) {
-      return file.url.startsWith("http") ? file.url : `https:${file.url}`;
-    } else if (typeof file === "string") {
-      return file.startsWith("http") ? file : `https:${file}`;
-    }
-    return undefined;
-  };
-
-  // Select blogs based on tab
   const activeBlogs = activeTab === "English" ? englishBlogs : teluguBlogs;
 
   return (
@@ -66,6 +49,8 @@ export default async function BlogPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {activeBlogs.map((blog) => {
           const { slug, title, description, heroImage } = blog.fields;
+          const safeTitle = safeString(title, "Untitled Blog");
+          const safeDescription = safeString(description);
           const heroUrl = getHeroUrl(heroImage);
 
           return (
@@ -77,13 +62,13 @@ export default async function BlogPage() {
               {heroUrl && (
                 <img
                   src={heroUrl}
-                  alt={title}
+                  alt={safeTitle}
                   className="w-full h-48 object-cover"
                 />
               )}
               <div className="p-4">
-                <h2 className="text-xl font-bold mb-2">{title}</h2>
-                <p className="text-gray-600">{description}</p>
+                <h2 className="text-xl font-bold mb-2">{safeTitle}</h2>
+                <p className="text-gray-600">{safeDescription}</p>
               </div>
             </Link>
           );
