@@ -2,7 +2,7 @@ import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import { BLOCKS } from "@contentful/rich-text-types";
 import Link from "next/link";
 import { fetchBlogPost } from "../../../lib/contentful";
-import { Asset, EntrySkeletonType } from "../../../contentful";
+import { Asset, EntrySkeletonType } from "../../../lib/contentful";
 
 interface BlogPageProps {
   params: { slug: string };
