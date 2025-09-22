@@ -1,4 +1,3 @@
-// app/blog/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -9,14 +8,18 @@ import { getHeroUrl, safeString } from "../lib/contentful-helpers";
 export default async function BlogPage() {
   const blogs = await fetchBlogs();
 
+  // Separate English and Telugu blogs
   const englishBlogs = blogs.filter(
-    (blog) => blog.fields.language === "English"
+    (blog) => safeString(blog.fields.language) === "English"
   );
   const teluguBlogs = blogs.filter(
-    (blog) => blog.fields.language === "Telugu"
+    (blog) => safeString(blog.fields.language) === "Telugu"
   );
 
+  // Tab state
   const [activeTab, setActiveTab] = useState<"English" | "Telugu">("English");
+
+  // Select blogs based on active tab
   const activeBlogs = activeTab === "English" ? englishBlogs : teluguBlogs;
 
   return (
@@ -47,16 +50,19 @@ export default async function BlogPage() {
 
       {/* Blog list */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {activeBlogs.map((blog) => {
+        {activeBlogs.map((blog, index) => {
           const { slug, title, description, heroImage } = blog.fields;
+
+          // Safe values
+          const safeSlug = safeString(slug, `blog-${index}`);
           const safeTitle = safeString(title, "Untitled Blog");
           const safeDescription = safeString(description);
           const heroUrl = getHeroUrl(heroImage);
 
           return (
             <Link
-              key={slug}
-              href={`/blog/articles/${slug}`}
+              key={safeSlug} // ✅ safe key
+              href={`/blog/articles/${safeSlug}`}
               className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
             >
               {heroUrl && (
