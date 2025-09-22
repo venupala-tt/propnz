@@ -1,5 +1,6 @@
 import { createClient } from "contentful";
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { BLOCKS } from "@contentful/rich-text-types";
 import { BlogItem } from "../../../../app/types";
 import Link from "next/link";
 
@@ -18,10 +19,8 @@ export async function generateStaticParams() {
 
   return articles.items.map((article) => ({
     slug: article.fields.slug,
-    fallback: 'false'
-
+    fallback: "false",
   }));
-
 }
 
 const fetchBlogPost = async (slug: string): Promise<BlogItem> => {
@@ -31,7 +30,6 @@ const fetchBlogPost = async (slug: string): Promise<BlogItem> => {
   };
 
   const queryResult = await client.getEntries(queryOptions);
-
   return queryResult.items[0] as unknown as BlogItem;
 };
 
@@ -42,19 +40,30 @@ type BlogPageProps = {
 export default async function BlogPage({ params }: BlogPageProps) {
   const { slug } = await params;
   const article = await fetchBlogPost(slug);
-  const { title, date, heroImage, body, description } = article.fields;
-  
-  // const imageUrl = heroImage?.fields?.file?.url
+  const { title, date, heroImage, body } = article.fields;
 
-/*  const imageUrl = heroImage.fields.file.url
-              ? `https:${heroImage.fields.file.url}`
-              : "/default-blog.jpg"; */
+  const imageUrl = heroImage?.fields?.file?.url
+    ? `https:${heroImage.fields.file.url}`
+    : "/default-blog.jpg";
 
-
-  const imageUrl = heroImage.fields.file.url
-              ? `https:${heroImage.fields.file.url}`
-              : "/default-blog.jpg"; 
-
+  // Custom renderer to handle embedded assets
+  const options = {
+    renderNode: {
+      [BLOCKS.EMBEDDED_ASSET]: (node: any) => {
+        const { file, title, description } = node.data.target.fields;
+        const imageUrl = file.url ? `https:${file.url}` : "";
+        return (
+          <div className="my-6 flex justify-center">
+            <img
+              src={imageUrl}
+              alt={description || title || "Embedded Asset"}
+              className="rounded-lg shadow-md max-w-full h-auto"
+            />
+          </div>
+        );
+      },
+    },
+  };
 
   return (
     <main
@@ -90,12 +99,11 @@ export default async function BlogPage({ params }: BlogPageProps) {
           })}
         </p>
 
-       {/* Content is rich text */}
-<div className="prose prose-lg max-w-none text-gray-700">
-  {documentToReactComponents(body)}
-</div>
+        {/* Render rich text with embedded assets */}
+        <div className="prose prose-lg max-w-none text-gray-700">
+          {documentToReactComponents(body, options)}
+        </div>
 
-        
         <div className="mt-8 text-center">
           <Link
             href="/blog"
