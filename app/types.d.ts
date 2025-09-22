@@ -10,6 +10,8 @@ export type BlogItem = {
         date: Date;
         heroImage: Asset;
         content: Document;
+        description: string;   
+
       //  heroImage: string;
     }
 }
