@@ -1,14 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchBlogs } from "../lib/contentful";
 import { getHeroUrl, safeString } from "../lib/contentful-helpers";
 
-export default async function BlogPage() {
-  const blogs = await fetchBlogs();
+interface BlogFields {
+  slug: string;
+  title: string;
+  description: string;
+  heroImage?: any;
+  language?: string;
+}
 
-  // Separate English and Telugu blogs
+interface BlogItem {
+  fields: BlogFields;
+}
+
+export default function BlogPage() {
+  const [blogs, setBlogs] = useState<BlogItem[]>([]);
+  const [activeTab, setActiveTab] = useState<"English" | "Telugu">("English");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadBlogs = async () => {
+      try {
+        const items = await fetchBlogs();
+        setBlogs(items);
+      } catch (error) {
+        console.error("Failed to fetch blogs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadBlogs();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-8 text-center">
+        Loading blogs...
+      </div>
+    );
+  }
+
   const englishBlogs = blogs.filter(
     (blog) => safeString(blog.fields.language) === "English"
   );
@@ -16,10 +51,6 @@ export default async function BlogPage() {
     (blog) => safeString(blog.fields.language) === "Telugu"
   );
 
-  // Tab state
-  const [activeTab, setActiveTab] = useState<"English" | "Telugu">("English");
-
-  // Select blogs based on active tab
   const activeBlogs = activeTab === "English" ? englishBlogs : teluguBlogs;
 
   return (
@@ -52,8 +83,6 @@ export default async function BlogPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {activeBlogs.map((blog, index) => {
           const { slug, title, description, heroImage } = blog.fields;
-
-          // Safe values
           const safeSlug = safeString(slug, `blog-${index}`);
           const safeTitle = safeString(title, "Untitled Blog");
           const safeDescription = safeString(description);
@@ -61,7 +90,7 @@ export default async function BlogPage() {
 
           return (
             <Link
-              key={safeSlug} // ✅ safe key
+              key={safeSlug}
               href={`/blog/articles/${safeSlug}`}
               className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
             >
