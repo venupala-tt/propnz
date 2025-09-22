@@ -1,64 +1,91 @@
-"use client"; // Required for useState
+// app/blog/page.tsx
+"use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { fetchBlogs } from "../lib/contentful";
+import { Asset, AssetFile } from "contentful";
 
-export default function BlogPage() {
-  const [blogs, setBlogs] = useState<any[]>([]);
+export default async function BlogPage() {
+  const blogs = await fetchBlogs();
+
+  // Separate English and Telugu blogs
+  const englishBlogs = blogs.filter(
+    (blog) => blog.fields.language === "English"
+  );
+  const teluguBlogs = blogs.filter(
+    (blog) => blog.fields.language === "Telugu"
+  );
+
+  // Tab state
   const [activeTab, setActiveTab] = useState<"English" | "Telugu">("English");
 
-  useEffect(() => {
-    async function loadBlogs() {
-      const allBlogs = await fetchBlogs();
-      setBlogs(allBlogs);
-    }
-    loadBlogs();
-  }, []);
+  // Helper to extract hero image URL safely
+  const getHeroUrl = (heroImage: unknown): string | undefined => {
+    const asset = heroImage as Asset | undefined;
+    const file = asset?.fields?.file as AssetFile | string | undefined;
 
-  // Filter blogs by active language tab
-  const filteredBlogs = blogs.filter(blog => blog.fields.language === activeTab);
+    if (typeof file === "object" && file?.url) {
+      return file.url.startsWith("http") ? file.url : `https:${file.url}`;
+    } else if (typeof file === "string") {
+      return file.startsWith("http") ? file : `https:${file}`;
+    }
+    return undefined;
+  };
+
+  // Select blogs based on tab
+  const activeBlogs = activeTab === "English" ? englishBlogs : teluguBlogs;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       {/* Tabs */}
-      <div className="flex space-x-4 mb-6">
-        {["English", "Telugu"].map(tab => (
-          <button
-            key={tab}
-            className={`px-4 py-2 rounded ${activeTab === tab ? "bg-blue-600 text-white" : "bg-gray-200"}`}
-            onClick={() => setActiveTab(tab as "English" | "Telugu")}
-          >
-            {tab}
-          </button>
-        ))}
+      <div className="flex gap-4 mb-6">
+        <button
+          onClick={() => setActiveTab("English")}
+          className={`px-4 py-2 rounded ${
+            activeTab === "English"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-700"
+          }`}
+        >
+          English
+        </button>
+        <button
+          onClick={() => setActiveTab("Telugu")}
+          className={`px-4 py-2 rounded ${
+            activeTab === "Telugu"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-700"
+          }`}
+        >
+          తెలుగు
+        </button>
       </div>
 
-      {/* Blog List */}
-      <div className="grid md:grid-cols-2 gap-6">
-        {filteredBlogs.length === 0 && (
-          <p className="text-gray-600 col-span-2">No blogs available in {activeTab}.</p>
-        )}
+      {/* Blog list */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {activeBlogs.map((blog) => {
+          const { slug, title, description, heroImage } = blog.fields;
+          const heroUrl = getHeroUrl(heroImage);
 
-        {filteredBlogs.map(blog => {
-          const { title, description, slug, heroImage } = blog.fields;
           return (
-            <div key={blog.sys.id} className="border rounded p-4 shadow-sm">
-              {/* Hero Image */}
-              {heroImage?.fields?.file?.url && (
+            <Link
+              key={slug}
+              href={`/blog/articles/${slug}`}
+              className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+            >
+              {heroUrl && (
                 <img
-                  src={heroImage.fields.file.url}
+                  src={heroUrl}
                   alt={title}
-                  className="w-full h-48 object-cover rounded"
+                  className="w-full h-48 object-cover"
                 />
               )}
-
-              <h2 className="text-xl font-bold mt-2">{title}</h2>
-              <p className="mt-1 text-gray-700">{description}</p>
-              <Link href={`/blog/articles/${slug}`} className="text-blue-500 mt-2 inline-block">
-                Read More
-              </Link>
-            </div>
+              <div className="p-4">
+                <h2 className="text-xl font-bold mb-2">{title}</h2>
+                <p className="text-gray-600">{description}</p>
+              </div>
+            </Link>
           );
         })}
       </div>
