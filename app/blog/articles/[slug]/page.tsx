@@ -3,7 +3,6 @@ import { fetchBlogPost } from "../../../lib/contentful";
 import { getHeroUrl, safeString } from "../../../lib/contentful-helpers";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { Document, BLOCKS, INLINES } from "@contentful/rich-text-types";
-import { Entry } from "contentful";
 
 interface BlogFields {
   slug: string;
@@ -14,7 +13,10 @@ interface BlogFields {
   body?: Document;
 }
 
-type BlogItem = Entry<BlogFields>;
+interface BlogItem {
+  sys: { id: string };
+  fields: BlogFields;
+}
 
 interface BlogPageProps {
   params: { slug: string };
@@ -74,7 +76,6 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      {/* Hero Image */}
       {heroUrl && (
         <img
           src={heroUrl}
@@ -83,17 +84,14 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
         />
       )}
 
-      {/* Blog Title */}
       <h1 className="text-4xl font-bold mb-6">{safeTitle}</h1>
 
-      {/* Blog Body */}
       {body && (
         <div className="prose prose-lg text-gray-700 mb-6">
           {documentToReactComponents(body, renderOptions)}
         </div>
       )}
 
-      {/* Back Link */}
       <Link href="/blog" className="text-blue-500 hover:underline">
         ← Back to Blog ({safeLanguage})
       </Link>
