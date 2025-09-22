@@ -9,7 +9,7 @@ export type BlogItem = {
         slug: string;
         date: Date;
         heroImage: Asset;
-        content: Document;
+        body: Document;
         description: string;   
 
       //  heroImage: string;
