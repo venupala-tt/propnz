@@ -1,9 +1,36 @@
-
 import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
 import SearchBar from "../components/SearchBar";
+import NotificationsTicker from "../components/NotificationsTicker";  // ✅ Import
+import { client } from "../lib/contentful";  // ✅ Import Contentful client
 
-export default function HomePage() {
+// Fetch notifications from Contentful
+async function getNotifications() {
+  const entries = await client.getEntries({
+    content_type: "notification",
+    select: "fields.subject,fields.document,fields.date,fields.notificationNumber",
+    order: "-fields.date",
+    limit: 10,
+  });
+
+  return entries.items.map((item: any) => {
+    const date = item.fields.date
+      ? new Date(item.fields.date).toLocaleDateString("en-GB")
+      : "";
+
+    return {
+      date,
+      text: `${item.fields.notificationNumber} - ${item.fields.subject}`,
+      url: item.fields.document?.fields?.file?.url
+        ? `https:${item.fields.document.fields.file.url}`
+        : "#",
+    };
+  });
+}
+
+export default async function HomePage() {
+  const notifications = await getNotifications();
+
   return (
     <div className="flex items-start">
       <main
@@ -19,8 +46,9 @@ export default function HomePage() {
           animate-fadeInBounce flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-6"
         >
           {/* Hero Content */}
-<div  className="w-full max-w-5xl rounded-xl shadow-md  bg-white/80 backdrop-blur-sm p-4 sm:p-6 animate-fadeInBounce flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-4"
->         
+          <div
+            className="w-full max-w-5xl rounded-xl shadow-md  bg-white/80 backdrop-blur-sm p-4 sm:p-6 animate-fadeInBounce flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-4"
+          >
             <h2 className="text-lg font-semibold mb-2">
               Learn & Build scalable, Property Solutions
             </h2>
@@ -113,6 +141,11 @@ export default function HomePage() {
               Access powerful tools to calculate ROI, capital gains, and more.
             </p>
           </Link>
+        </div>
+
+        {/* ✅ Notifications Section */}
+        <div className="mt-10 w-full max-w-5xl">
+          <NotificationsTicker items={notifications} />
         </div>
       </main>
     </div>
