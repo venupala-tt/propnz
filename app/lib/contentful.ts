@@ -38,3 +38,4 @@ export async function fetchBlogPost(slug: string) {
     return null;
   }
 }
+export default client;
