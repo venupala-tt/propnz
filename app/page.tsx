@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
 import SearchBar from "../components/SearchBar";
-import NotificationsTicker from "../components/NotificationsTicker";  // ✅ Import
+import NotificationsTicker from "../components/NotificationsTicker";  // ✅ Import ticker
 import { client } from "../lib/contentful";  // ✅ Import Contentful client
 
-// Fetch notifications from Contentful
+// ✅ Fetch notifications from Contentful
 async function getNotifications() {
   const entries = await client.getEntries({
     content_type: "notification",
@@ -15,7 +15,7 @@ async function getNotifications() {
 
   return entries.items.map((item: any) => {
     const date = item.fields.date
-      ? new Date(item.fields.date).toLocaleDateString("en-GB")
+      ? new Date(item.fields.date).toLocaleDateString("en-GB") // dd/mm/yyyy
       : "";
 
     return {
@@ -47,7 +47,7 @@ export default async function HomePage() {
         >
           {/* Hero Content */}
           <div
-            className="w-full max-w-5xl rounded-xl shadow-md  bg-white/80 backdrop-blur-sm p-4 sm:p-6 animate-fadeInBounce flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-4"
+            className="w-full max-w-5xl rounded-xl shadow-md bg-white/80 backdrop-blur-sm p-4 sm:p-6 animate-fadeInBounce flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-4"
           >
             <h2 className="text-lg font-semibold mb-2">
               Learn & Build scalable, Property Solutions
@@ -145,7 +145,7 @@ export default async function HomePage() {
 
         {/* ✅ Notifications Section */}
         <div className="mt-10 w-full max-w-5xl">
-          <NotificationsTicker items={notifications} />
+          <NotificationsTicker items={notifications} speed="medium" />
         </div>
       </main>
     </div>
