@@ -8,7 +8,13 @@ import  client  from "./lib/contentful";  // ✅ Import Contentful client
 async function getNotifications() {
   const entries = await client.getEntries({
     content_type: "notification",
-    select: "fields.subject,fields.document,fields.date,fields.notificationNumber",
+    // select: "fields.subject,fields.document,fields.date,fields.notificationNumber",
+    select: [
+  "fields.subject",
+  "fields.document",
+  "fields.date",
+  "fields.notificationNumber",
+],
     order: "-fields.date",
     limit: 10,
   });
