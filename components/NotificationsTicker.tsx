@@ -9,9 +9,24 @@ type Notification = {
   url: string;
 };
 
-export default function NotificationsTicker({ items }: { items: Notification[] }) {
+type Speed = "slow" | "medium" | "fast";
+
+export default function NotificationsTicker({
+  items,
+  speed = "medium", // default
+}: {
+  items: Notification[];
+  speed?: Speed;
+}) {
   const [isPlaying, setIsPlaying] = useState(true);
   const tickerRef = useRef<HTMLDivElement>(null);
+
+  // Map speed → animation duration
+  const speedMap: Record<Speed, string> = {
+    slow: "40s",
+    medium: "20s",
+    fast: "10s",
+  };
 
   useEffect(() => {
     if (tickerRef.current) {
@@ -22,7 +37,13 @@ export default function NotificationsTicker({ items }: { items: Notification[] }
   return (
     <div className="w-full bg-gray-100 border border-gray-300 py-2 flex items-center overflow-hidden rounded-lg shadow-sm">
       <span className="ml-3 font-bold text-gray-700">Notifications:</span>
-      <div ref={tickerRef} className="ml-4 flex whitespace-nowrap animate-scroll">
+      <div
+        ref={tickerRef}
+        className="ml-4 flex whitespace-nowrap"
+        style={{
+          animation: `scroll ${speedMap[speed]} linear infinite`,
+        }}
+      >
         {items.map((item, i) => (
           <div key={i} className="mx-6 flex items-center space-x-2">
             {item.date && <span className="text-gray-500 text-sm">[{item.date}]</span>}
