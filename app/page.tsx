@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
 import SearchBar from "../components/SearchBar";
 import NotificationsTicker from "../components/NotificationsTicker";  // ✅ Import ticker
-import { client } from "../lib/contentful";  // ✅ Import Contentful client
+import { client } from "../../lib/contentful";  // ✅ Import Contentful client
 
 // ✅ Fetch notifications from Contentful
 async function getNotifications() {
