@@ -5,7 +5,8 @@ import Link from "next/link";
 
 type Notification = {
   date: string;
-  text: string;
+  title: string;
+  subject: string;
   url: string;
 };
 
@@ -13,7 +14,7 @@ type Speed = "slow" | "medium" | "fast";
 
 export default function NotificationsTicker({
   items,
-  speed = "medium", // default
+  speed = "medium",
 }: {
   items: Notification[];
   speed?: Speed;
@@ -21,7 +22,6 @@ export default function NotificationsTicker({
   const [isPlaying, setIsPlaying] = useState(true);
   const tickerRef = useRef<HTMLDivElement>(null);
 
-  // Map speed → animation duration
   const speedMap: Record<Speed, string> = {
     slow: "40s",
     medium: "20s",
@@ -34,25 +34,50 @@ export default function NotificationsTicker({
     }
   }, [isPlaying]);
 
+  const handleMouseEnter = () => {
+    if (tickerRef.current) {
+      tickerRef.current.style.animationPlayState = "paused";
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (tickerRef.current && isPlaying) {
+      tickerRef.current.style.animationPlayState = "running";
+    }
+  };
+
+  if (!items || items.length === 0) {
+    return (
+      <div className="w-full bg-gray-100 border border-gray-300 py-2 px-4 rounded-lg shadow-sm text-gray-600 text-sm">
+        No notifications available.
+      </div>
+    );
+  }
+
   return (
     <div className="w-full bg-gray-100 border border-gray-300 py-2 flex items-center overflow-hidden rounded-lg shadow-sm">
       <span className="ml-3 font-bold text-gray-700">Notifications:</span>
       <div
         ref={tickerRef}
-        className="ml-4 flex whitespace-nowrap"
+        className="ml-4 flex whitespace-nowrap animate-scroll"
         style={{
           animation: `scroll ${speedMap[speed]} linear infinite`,
         }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         {items.map((item, i) => (
           <div key={i} className="mx-6 flex items-center space-x-2">
-            {item.date && <span className="text-gray-500 text-sm">[{item.date}]</span>}
+            {item.date && (
+              <span className="text-gray-500 text-sm">[{item.date}]</span>
+            )}
             <Link
               href={item.url}
               target="_blank"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 hover:underline flex space-x-1"
             >
-              {item.text}
+              <span className="font-bold">{item.title}</span>
+              <span>- {item.subject}</span>
             </Link>
           </div>
         ))}
