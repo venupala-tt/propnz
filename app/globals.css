@@ -18,20 +18,27 @@ textarea {
     @apply shadow-md px-6 py-2 border border-slate-300;
 }
 
-/* ✅ Notification ticker scrolling animation */
-@keyframes scroll {
+/* Keyframes for sliding notifications upward */
+@keyframes slideUp {
   0% {
-    transform: translateX(100%);
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(0%);
+    opacity: 1;
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateY(-100%);
+    opacity: 0;
   }
 }
 
-/* We no longer hardcode animation duration here, 
-   because the React component applies it dynamically based on "speed". */
-.animate-scroll {
-  display: inline-block;
-  min-width: 100%;
+/* Class applied in NotificationsTicker.tsx */
+.animate-slideUp {
+  animation: slideUp 0.6s ease-in-out;
 }
-
