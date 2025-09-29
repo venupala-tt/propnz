@@ -2,48 +2,12 @@ import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
 import SearchBar from "../components/SearchBar";
 import NotificationsTicker from "../components/NotificationsTicker";  // ✅ Import ticker
-import  client  from "./lib/contentful";  // ✅ Import Contentful client
+import { client } from "./lib/contentful";  // ✅ Import Contentful client
 
-async function getNotifications() {
-  const entries = await client.getEntries({
-    content_type: "notification",
-    select: [
-      "fields.subject",
-      "fields.document",
-      "fields.date",
-      "fields.notificationNumber",
-    ],
-    order: "-fields.date",
-    limit: 10,
-  });
-
-  return entries.items.map((item: any) => {
-    const date = item.fields.date
-      ? new Date(item.fields.date).toLocaleDateString("en-GB") // dd/mm/yyyy
-      : "";
-
-    return {
-      date,
-      text: `${item.fields.notificationNumber} - ${item.fields.subject}`,
-      url: item.fields.document?.fields?.file?.url
-        ? `https:${item.fields.document.fields.file.url}`
-        : "#",
-    };
-  });
-}
-
-/*
 // ✅ Fetch notifications from Contentful
 async function getNotifications() {
   const entries = await client.getEntries({
     content_type: "notification",
-    // select: "fields.subject,fields.document,fields.date,fields.notificationNumber",
-    select: [
-  "fields.subject",
-  "fields.document",
-  "fields.date",
-  "fields.notificationNumber",
-],
     order: "-fields.date",
     limit: 10,
   });
@@ -55,14 +19,15 @@ async function getNotifications() {
 
     return {
       date,
-      text: `${item.fields.notificationNumber} - ${item.fields.subject}`,
+      title: item.fields.title || "",
+      subject: item.fields.subject || "",
       url: item.fields.document?.fields?.file?.url
         ? `https:${item.fields.document.fields.file.url}`
         : "#",
     };
   });
 }
-*/
+
 export default async function HomePage() {
   const notifications = await getNotifications();
 
