@@ -2,22 +2,20 @@ import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
 import SearchBar from "../components/SearchBar";
 import NotificationsTicker from "../components/NotificationsTicker";  // ✅ Import ticker
-import  client  from "./lib/contentful";  // ✅ Import Contentful client
-import SEO from "../components/SEO";
+import client from "./lib/contentful";  // ✅ Import Contentful client
 
 // ✅ Fetch notifications from Contentful
 async function getNotifications() {
-
-const entries = await client.getEntries({
-  content_type: "notification",
-  order: ["-fields.date"],   // ✅ fixed
-  limit: 10,
-});
+  const entries = await client.getEntries({
+    content_type: "notification",
+    order: ["-fields.date"],
+    limit: 10,
+  });
 
   return entries.items.map((item: any) => {
     const date = item.fields.date
       ? new Date(item.fields.date).toLocaleDateString("en-GB") // dd/mm/yyyy
-      : "";
+      : new Date(item.sys.createdAt).toLocaleDateString("en-GB"); // fallback
 
     return {
       date,
@@ -35,11 +33,6 @@ export default async function HomePage() {
 
   return (
     <div className="flex items-start">
-       <SEO
-        title="Propmatics - Smart Real Estate Solutions"
-        description="Discover real estate investment opportunities in multifamily apartments across US cities."
-        keywords="real estate, apartments, multifamily, investments, propmatics"
-      />
       <main
         className="flex-1 flex min-h-screen flex-col items-center justify-start 
         p-4 sm:p-8 lg:p-16 
@@ -127,18 +120,17 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {/* CTA Section */}
+        {/* CTA Section with Notifications */}
         <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
-          <Link
-            href="/products"
-            className="block rounded-xl shadow-lg p-6 text-center bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce"
-          >
-            <h3 className="text-xl font-semibold mb-2">Explore Our Products</h3>
-            <p className="text-sm opacity-90">
-              Discover our full range of property solutions tailored to your needs.
-            </p>
-          </Link>
+          {/* Notifications Live Feed */}
+          <div className="block rounded-xl shadow-lg p-6 bg-white/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 animate-fadeInBounce h-80 flex flex-col">
+            <h3 className="text-xl font-semibold mb-4 text-gray-800">Latest Notifications</h3>
+            <div className="flex-1 overflow-hidden">
+              <NotificationsTicker items={notifications} speed="slow" />
+            </div>
+          </div>
 
+          {/* Property Tools Card */}
           <Link
             href="/pages/tools"
             className="block rounded-xl shadow-lg p-6 text-center bg-gradient-to-r from-green-600 via-teal-500 to-blue-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce"
@@ -148,11 +140,6 @@ export default async function HomePage() {
               Access powerful tools to calculate ROI, capital gains, and more.
             </p>
           </Link>
-        </div>
-
-        {/* ✅ Notifications Section */}
-        <div className="mt-10 w-full max-w-5xl">
-          <NotificationsTicker items={notifications} speed="medium" />
         </div>
       </main>
     </div>
