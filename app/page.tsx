@@ -3,6 +3,7 @@ import { Package, Wrench, FileText } from "lucide-react";
 import SearchBar from "../components/SearchBar";
 import NotificationsTicker from "../components/NotificationsTicker";  // ✅ Import ticker
 import  client  from "./lib/contentful";  // ✅ Import Contentful client
+import SEO from "../components/SEO";
 
 // ✅ Fetch notifications from Contentful
 async function getNotifications() {
@@ -34,6 +35,11 @@ export default async function HomePage() {
 
   return (
     <div className="flex items-start">
+       <SEO
+        title="Propmatics - Smart Real Estate Solutions"
+        description="Discover real estate investment opportunities in multifamily apartments across US cities."
+        keywords="real estate, apartments, multifamily, investments, propmatics"
+      />
       <main
         className="flex-1 flex min-h-screen flex-col items-center justify-start 
         p-4 sm:p-8 lg:p-16 
