@@ -5,7 +5,7 @@ import Link from "next/link";
 type Notification = {
   date: string;
   title: string;
-  subject: string;
+  subject?: string; // optional now
   url: string;
 };
 
@@ -36,7 +36,7 @@ export default function NotificationsTicker({
           animationDuration: speedMap[speed],
         }}
       >
-        {/* Duplicate list to allow seamless looping */}
+        {/* Duplicate list for seamless looping */}
         {[...items, ...items].map((item, i) => (
           <div key={i} className="py-2">
             {item.date && (
@@ -45,10 +45,9 @@ export default function NotificationsTicker({
             <Link
               href={item.url}
               target="_blank"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 hover:underline font-bold"
             >
-              <span className="font-bold">{item.title}</span>
-              <span> - {item.subject}</span>
+              {item.title}
             </Link>
           </div>
         ))}
