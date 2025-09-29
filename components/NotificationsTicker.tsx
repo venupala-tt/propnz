@@ -77,7 +77,7 @@ export default function NotificationsTicker({
               className="text-blue-600 hover:underline flex space-x-1"
             >
               <span className="font-bold">{item.title}</span>
-              console.log("Notifications fetched:", entries.items.map(i => i.fields));
+              console.log("Notifications fetched:", entries.items.map(i = > i.fields));
             </Link>
           </div>
         ))}
