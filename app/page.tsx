@@ -6,11 +6,12 @@ import  client  from "./lib/contentful";  // ✅ Import Contentful client
 
 // ✅ Fetch notifications from Contentful
 async function getNotifications() {
-  const entries = await client.getEntries({
-    content_type: "notification",
-    order: "-fields.date",
-    limit: 10,
-  });
+
+const entries = await client.getEntries({
+  content_type: "notification",
+  order: ["-fields.date"],   // ✅ fixed
+  limit: 10,
+});
 
   return entries.items.map((item: any) => {
     const date = item.fields.date
