@@ -6,6 +6,8 @@ const client = createClient({
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
 });
 
+// -------------------- BLOGS --------------------
+
 // Fetch all blogs (for listing)
 export async function fetchBlogs() {
   try {
@@ -38,4 +40,35 @@ export async function fetchBlogPost(slug: string) {
     return null;
   }
 }
+
+// -------------------- NOTIFICATIONS --------------------
+
+export async function fetchNotifications(limit = 10) {
+  try {
+    const response = await client.getEntries({
+      content_type: "notification",
+      order: ["-fields.date"], // latest first
+      limit,
+    });
+
+    return response.items.map((item: any) => {
+      const date = item.fields.date
+        ? new Date(item.fields.date).toLocaleDateString("en-GB")
+        : "";
+
+      return {
+        date,
+        title: item.fields.title || "",
+        subject: item.fields.subject || "",
+        url: item.fields.document?.fields?.file?.url
+          ? `https:${item.fields.document.fields.file.url}`
+          : "#",
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    return [];
+  }
+}
+
 export default client;
