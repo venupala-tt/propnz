@@ -53,6 +53,7 @@ export default function NotificationsTicker({
       </div>
     );
   }
+console.log("Notifications fetched:", items);
 
   return (
     <div className="w-full bg-gray-100 border border-gray-300 py-2 flex items-center overflow-hidden rounded-lg shadow-sm">
