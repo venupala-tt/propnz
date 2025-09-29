@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 type Notification = {
@@ -20,31 +20,23 @@ export default function NotificationsTicker({
   speed?: Speed;
 }) {
   const [isPlaying, setIsPlaying] = useState(true);
-  const tickerRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const speedMap: Record<Speed, string> = {
-    slow: "40s",
-    medium: "20s",
-    fast: "10s",
+  const speedMap: Record<Speed, number> = {
+    slow: 6000, // 6s per item
+    medium: 4000, // 4s per item
+    fast: 2000, // 2s per item
   };
 
   useEffect(() => {
-    if (tickerRef.current) {
-      tickerRef.current.style.animationPlayState = isPlaying ? "running" : "paused";
-    }
-  }, [isPlaying]);
+    if (!isPlaying || items.length <= 1) return;
 
-  const handleMouseEnter = () => {
-    if (tickerRef.current) {
-      tickerRef.current.style.animationPlayState = "paused";
-    }
-  };
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % items.length);
+    }, speedMap[speed]);
 
-  const handleMouseLeave = () => {
-    if (tickerRef.current && isPlaying) {
-      tickerRef.current.style.animationPlayState = "running";
-    }
-  };
+    return () => clearInterval(interval);
+  }, [isPlaying, items.length, speed]);
 
   if (!items || items.length === 0) {
     return (
@@ -53,36 +45,35 @@ export default function NotificationsTicker({
       </div>
     );
   }
-console.log("Notifications fetched:", items);
+
+  const currentItem = items[currentIndex];
 
   return (
-    <div className="w-full bg-gray-100 border border-gray-300 py-2 flex items-center overflow-hidden rounded-lg shadow-sm">
-      <span className="ml-3 font-bold text-gray-700">Notifications:</span>
-      <div
-        ref={tickerRef}
-        className="ml-4 flex whitespace-nowrap animate-scroll"
-        style={{
-          animation: `scroll ${speedMap[speed]} linear infinite`,
-        }}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        {items.map((item, i) => (
-          <div key={i} className="mx-6 flex items-center space-x-2">
-            {item.date && (
-              <span className="text-gray-500 text-sm">[{item.date}]</span>
-            )}
-            <Link
-              href={item.url}
-              target="_blank"
-              className="text-blue-600 hover:underline flex space-x-1"
-            >
-              <span className="font-bold">{item.title}</span>
-            </Link>
-          </div>
-        ))}
+    <div className="w-full bg-gray-100 border border-gray-300 py-3 px-4 flex items-center rounded-lg shadow-sm">
+      <span className="font-bold text-gray-700 mr-3">Notifications:</span>
+
+      <div className="flex-1 overflow-hidden h-6 relative">
+        <div
+          key={currentIndex}
+          className="absolute w-full animate-slideUp"
+        >
+          {currentItem.date && (
+            <span className="text-gray-500 text-sm mr-2">
+              [{currentItem.date}]
+            </span>
+          )}
+          <Link
+            href={currentItem.url}
+            target="_blank"
+            className="text-blue-600 hover:underline"
+          >
+            <span className="font-bold">{currentItem.title}</span>
+            <span> - {currentItem.subject}</span>
+          </Link>
+        </div>
       </div>
-      <div className="ml-auto flex items-center mr-3 space-x-2">
+
+      <div className="ml-auto flex items-center space-x-2">
         <button
           onClick={() => setIsPlaying(false)}
           className="px-2 py-1 bg-red-500 text-white text-sm rounded hover:opacity-90"
