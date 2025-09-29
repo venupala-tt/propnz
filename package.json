@@ -15,6 +15,7 @@
      "next-auth": "^4.24.11",
     "mongoose": "^8.5.2",
     "@contentful/f36-spinner": "^4.81.1",
+     "postbuild": "next-sitemap",
     "@contentful/rich-text-react-renderer": "^16.1.0",
        "@contentful/rich-text-types": "^16.6.6",
     "@types/lodash": "^4.17.20",
