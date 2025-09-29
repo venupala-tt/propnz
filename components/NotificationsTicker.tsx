@@ -77,7 +77,6 @@ export default function NotificationsTicker({
               className="text-blue-600 hover:underline flex space-x-1"
             >
               <span className="font-bold">{item.title}</span>
-              <span>- {item.subject}</span>
             </Link>
           </div>
         ))}
