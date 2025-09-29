@@ -18,17 +18,17 @@ textarea {
     @apply shadow-md px-6 py-2 border border-slate-300;
 }
 
-/* Keyframes for sliding notifications upward */
+/* Smooth vertical scrolling for notifications */
 @keyframes slideUp {
   0% {
     transform: translateY(100%);
     opacity: 0;
   }
-  20% {
+  10% {
     transform: translateY(0%);
     opacity: 1;
   }
-  80% {
+  90% {
     transform: translateY(0%);
     opacity: 1;
   }
@@ -38,7 +38,7 @@ textarea {
   }
 }
 
-/* Class applied in NotificationsTicker.tsx */
+/* Slower + smoother */
 .animate-slideUp {
-  animation: slideUp 0.6s ease-in-out;
+  animation: slideUp 3s ease-in-out; /* ⏳ was 0.6s, now 3s */
 }
