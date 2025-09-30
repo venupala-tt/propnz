@@ -157,7 +157,10 @@ export default async function HomePage() {
 
     {/* Card 3 (Original Tools & Jobs) */}
     <div className="flex-1 rounded-xl shadow-lg p-4 bg-gradient-to-r from-green-600 via-teal-500 to-blue-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce text-center">
-      <Link href="/pages/tools" className="inline-block mt-2 px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100">
+      <Link href="/pages/tools"
+          target="_blank"
+        className="block font-semibold hover:underline"
+      >
         Access powerful tools to calculate ROI, capital gains, and more.
       </Link>
     </div>
