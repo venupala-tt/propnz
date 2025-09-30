@@ -42,10 +42,10 @@ export default function ServicesPage() {
    
     
     {
-      slug: "flat-ready-services",
-      title: "Flat-Ready-Services",
+      slug: "flat-maint-services",
+      title: "Flat-Maintenance-Services",
       icon: <Home size={24} />,
-      description: "Comprehensive finishing services to make your flat move-in ready.",
+      description: "Comprehensive Maintenance services to keep your flat in great condition.",
       image: "/flat-ready.jpg",
     },
   ];
