@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Package, Wrench, FileText } from "lucide-react";
 import SearchBar from "../components/SearchBar";
-import NotificationsTicker from "../components/NotificationsTicker";  // ✅ Import ticker
-import client from "./lib/contentful";  // ✅ Import Contentful client
+import NotificationsTicker from "../components/NotificationsTicker";
+import client from "./lib/contentful";
 
 // ✅ Fetch notifications from Contentful
 async function getNotifications() {
@@ -14,8 +14,8 @@ async function getNotifications() {
 
   return entries.items.map((item: any) => {
     const date = item.fields.date
-      ? new Date(item.fields.date).toLocaleDateString("en-GB") // dd/mm/yyyy
-      : new Date(item.sys.createdAt).toLocaleDateString("en-GB"); // fallback
+      ? new Date(item.fields.date).toLocaleDateString("en-GB")
+      : new Date(item.sys.createdAt).toLocaleDateString("en-GB");
 
     return {
       date,
@@ -32,24 +32,14 @@ export default async function HomePage() {
   const notifications = await getNotifications();
 
   return (
-    <div className="flex items-start">
-      <main
-        className="flex-1 flex min-h-screen flex-col items-center justify-start 
-        p-4 sm:p-8 lg:p-16 
-        bg-gradient-to-br from-blue-100 via-white to-purple-100 
-        animate-gradientWave"
-      >
-        {/* Hero + Search Section Combined */}
-        <div
-          className="w-full max-w-5xl rounded-xl shadow-md 
-          bg-white/80 backdrop-blur-sm p-6 sm:p-10 
-          animate-fadeInBounce flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-6"
-        >
+    <div className="flex min-h-screen bg-gradient-to-br from-blue-100 via-white to-purple-100 animate-gradientWave">
+      {/* ====== LEFT MAIN CONTENT ====== */}
+      <main className="flex-1 flex flex-col items-center justify-start p-4 sm:p-8 lg:p-16">
+        {/* Hero + Search Section */}
+        <div className="w-full max-w-5xl rounded-xl shadow-md bg-white/80 backdrop-blur-sm p-6 sm:p-10 animate-fadeInBounce flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-6">
           {/* Hero Content */}
-          <div
-            className="w-full max-w-5xl rounded-xl shadow-md bg-white/80 backdrop-blur-sm p-4 sm:p-6 animate-fadeInBounce flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-4"
-          >
-            <h2 className="text-lg font-semibold mb-2">
+          <div className="w-full sm:w-2/3 rounded-xl shadow-md bg-white/80 backdrop-blur-sm p-4 sm:p-6 animate-fadeInBounce flex flex-col gap-4">
+            <h2 className="text-lg font-semibold">
               Learn & Build scalable, Property Solutions
             </h2>
             <Link
@@ -63,7 +53,7 @@ export default async function HomePage() {
           </div>
 
           {/* Search Box */}
-          <div className="w-full sm:w-80 flex flex-col items-center sm:items-end">
+          <div className="w-full sm:w-1/3 flex flex-col items-center sm:items-end">
             <h2 className="text-lg font-semibold mb-2">Property Search</h2>
             <SearchBar />
           </div>
@@ -119,53 +109,50 @@ export default async function HomePage() {
             </p>
           </Link>
         </div>
-
-    {/* CTA Section with Notifications + 3 Cards */}
-<div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
-  {/* Notifications Live Feed */}
-  <div className="block rounded-xl shadow-lg p-6 bg-white/90 backdrop-blur-sm 
-                  hover:shadow-xl transition-all duration-300 animate-fadeInBounce 
-                  h-80 flex flex-col">
-    <h3 className="text-xl font-semibold mb-4 text-gray-800">Latest Notifications</h3>
-    <div className="flex-1 overflow-hidden">
-      <NotificationsTicker items={notifications} speed="slow" />
-    </div>
-  </div>
-
-  {/* Right Side: 3 Mini Cards */}
-  <div className="flex flex-col gap-4 h-80">
-    {/* Card 1 */}
-    <div className="flex-1 rounded-xl shadow-lg p-4 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce">
-      <Link href="/services/interior-designer" className="block mb-2 font-semibold hover:underline">
-        Building a New Property? Make it perfect with our Planning and Designing Services
-      </Link>
-      <Link href="/services/vaastu-services" className="block font-semibold hover:underline">
-        Make Your Property Vaastu Compliant Now
-      </Link>
-    </div>
-
-    {/* Card 2 */}
-    <div className="flex-1 rounded-xl shadow-lg p-4 bg-gradient-to-r from-blue-600 via-teal-500 to-green-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce">
-      <Link
-        href="/services/digital-services"
-        className="block font-semibold hover:underline"
-      >
-        Are you a Builder or Developer? Visit our Digital Services Now
-      </Link>
-    </div>
-
-    {/* Card 3 (Original Tools & Jobs) */}
-    <div className="flex-1 rounded-xl shadow-lg p-4 bg-gradient-to-r from-green-600 via-teal-500 to-blue-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce text-center">
-      <Link href="/pages/tools"
-        className="block font-semibold hover:underline"
-      >
-        Access powerful tools to calculate ROI, capital gains, and more.
-      </Link>
-    </div>
-  </div>
-</div>
-
       </main>
+
+      {/* ====== RIGHT CTA SIDEBAR ====== */}
+      <aside className="hidden lg:flex w-80 flex-col p-4 bg-white/80 backdrop-blur-md shadow-xl border-l border-gray-200 animate-fadeInBounce">
+        {/* Notifications */}
+        <div className="rounded-xl shadow-lg p-4 bg-white/90 backdrop-blur-sm mb-6 flex flex-col h-80">
+          <h3 className="text-xl font-semibold mb-4 text-gray-800">Latest Notifications</h3>
+          <div className="flex-1 overflow-hidden">
+            <NotificationsTicker items={notifications} speed="slow" />
+          </div>
+        </div>
+
+        {/* CTA Cards */}
+        <div className="flex flex-col gap-4">
+          {/* Card 1 */}
+          <div className="rounded-xl shadow-lg p-4 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce">
+            <Link href="/services/interior-designer" className="block mb-2 font-semibold hover:underline">
+              Building a New Property? Make it perfect with our Planning and Designing Services
+            </Link>
+            <Link href="/services/vaastu-services" className="block font-semibold hover:underline">
+              Make Your Property Vaastu Compliant Now
+            </Link>
+          </div>
+
+          {/* Card 2 */}
+          <div className="rounded-xl shadow-lg p-4 bg-gradient-to-r from-blue-600 via-teal-500 to-green-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce">
+            <Link
+              href="/services/digital-services"
+              className="block font-semibold hover:underline"
+            >
+              Are you a Builder or Developer? Visit our Digital Services Now
+            </Link>
+          </div>
+
+          {/* Card 3 */}
+          <div className="rounded-xl shadow-lg p-4 bg-gradient-to-r from-green-600 via-teal-500 to-blue-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce text-center">
+            <Link href="/pages/tools"
+              className="block font-semibold hover:underline"
+            >
+              Access powerful tools to calculate ROI, capital gains, and more.
+            </Link>
+          </div>
+        </div>
+      </aside>
     </div>
   );
 }
