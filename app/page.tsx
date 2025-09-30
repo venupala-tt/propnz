@@ -136,10 +136,10 @@ export default async function HomePage() {
   <div className="flex flex-col gap-4 h-80">
     {/* Card 1 */}
     <div className="flex-1 rounded-xl shadow-lg p-4 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce">
-      <Link href="/services/interior-design" className="block mb-2 font-semibold hover:underline">
+      <Link href="/services/interior-designer" className="block mb-2 font-semibold hover:underline">
         Building a New Property? Make it perfect with our Planning and Designing Services
       </Link>
-      <Link href="https://www.propmatics.com/services/vaastu-services" target="_blank" className="block font-semibold hover:underline">
+      <Link href="/services/vaastu-services" target="_blank" className="block font-semibold hover:underline">
         Make Your Property Vaastu Compliant Now
       </Link>
     </div>
@@ -147,7 +147,7 @@ export default async function HomePage() {
     {/* Card 2 */}
     <div className="flex-1 rounded-xl shadow-lg p-4 bg-gradient-to-r from-blue-600 via-teal-500 to-green-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce">
       <Link
-        href="https://www.propmatics.com/services/digital-services"
+        href="/services/digital-services"
         target="_blank"
         className="block font-semibold hover:underline"
       >
@@ -158,11 +158,8 @@ export default async function HomePage() {
     {/* Card 3 (Original Tools & Jobs) */}
     <div className="flex-1 rounded-xl shadow-lg p-4 bg-gradient-to-r from-green-600 via-teal-500 to-blue-500 text-white hover:shadow-xl transition-all duration-300 animate-fadeInBounce text-center">
       <h3 className="text-lg font-semibold mb-2">Property Tools & Jobs For You</h3>
-      <p className="text-sm opacity-90">
-        Access powerful tools to calculate ROI, capital gains, and more.
-      </p>
       <Link href="/pages/tools" className="inline-block mt-2 px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100">
-        Explore Tools
+        Access powerful tools to calculate ROI, capital gains, and more.
       </Link>
     </div>
   </div>
