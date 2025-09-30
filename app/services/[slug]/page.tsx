@@ -35,8 +35,8 @@ const services = {
       "Follow-up until completion",
     ],
   },
-  "flat-ready-services": {
-    title: "Flat-Ready-Services",
+  "flat-maint-services": {
+    title: "Flat-Maint-Services",
     image: "/flat-ready.jpg",
     description:
       "From flooring to fittings, we make your new flat move-in ready.",
