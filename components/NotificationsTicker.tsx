@@ -22,7 +22,7 @@ export default function NotificationsTicker({
 
   if (!items || items.length === 0) {
     return (
-      <div className="text-gray-500 text-sm p-4 bg-white/80 rounded-lg border border-gray-200">
+      <div className="text-gray-500 text-sm p-4 bg-sky-200 rounded-lg border border-gray-200">
         No notifications available.
       </div>
     );
@@ -34,14 +34,12 @@ export default function NotificationsTicker({
     fast: "15s",
   };
 
-  // ✅ Toggle pause/resume
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.style.animationPlayState = isPaused ? "paused" : "running";
     }
   }, [isPaused]);
 
-  // ✅ Also pause on hover for desktop users
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -59,8 +57,7 @@ export default function NotificationsTicker({
   }, []);
 
   return (
-    <div className="relative h-full overflow-hidden p-3 rounded-xl 
-                    bg-white/90 backdrop-blur-sm border border-gray-200 shadow-sm">
+    <div className="relative h-full overflow-hidden p-3 rounded-xl bg-sky-200 backdrop-blur-sm border border-gray-200 shadow-sm">
       {/* Play / Pause Button */}
       <button
         onClick={() => setIsPaused(!isPaused)}
@@ -86,7 +83,7 @@ export default function NotificationsTicker({
             <Link
               href={item.url}
               target="_blank"
-              className="text-blue-600 hover:text-purple-600 font-medium transition-colors"
+              className="text-blue-800 hover:text-purple-600 font-medium transition-colors"
             >
               {item.title}
             </Link>
