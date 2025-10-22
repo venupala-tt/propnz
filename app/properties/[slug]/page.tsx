@@ -1,7 +1,4 @@
-/* app/properties/[slug]/page.tsx */
-
-import {fetchPropertyBySlug} from "../../lib/contentful";
-
+import { fetchPropertyBySlug, fetchProperties } from "../../lib/contentful";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -9,7 +6,7 @@ export const revalidate = 60; // revalidate every 60s
 
 // Generate static paths for ISR
 export async function generateStaticParams() {
-  const properties = await fetchPropertyBySlug(params.slug);
+  const properties = await fetchProperties();
   return properties.map((item: any) => ({
     slug: item.fields.slug,
   }));
