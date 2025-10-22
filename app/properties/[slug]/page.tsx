@@ -9,7 +9,7 @@ export const revalidate = 60; // revalidate every 60s
 
 // Generate static paths for ISR
 export async function generateStaticParams() {
-  const properties = await fetchProperties();
+  const properties = await fetchPropertyBySlug();
   return properties.map((item: any) => ({
     slug: item.fields.slug,
   }));
