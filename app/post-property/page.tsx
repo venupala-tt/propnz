@@ -9,9 +9,11 @@ export default function PostPropertyPage() {
     description: "",
   });
   const [images, setImages] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Handle selecting up to 10 images
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length + images.length > 10) {
@@ -19,6 +21,8 @@ export default function PostPropertyPage() {
       return;
     }
     setImages((prev) => [...prev, ...files]);
+    const newPreviews = files.map((file) => URL.createObjectURL(file));
+    setPreviews((prev) => [...prev, ...newPreviews]);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,24 +30,41 @@ export default function PostPropertyPage() {
     setLoading(true);
     setMessage("");
 
-    const formData = new FormData();
-    formData.append("title", form.title);
-    formData.append("price", form.price);
-    formData.append("location", form.location);
-    formData.append("description", form.description);
-    images.forEach((file) => formData.append("images", file));
+    try {
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("price", form.price);
+      formData.append("location", form.location);
+      formData.append("description", form.description);
+      images.forEach((file) => formData.append("images", file));
 
-    const res = await fetch("/api/properties", { method: "POST", body: formData });
-    const data = await res.json();
+      const res = await fetch("/api/properties", {
+        method: "POST",
+        body: formData,
+      });
 
-    if (res.ok) setMessage("Property posted successfully!");
-    else setMessage(`Error: ${data.error}`);
-    setLoading(false);
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage("✅ Property posted successfully!");
+        setForm({ title: "", price: "", location: "", description: "" });
+        setImages([]);
+        setPreviews([]);
+      } else {
+        setMessage(`❌ Error: ${data.error || "Failed to post property."}`);
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage("❌ Something went wrong while submitting.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
+    <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-xl shadow">
       <h1 className="text-2xl font-bold mb-4">Post a Property</h1>
+
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
           type="text"
@@ -76,22 +97,49 @@ export default function PostPropertyPage() {
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
         />
+
+        {/* Image Upload */}
+        <label className="font-semibold mt-2">Upload up to 10 images:</label>
         <input
           type="file"
           accept="image/*"
           multiple
           onChange={handleImageChange}
+          className="border p-2 rounded"
         />
+
+        {/* Previews */}
+        {previews.length > 0 && (
+          <div className="grid grid-cols-3 gap-2 mt-2">
+            {previews.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt={`preview-${i}`}
+                className="w-full h-24 object-cover rounded"
+              />
+            ))}
+          </div>
+        )}
+
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition disabled:opacity-50 mt-4"
         >
           {loading ? "Posting..." : "Submit Property"}
         </button>
       </form>
-      {message && <p className="mt-3 text-green-600">{message}</p>}
+
+      {message && (
+        <p
+          className={`mt-4 text-center font-medium ${
+            message.startsWith("✅") ? "text-green-600" : "text-red-600"
+          }`}
+        >
+          {message}
+        </p>
+      )}
     </div>
   );
 }
-
