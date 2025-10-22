@@ -32,7 +32,7 @@ export default async function PropertyDetailPage({ params }: { params: { slug: s
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-2">{title}</h1>
+      <h1 className="text-3xl font-bold mb-2">{title.toLocaleString()}</h1>
       <p className="text-gray-600 mb-2">{location}</p>
       <p className="text-xl font-semibold text-blue-600 mb-4">
         ?{price?.toLocaleString()}
