@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       assetLinks.push({ sys: { type: "Link", linkType: "Asset", id: published.sys.id } });
     }
 
-    // Create Property entry
+    // Create eProperty entry
     const entry = await environment.createEntry("eproperty", {
       fields: {
         title: { "en-US": title },
