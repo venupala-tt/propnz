@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     }
 
     // Create Property entry
-    const entry = await environment.createEntry("property", {
+    const entry = await environment.createEntry("eproperty", {
       fields: {
         title: { "en-US": title },
         price: { "en-US": Number(price) },
