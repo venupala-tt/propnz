@@ -71,4 +71,16 @@ export async function fetchNotifications(limit = 10) {
   }
 }
 
+export async function fetchPropertyBySlug(slug: string) {
+  const entries = await contentfulClient.getEntries({
+    content_type: "eproperty",
+    "fields.slug": slug,
+    limit: 1,
+  });
+
+  return entries.items[0];
+}
+
+
+
 export default client;
