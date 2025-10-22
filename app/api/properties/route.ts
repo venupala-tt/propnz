@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "contentful-management";
-import type { Readable } from "stream";
+import { Readable } from "stream"; // ✅ fixed import
+
 
 // Create a Contentful Management API client
 const contentfulClient = createClient({
