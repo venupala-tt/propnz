@@ -72,7 +72,7 @@ export async function fetchNotifications(limit = 10) {
 }
 
 export async function fetchPropertyBySlug(slug: string) {
-  const entries = await contentfulClient.getEntries({
+  const entries = await client.getEntries({
     content_type: "eproperty",
     "fields.slug": slug,
     limit: 1,
