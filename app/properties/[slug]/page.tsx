@@ -1,4 +1,4 @@
-import { fetchPropertyBySlug, fetchProperties } from "@/lib/contentful";
+import { fetchPropertyBySlug, fetchProperties } from "../../lib/contentful";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
