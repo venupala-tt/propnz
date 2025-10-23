@@ -18,12 +18,12 @@ export async function POST(req: Request) {
     );
 
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
+      host: "process.env.EMAIL_SERVER_HOST",
+      port: Number(process.env.EMAIL_SERVER_PORT),
       secure: false,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+       user: "info@propmatics.com",
+        pass: "Thiru@987$_ap",
       },
     });
 
