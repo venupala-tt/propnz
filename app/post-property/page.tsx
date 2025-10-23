@@ -7,6 +7,11 @@ export default function PostPropertyPage() {
     price: "",
     location: "",
     description: "",
+    name: "",
+    phone: "",
+    email: "",
+    userType: "",
+    additionalInfo: "",
   });
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -33,10 +38,9 @@ export default function PostPropertyPage() {
 
     try {
       const formData = new FormData();
-      formData.append("title", form.title);
-      formData.append("price", form.price);
-      formData.append("location", form.location);
-      formData.append("description", form.description);
+      Object.entries(form).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
       images.forEach((file) => formData.append("images", file));
 
       // Send to API route which emails info@propmatics.com
@@ -49,7 +53,17 @@ export default function PostPropertyPage() {
 
       if (res.ok) {
         setMessage("✅ Property submitted successfully! Email sent to info@propmatics.com.");
-        setForm({ title: "", price: "", location: "", description: "" });
+        setForm({
+          title: "",
+          price: "",
+          location: "",
+          description: "",
+          name: "",
+          phone: "",
+          email: "",
+          userType: "",
+          additionalInfo: "",
+        });
         setImages([]);
         setPreviews([]);
       } else {
@@ -68,6 +82,45 @@ export default function PostPropertyPage() {
       <h1 className="text-2xl font-bold mb-4 text-center">Post a Property</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <input
+          type="text"
+          placeholder="Your Name"
+          className="border p-2 rounded"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          required
+        />
+
+        <input
+          type="tel"
+          placeholder="Phone Number"
+          className="border p-2 rounded"
+          value={form.phone}
+          onChange={(e) => setForm({ ...form, phone: e.target.value })}
+          required
+        />
+
+        <input
+          type="email"
+          placeholder="Email ID"
+          className="border p-2 rounded"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          required
+        />
+
+        <select
+          className="border p-2 rounded"
+          value={form.userType}
+          onChange={(e) => setForm({ ...form, userType: e.target.value })}
+          required
+        >
+          <option value="">Are you a Seller / Agent / Buyer?</option>
+          <option value="Seller">Seller</option>
+          <option value="Agent">Agent</option>
+          <option value="Buyer">Buyer</option>
+        </select>
+
         <input
           type="text"
           placeholder="Title"
@@ -103,7 +156,15 @@ export default function PostPropertyPage() {
           onChange={(e) => setForm({ ...form, description: e.target.value })}
         />
 
-        <label className="font-semibold mt-2">Upload Max 2 images only </label>
+        <textarea
+          placeholder="Additional Information (if any)"
+          className="border p-2 rounded"
+          rows={3}
+          value={form.additionalInfo}
+          onChange={(e) => setForm({ ...form, additionalInfo: e.target.value })}
+        />
+
+        <label className="font-semibold mt-2">Upload Max 10 images</label>
         <input
           type="file"
           accept="image/*"
