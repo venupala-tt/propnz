@@ -74,7 +74,7 @@ export async function fetchNotifications(limit = 10) {
 // ------------------- EXTERNAL PROPERTIES ---------------
 // Fetch all properties
 export async function fetchProperties() {
-  const entries = await contentfulClient.getEntries({
+  const entries = await client.getEntries({
     content_type: "eproperty",
     order: ["-sys.createdAt"], // ✅ fixed here
   });
@@ -83,7 +83,7 @@ export async function fetchProperties() {
 
 // Fetch single property by slug
 export async function fetchPropertyBySlug(slug: string) {
-  const entries = await contentfulClient.getEntries({
+  const entries = await client.getEntries({
     content_type: "eproperty",
     "fields.slug": slug,
     limit: 1,
