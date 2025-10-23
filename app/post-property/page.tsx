@@ -13,7 +13,7 @@ export default function PostPropertyPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Handle selecting up to 10 images
+  // Handle image upload (max 10)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length + images.length > 10) {
@@ -25,6 +25,7 @@ export default function PostPropertyPage() {
     setPreviews((prev) => [...prev, ...newPreviews]);
   };
 
+  // Submit form
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -38,6 +39,7 @@ export default function PostPropertyPage() {
       formData.append("description", form.description);
       images.forEach((file) => formData.append("images", file));
 
+      // Send to API route which emails info@propmatics.com
       const res = await fetch("/api/properties", {
         method: "POST",
         body: formData,
@@ -46,16 +48,16 @@ export default function PostPropertyPage() {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage("✅ Property posted successfully!");
+        setMessage("✅ Property submitted successfully! Email sent to info@propmatics.com.");
         setForm({ title: "", price: "", location: "", description: "" });
         setImages([]);
         setPreviews([]);
       } else {
-        setMessage(`❌ Error: ${data.error || "Failed to post property."}`);
+        setMessage(`❌ Error: ${data.error || "Failed to send property details."}`);
       }
     } catch (err) {
       console.error(err);
-      setMessage("❌ Something went wrong while submitting.");
+      setMessage("❌ Something went wrong while submitting the form.");
     } finally {
       setLoading(false);
     }
@@ -63,7 +65,7 @@ export default function PostPropertyPage() {
 
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-xl shadow">
-      <h1 className="text-2xl font-bold mb-4">Post a Property</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">Post a Property</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
@@ -74,6 +76,7 @@ export default function PostPropertyPage() {
           onChange={(e) => setForm({ ...form, title: e.target.value })}
           required
         />
+
         <input
           type="number"
           placeholder="Price"
@@ -82,6 +85,7 @@ export default function PostPropertyPage() {
           onChange={(e) => setForm({ ...form, price: e.target.value })}
           required
         />
+
         <input
           type="text"
           placeholder="Location"
@@ -90,6 +94,7 @@ export default function PostPropertyPage() {
           onChange={(e) => setForm({ ...form, location: e.target.value })}
           required
         />
+
         <textarea
           placeholder="Description"
           className="border p-2 rounded"
@@ -98,7 +103,6 @@ export default function PostPropertyPage() {
           onChange={(e) => setForm({ ...form, description: e.target.value })}
         />
 
-        {/* Image Upload */}
         <label className="font-semibold mt-2">Upload up to 10 images:</label>
         <input
           type="file"
@@ -108,7 +112,6 @@ export default function PostPropertyPage() {
           className="border p-2 rounded"
         />
 
-        {/* Previews */}
         {previews.length > 0 && (
           <div className="grid grid-cols-3 gap-2 mt-2">
             {previews.map((src, i) => (
@@ -127,7 +130,7 @@ export default function PostPropertyPage() {
           disabled={loading}
           className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition disabled:opacity-50 mt-4"
         >
-          {loading ? "Posting..." : "Submit Property"}
+          {loading ? "Submitting..." : "Submit Property"}
         </button>
       </form>
 
