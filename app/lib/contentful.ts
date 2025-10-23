@@ -71,9 +71,19 @@ export async function fetchNotifications(limit = 10) {
   }
 }
 
+// ✅ Fetch all properties (for listing & generateStaticParams)
+export async function fetchProperties() {
+  const entries = await contentfulClient.getEntries({
+    content_type: "property",
+    order: "-sys.createdAt",
+  });
+  return entries.items;
+}
+
+// ✅ Fetch single property by slug
 export async function fetchPropertyBySlug(slug: string) {
-  const entries = await client.getEntries({
-    content_type: "eproperty",
+  const entries = await contentfulClient.getEntries({
+    content_type: "property",
     "fields.slug": slug,
     limit: 1,
   });
