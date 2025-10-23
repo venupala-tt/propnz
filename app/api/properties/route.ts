@@ -28,7 +28,8 @@ export async function POST(req: Request) {
     });
 
     await transporter.sendMail({
-      from: `"Propmatics" <${process.env.EMAIL_USER}>`,
+    //  from: `"Propmatics" <${process.env.EMAIL_USER}>`,
+      from: "info@propmatics.com",
       to: "info@propmatics.com",
       subject: `New Property Submission: ${title}`,
       html: `
