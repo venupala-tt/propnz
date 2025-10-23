@@ -103,7 +103,7 @@ export default function PostPropertyPage() {
           onChange={(e) => setForm({ ...form, description: e.target.value })}
         />
 
-        <label className="font-semibold mt-2">Upload up to 10 images:</label>
+        <label className="font-semibold mt-2">Upload Max 2 images only </label>
         <input
           type="file"
           accept="image/*"
