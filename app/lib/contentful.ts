@@ -75,7 +75,7 @@ export async function fetchNotifications(limit = 10) {
 // Fetch all properties
 export async function fetchProperties() {
   const entries = await client.getEntries({
-    content_type: "eproperty",
+    content_type: "eProperty",
     order: ["-sys.createdAt"], // ✅ fixed here
   });
   return entries.items;
@@ -84,7 +84,7 @@ export async function fetchProperties() {
 // Fetch single property by slug
 export async function fetchPropertyBySlug(slug: string) {
   const entries = await client.getEntries({
-    content_type: "eproperty",
+    content_type: "eProperty",
     "fields.slug": slug,
     limit: 1,
   });
