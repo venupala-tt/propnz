@@ -7,7 +7,7 @@ export default async function PropertiesPage() {
   const CONTENTFUL_ENVIRONMENT = "master";
 
   const res = await fetch(
-    `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?access_token=${CONTENTFUL_ACCESS_TOKEN}&content_type=property&include=2`,
+    `https://cdn.contentful.com/spaces/${CONTENTFUL_SPACE_ID}/environments/${CONTENTFUL_ENVIRONMENT}/entries?access_token=${CONTENTFUL_ACCESS_TOKEN}&content_type=eProperty&include=2`,
     { cache: "no-store" }
   );
 
