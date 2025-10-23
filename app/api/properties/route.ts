@@ -1,89 +1,49 @@
 import { NextResponse } from "next/server";
-import { createClient } from "contentful-management";
-import { Readable } from "stream"; // ✅ fixed import
-
-
-// Create a Contentful Management API client
-const contentfulClient = createClient({
-  accessToken: process.env.CONTENTFUL_CMA_TOKEN!,
-});
+import nodemailer from "nodemailer";
 
 export async function POST(req: Request) {
   try {
-    // Parse form data
-    const body = await req.formData();
-    const title = body.get("title") as string;
-    const price = body.get("price") as string;
-    const location = body.get("location") as string;
-    const description = body.get("description") as string;
+    const formData = await req.formData();
+    const title = formData.get("title") as string;
+    const price = formData.get("price") as string;
+    const location = formData.get("location") as string;
+    const description = formData.get("description") as string;
+    const images = formData.getAll("images") as File[];
 
-    const imageFiles = body.getAll("images") as File[];
+    const attachments = await Promise.all(
+      images.map(async (file) => ({
+        filename: file.name,
+        content: Buffer.from(await file.arrayBuffer()),
+      }))
+    );
 
-    // Connect to Contentful space & environment
-    const space = await contentfulClient.getSpace(process.env.CONTENTFUL_SPACE_ID!);
-    const environment = await space.getEnvironment(process.env.CONTENTFUL_ENVIRONMENT!);
-
-    const assetLinks: any[] = [];
-
-    for (const file of imageFiles.slice(0, 10)) {
-      // Convert browser File → Node Buffer (binary)
-      const arrayBuffer = await file.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-
-      // ⚙️ FIX: Convert buffer into a readable stream so TypeScript & SDK both accept it
-      const stream = Readable.from(buffer);
-
-      // Upload binary stream to Contentful
-      const upload = await environment.createUpload({ file: stream as any });
-
-      // Create an Asset for that upload
-      const asset = await environment.createAsset({
-        fields: {
-          title: { "en-US": file.name },
-          file: {
-            "en-US": {
-              fileName: file.name,
-              contentType: file.type,
-              uploadFrom: {
-                sys: { type: "Link", linkType: "Upload", id: upload.sys.id },
-              },
-            },
-          },
-        },
-      });
-
-      // Process and publish the Asset
-      await asset.processForAllLocales();
-      const published = await asset.publish();
-
-      assetLinks.push({
-        sys: { type: "Link", linkType: "Asset", id: published.sys.id },
-      });
-    }
-
-    // Create the Property entry
-    const entry = await environment.createEntry("property", {
-      fields: {
-        title: { "en-US": title },
-        price: { "en-US": Number(price) },
-        location: { "en-US": location },
-        description: { "en-US": description },
-        images: { "en-US": assetLinks },
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
-    await entry.publish();
-
-    return NextResponse.json({
-      success: true,
-      entryId: entry.sys.id,
-      message: "Property posted successfully!",
+    await transporter.sendMail({
+      from: `"Propmatics" <${process.env.EMAIL_USER}>`,
+      to: "info@propmatics.com",
+      subject: `New Property Submission: ${title}`,
+      html: `
+        <h3>New Property Submission Details</h3>
+        <p><strong>Title:</strong> ${title}</p>
+        <p><strong>Price:</strong> ${price}</p>
+        <p><strong>Location:</strong> ${location}</p>
+        <p><strong>Description:</strong> ${description}</p>
+      `,
+      attachments,
     });
-  } catch (error: any) {
-    console.error("Error posting property:", error);
-    return NextResponse.json(
-      { error: error.message || "Failed to post property" },
-      { status: 500 }
-    );
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Email send error:", error);
+    return NextResponse.json({ error: "Failed to send email." }, { status: 500 });
   }
 }
