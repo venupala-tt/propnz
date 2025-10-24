@@ -26,6 +26,7 @@ export default function Navbar() {
     { href: "/pages/tools", label: "Prop Tools" },
     { href: "/blog", label: "Blogs" },
     { href: "/pages/book-an-expert", label: "Book Expert" },
+    { href: "https://www.propmatics.com/post-property", label: "Post Property", cta: true }, // ✅ Highlighted CTA
   ];
 
   useEffect(() => {
@@ -46,7 +47,7 @@ export default function Navbar() {
 
     if (res?.ok) {
       setShowLogin(false);
-      router.push("/dashboard"); // ✅ always redirect here
+      router.push("/dashboard");
     } else {
       setError("Invalid email or password.");
     }
@@ -75,6 +76,21 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-6">
             {navLinks.map((item) => {
               const isActive = pathname === item.href;
+
+              if (item.cta) {
+                // ✅ Styled "Post Property" button
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    className="ml-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:scale-105 transition-transform shadow-md"
+                  >
+                    {item.label}
+                  </Link>
+                );
+              }
+
               return (
                 <Link
                   key={item.href}
@@ -129,6 +145,20 @@ export default function Navbar() {
         <div className="md:hidden bg-white shadow-lg px-6 py-4 space-y-3">
           {navLinks.map((item) => {
             const isActive = pathname === item.href;
+
+            if (item.cta) {
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  className="block w-full text-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:scale-[1.02] transition-transform shadow-md"
+                >
+                  {item.label}
+                </Link>
+              );
+            }
+
             return (
               <Link
                 key={item.href}
