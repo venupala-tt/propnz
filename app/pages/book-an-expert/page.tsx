@@ -127,11 +127,11 @@ export default function BookAnExpertPage() {
                 required
               >
                 <option value="">Select Category</option>
-                <option>Property Advisory</option>
+                <option>Property Advisory, Documentation</option>
                 <option>Construction Planning Services</option>
                 <option>Interior Designing</option>
                 <option>Vaastu Services</option>
-                <option>Property Documentation Services</option>
+                <option>Property Registration Services</option>
                 <option>Flat-Ready-Services</option>
               </select>
 
