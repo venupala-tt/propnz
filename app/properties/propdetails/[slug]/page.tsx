@@ -1,8 +1,11 @@
-
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import {
+  documentToReactComponents,
+  Options,
+} from "@contentful/rich-text-react-renderer";
+import { BLOCKS } from "@contentful/rich-text-types";
 import type { Document } from "@contentful/rich-text-types";
 
 const CONTENTFUL_SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
@@ -55,12 +58,71 @@ async function getProperty(slug: string): Promise<Property | null> {
   };
 }
 
-export default async function PropertyPage({ params }: { params: { slug: string } }) {
+export default async function PropertyPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const property = await getProperty(params.slug);
 
   if (!property) {
     notFound();
   }
+
+  // Custom render options for images & videos in Contentful Rich Text
+  const options: Options = {
+    renderNode: {
+      [BLOCKS.EMBEDDED_ASSET]: (node: any) => {
+        const file = node.data.target.fields?.file;
+        if (!file) return null;
+
+        const url = file.url.startsWith("https:")
+          ? file.url
+          : `https:${file.url}`;
+        const contentType = file.contentType || "";
+
+        // Handle images
+        if (contentType.startsWith("image/")) {
+          return (
+            <div className="my-6 flex justify-center">
+              <Image
+                src={url}
+                alt={node.data.target.fields?.title || "Embedded image"}
+                width={800}
+                height={600}
+                className="rounded-lg shadow-md object-contain"
+              />
+            </div>
+          );
+        }
+
+        // Handle videos
+        if (contentType.startsWith("video/")) {
+          return (
+            <div className="my-6">
+              <video
+                controls
+                className="w-full rounded-lg shadow-md"
+                src={url}
+              />
+            </div>
+          );
+        }
+
+        // Fallback for other file types
+        return (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline"
+          >
+            {file.fileName}
+          </a>
+        );
+      },
+    },
+  };
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6 flex flex-col items-center">
@@ -75,7 +137,7 @@ export default async function PropertyPage({ params }: { params: { slug: string 
           </Link>
         </div>
 
-        {/* Image */}
+        {/* Main Image */}
         {property.imageUrl && (
           <div className="relative w-full h-64 sm:h-96">
             <Image
@@ -101,7 +163,7 @@ export default async function PropertyPage({ params }: { params: { slug: string 
               {typeof property.description === "string" ? (
                 <p>{property.description}</p>
               ) : (
-                documentToReactComponents(property.description as Document)
+                documentToReactComponents(property.description as Document, options)
               )}
             </div>
           )}
