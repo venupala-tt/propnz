@@ -45,9 +45,7 @@ export default function BookAnExpertPage() {
     <SEO
         title="Propmatics - Book An Expert for All your Property/ Real Estate Needs"
         description="Discover real estate expert in Hi Tech City"
-        keywords="real estate, Vaastu, Construction Planning, Brochures, Registration Services Interior Design, apartments, multifamily, investments, propmatics"
-      />
-    
+        keywords="real estate, Vaastu, Construction Planning, Brochures, Registration Services Interior Design,propmatics" />
     <main
       className="flex min-h-screen flex-col items-center justify-center 
       p-6 sm:p-12 lg:p-24 
