@@ -1,7 +1,10 @@
 "use client";
 import { useState } from "react";
 
+import SEO from "@/components/SEO";
+
 export default function BookAnExpertPage() {
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -39,6 +42,12 @@ export default function BookAnExpertPage() {
   };
 
   return (
+    <SEO
+        title="Propmatics - Smart Real Estate Solutions"
+        description="Discover real estate investment opportunities in multifamily apartments across US cities."
+        keywords="real estate, apartments, multifamily, investments, propmatics"
+      />
+    
     <main
       className="flex min-h-screen flex-col items-center justify-center 
       p-6 sm:p-12 lg:p-24 
