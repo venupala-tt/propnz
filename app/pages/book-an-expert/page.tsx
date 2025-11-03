@@ -43,9 +43,9 @@ export default function BookAnExpertPage() {
 
   return (
     <SEO
-        title="Propmatics - Smart Real Estate Solutions"
-        description="Discover real estate investment opportunities in multifamily apartments across US cities."
-        keywords="real estate, apartments, multifamily, investments, propmatics"
+        title="Propmatics - Book An Expert for All your Property/ Real Estate Needs"
+        description="Discover real estate expert in Hi Tech City"
+        keywords="real estate, Vaastu, Interior, apartments, multifamily, investments, propmatics"
       />
     
     <main
