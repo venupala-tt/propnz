@@ -55,8 +55,8 @@ export default function ServicesPage() {
        <>
     {/* ✅ SEO Component customize for  Book An Expert*/}
       <SEO
-        title="Propmatics - Book An Expert for All your Property / Real Estate Needs"
-        description="Discover real estate experts in Hi-Tech City"
+        title="Propmatics - Services for All your Property / Real Estate Needs"
+        description="Discover real estate Services in Hi-Tech City"
         keywords="real estate, Vaastu, Construction Planning, Brochures, Registration Services, Interior Design, propmatics"
       />
 
