@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import SEO from "../../../components/SEO";
+
 
 type OptionInput = {
   name: string;
@@ -112,6 +114,14 @@ export default function Page() {
   };
 
   return (
+
+    {/* ✅ SEO Component customize for ROI Calculator */}
+      <SEO
+        title="Propmatics - ROI Calculator for property investments"
+        description="Calculate Return on Investment for my property in Hi Tech city, ROI"
+        keywords="ROI Calculator, EMI, Property Investment, Best Way to Buy property "
+      />
+    
     <div className="p-6 max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">Real Estate ROI Calculator</h1>
       <h2 className="text-3xl font-bold mb-4 text-center">Enter No.of Years, Data for Option A, B & C and then Hit "Calulate" Button</h2>
