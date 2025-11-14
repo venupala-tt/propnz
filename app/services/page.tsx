@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Hammer, Zap, Home, PenTool, FileText, Compass } from "lucide-react";
-import SEO from "../../../components/SEO";
+import SEO from "../../components/SEO";
 export default function ServicesPage() {
   const services = [
     {
