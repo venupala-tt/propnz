@@ -115,11 +115,12 @@ export default function Page() {
 
   return (
 
-    {/* ✅ SEO Component customize for ROI Calculator */}
+ <>
+      {/* ✅ SEO Component */}
       <SEO
-        title="Propmatics - ROI Calculator for property investments"
-        description="Calculate Return on Investment for my property in Hi Tech city, ROI"
-        keywords="ROI Calculator, EMI, Property Investment, Best Way to Buy property "
+        title="Propmatics - Book An Expert for All your Property / Real Estate Needs"
+        description="Discover real estate experts in Hi-Tech City"
+        keywords="real estate, Vaastu, Construction Planning, Brochures, Registration Services, Interior Design, propmatics"
       />
     
     <div className="p-6 max-w-7xl mx-auto">
