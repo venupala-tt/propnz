@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Hammer, Zap, Home, PenTool, FileText, Compass } from "lucide-react";
+
 export default function ServicesPage() {
   const services = [
     {
@@ -49,8 +50,7 @@ export default function ServicesPage() {
     },
   ];
 
-  return 
-    (
+  return (
     <main
       className="flex min-h-screen flex-col items-center justify-center 
       p-6 sm:p-12 lg:p-24 
@@ -107,6 +107,5 @@ export default function ServicesPage() {
         </div>
       </div>
     </main>
-  
   );
 }
