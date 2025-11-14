@@ -53,7 +53,7 @@ export default function ServicesPage() {
   return 
     (
        <>
-    {/* ✅ SEO Component customize for  Book An Expert*/}
+    {/* ✅ SEO Component customize for Services Page */}
       <SEO
         title="Propmatics - Services for All your Property / Real Estate Needs"
         description="Discover real estate Services in Hi-Tech City"
