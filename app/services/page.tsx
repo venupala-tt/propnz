@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Hammer, Zap, Home, PenTool, FileText, Compass } from "lucide-react";
-
+import SEO from "../../../components/SEO";
 export default function ServicesPage() {
   const services = [
     {
@@ -50,7 +50,16 @@ export default function ServicesPage() {
     },
   ];
 
-  return (
+  return 
+    (
+       <>
+    {/* ✅ SEO Component customize for  Book An Expert*/}
+      <SEO
+        title="Propmatics - Book An Expert for All your Property / Real Estate Needs"
+        description="Discover real estate experts in Hi-Tech City"
+        keywords="real estate, Vaastu, Construction Planning, Brochures, Registration Services, Interior Design, propmatics"
+      />
+
     <main
       className="flex min-h-screen flex-col items-center justify-center 
       p-6 sm:p-12 lg:p-24 
@@ -107,5 +116,6 @@ export default function ServicesPage() {
         </div>
       </div>
     </main>
+    </>
   );
 }
